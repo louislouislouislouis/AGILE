@@ -5,7 +5,10 @@ public class AppTest {
     @Test
     public void testAdd() {
         String str = "Junit is working fine";
-        assertEquals("Junit is working fine", str);
+        assertEquals("CACA", str);
     }
+
+    // TODO : Test du parser XML
+    //
 
 }
