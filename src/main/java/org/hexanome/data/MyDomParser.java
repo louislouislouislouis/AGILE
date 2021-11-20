@@ -20,7 +20,7 @@ public class MyDomParser {
     public MyDomParser() {
     }
 
-    public static MapIF parseMap(String fileURI) throws ParserConfigurationException, IOException, SAXException {
+    public MapIF parseMap(String fileURI) throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document document = builder.parse(fileURI);
@@ -65,7 +65,7 @@ public class MyDomParser {
         MyDomParser mydom = new MyDomParser();
 
         try {
-            MapIF map = parseMap("src/main/resources/org/hexanome/model/testMap.xml");
+            MapIF map = mydom.parseMap("src/main/resources/org/hexanome/model/testMap.xml");
             System.out.println(map.toString());
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
