@@ -1,4 +1,4 @@
-package org.hexanome.Data;
+package org.hexanome.data;
 
 import org.hexanome.model.Intersection;
 import org.hexanome.model.MapIF;
