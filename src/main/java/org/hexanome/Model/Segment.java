@@ -12,4 +12,14 @@ public class Segment {
         this.name = name;
         this.length = length;
     }
+
+    @Override
+    public String toString() {
+        return "Segment{" +
+                "originIntersection=" + originIntersection +
+                ", destinationIntersection=" + destinationIntersection +
+                ", name='" + name + '\'' +
+                ", length=" + length +
+                '}';
+    }
 }
