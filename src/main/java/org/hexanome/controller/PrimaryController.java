@@ -1,8 +1,9 @@
 package org.hexanome.controller;
 
 import java.io.IOException;
+
 import javafx.fxml.FXML;
-import org.hexanome.App;
+import org.hexanome.vue.App;
 
 public class PrimaryController {
 

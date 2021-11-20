@@ -4,5 +4,5 @@ module org.hexanome {
     requires java.xml;
 
     opens org.hexanome.controller to javafx.fxml;
-    exports org.hexanome;
+    exports org.hexanome.vue;
 }

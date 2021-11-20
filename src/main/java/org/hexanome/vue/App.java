@@ -1,4 +1,4 @@
-package org.hexanome;
+package org.hexanome.vue;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -28,12 +28,11 @@ public class App extends Application {
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("controller/" + fxml + ".fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
 
-    public static void main(String[] args) {
+    public void start() {
         launch();
     }
-
 }
