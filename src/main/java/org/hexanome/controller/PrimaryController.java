@@ -1,7 +1,8 @@
-package org.hexanome;
+package org.hexanome.controller;
 
 import java.io.IOException;
 import javafx.fxml.FXML;
+import org.hexanome.App;
 
 public class PrimaryController {
 

@@ -1,8 +1,8 @@
 package org.hexanome.Data;
 
-import org.hexanome.Model.Intersection;
-import org.hexanome.Model.MapIF;
-import org.hexanome.Model.Segment;
+import org.hexanome.model.Intersection;
+import org.hexanome.model.MapIF;
+import org.hexanome.model.Segment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -32,9 +32,9 @@ public class MyDomParser {
         HashMap<String, Segment> segmentsHashMap = new HashMap<>();
 
         // creation des objets de type intersection
-        for(int i=0; i<intersections.getLength(); i++){
+        for (int i = 0; i < intersections.getLength(); i++) {
             Node node = intersections.item(i);
-            Element element = (Element)node;
+            Element element = (Element) node;
             long id = Long.parseLong(element.getAttribute("id"));
             double longitude = Double.parseDouble(element.getAttribute("longitude"));
             double latitude = Double.parseDouble(element.getAttribute("latitude"));
@@ -43,9 +43,9 @@ public class MyDomParser {
         }
 
         // creation des objets de type segment
-        for(int i=0; i<segments.getLength(); i++){
+        for (int i = 0; i < segments.getLength(); i++) {
             Node node = segments.item(i);
-            Element element = (Element)node;
+            Element element = (Element) node;
             long originId = Long.parseLong(element.getAttribute("origin"));
             long destinationId = Long.parseLong(element.getAttribute("destination"));
             double length = Double.parseDouble(element.getAttribute("length"));

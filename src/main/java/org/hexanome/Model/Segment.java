@@ -1,4 +1,4 @@
-package org.hexanome.Model;
+package org.hexanome.model;
 
 public class Segment {
     private Intersection originIntersection;
@@ -6,7 +6,7 @@ public class Segment {
     private String name;
     private double length;
 
-    public Segment(Intersection originIntersection, Intersection destinationIntersection, String name, double length){
+    public Segment(Intersection originIntersection, Intersection destinationIntersection, String name, double length) {
         this.originIntersection = originIntersection;
         this.destinationIntersection = destinationIntersection;
         this.name = name;
