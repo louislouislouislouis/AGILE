@@ -18,7 +18,6 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         loadFXML("primary");
-        System.out.println("zzz");
         scene = new Scene(loadFXML("primary"), 640, 480);
         stage.setScene(scene);
         stage.show();
@@ -29,11 +28,7 @@ public class App extends Application {
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
-        System.out.println(App.class.getResource("controller/" + fxml + ".fxml"));
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("controller/" + fxml + ".fxml"));
-        System.out.println(fxmlLoader);
-        System.out.println("ee");
-
         return fxmlLoader.load();
     }
 
