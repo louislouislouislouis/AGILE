@@ -65,7 +65,7 @@ public class MyDomParser {
         MyDomParser mydom = new MyDomParser();
 
         try {
-            MapIF map = parseMap("src/main/java/org/hexanome/Model/testMap.xml");
+            MapIF map = parseMap("src/main/resources/org/hexanome/model/testMap.xml");
             System.out.println(map.toString());
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
