@@ -9,4 +9,12 @@ public class Warehouse extends Point{
         super(departureAddress);
         this.departureTime = departureTime;
     }
+
+    @Override
+    public String toString() {
+        return "\nWarehouse{" +
+                "\ndepartureTime=" + departureTime +
+                "\nPoint=" + super.toString() +
+                "\n}";
+    }
 }

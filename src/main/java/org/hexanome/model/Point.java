@@ -6,4 +6,15 @@ public class Point {
     public Point(Intersection address) {
         this.address = address;
     }
+
+    public Intersection getAddress() {
+        return address;
+    }
+
+    @Override
+    public String toString() {
+        return "\nPoint{" +
+                "\naddress=" + address +
+                "\n}";
+    }
 }

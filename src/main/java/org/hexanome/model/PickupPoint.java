@@ -7,4 +7,16 @@ public class PickupPoint extends Point{
         super(address);
         this.pickupDuration = pickupDuration;
     }
+
+    public int getPickupDuration() {
+        return pickupDuration;
+    }
+
+    @Override
+    public String toString() {
+        return "\nPickupPoint{" +
+                "\npickupDuration=" + pickupDuration +
+                "\nPoint=" + super.toString() +
+                "\n}";
+    }
 }

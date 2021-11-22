@@ -8,4 +8,20 @@ public class Request {
         this.deliveryPoint = deliveryPoint;
         this.pickupPoint = pickupPoint;
     }
+
+    public PickupPoint getPickupPoint() {
+        return pickupPoint;
+    }
+
+    public DeliveryPoint getDeliveryPoint() {
+        return deliveryPoint;
+    }
+
+    @Override
+    public String toString() {
+        return "\nRequest{" +
+                "\npickupPoint=" + pickupPoint +
+                "\n, deliveryPoint=" + deliveryPoint +
+                "\n}";
+    }
 }

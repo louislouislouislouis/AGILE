@@ -7,4 +7,16 @@ public class DeliveryPoint extends Point{
         super(address);
         this.deliveryDuration = deliveryDuration;
     }
+
+    public int getDeliveryDuration() {
+        return deliveryDuration;
+    }
+
+    @Override
+    public String toString() {
+        return "\nDeliveryPoint{" +
+                "\ndeliveryDuration=" + deliveryDuration +
+                "\nPoint=" + super.toString() +
+                "\n}";
+    }
 }
