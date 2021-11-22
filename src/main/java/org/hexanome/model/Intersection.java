@@ -11,6 +11,18 @@ public class Intersection {
         this.idIntersection = idIntersection;
     }
 
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public long getIdIntersection() {
+        return idIntersection;
+    }
+
     @Override
     public String toString() {
         return "Intersection{" +
