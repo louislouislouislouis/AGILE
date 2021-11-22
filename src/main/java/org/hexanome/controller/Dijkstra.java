@@ -3,7 +3,6 @@ package org.hexanome.controller;
 import org.hexanome.model.Intersection;
 import org.hexanome.model.Node;
 import org.hexanome.model.Segment;
-import org.hexanome.model.MapIF;
 
 import java.util.*;
 

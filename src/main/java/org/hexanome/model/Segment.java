@@ -38,20 +38,4 @@ public class Segment {
                 ", length=" + length +
                 '}';
     }
-
-    public Intersection getOriginIntersection() {
-        return this.originIntersection;
-    }
-
-    public Intersection getDestinationIntersection() {
-        return this.destinationIntersection;
-    }
-
-    public Double getLength() {
-        return this.length;
-    }
-
-    public String getName() {
-        return this.name;
-    }
 }

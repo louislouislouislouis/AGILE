@@ -32,7 +32,4 @@ public class Intersection {
                 '}';
     }
 
-    public long getIdIntersection() {
-        return this.idIntersection;
-    }
 }
