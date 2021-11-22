@@ -19,4 +19,8 @@ public class Intersection {
                 ", idIntersection=" + idIntersection +
                 '}';
     }
+
+    public long getIdIntersection() {
+        return this.idIntersection;
+    }
 }
