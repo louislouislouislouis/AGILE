@@ -12,6 +12,27 @@ public class MapIF {
         this.segments = segments;
     }
 
+    public MapIF() {
+        this.intersections = new HashMap<>();
+        this.segments = new HashMap<>();
+    }
+
+    public void addSegment(Segment segment){
+        this.segments.put(segment.getName(), segment);
+    }
+
+    public void addIntersection(Intersection intersection){
+        this.intersections.put(intersection.getIdIntersection(), intersection);
+    }
+
+    public HashMap<Long, Intersection> getIntersections() {
+        return intersections;
+    }
+
+    public HashMap<String, Segment> getSegments() {
+        return segments;
+    }
+
     @Override
     public String toString() {
         String toReturn = "MapIF{" +

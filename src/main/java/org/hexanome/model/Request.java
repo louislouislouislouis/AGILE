@@ -1,15 +1,27 @@
 package org.hexanome.model;
 
 public class Request {
-    private Intersection pickupPoint;
-    private Intersection deliveryPoint;
-    private int pickupDuration;
-    private int deliveryDuration;
+    private PickupPoint pickupPoint;
+    private DeliveryPoint deliveryPoint;
 
-    public Request(Intersection pickupPoint, Intersection deliveryPoint, int pickupDuration, int deliveryDuration) {
+    public Request(PickupPoint pickupPoint, DeliveryPoint deliveryPoint) {
         this.deliveryPoint = deliveryPoint;
         this.pickupPoint = pickupPoint;
-        this.pickupDuration = pickupDuration;
-        this.deliveryDuration = deliveryDuration;
+    }
+
+    public PickupPoint getPickupPoint() {
+        return pickupPoint;
+    }
+
+    public DeliveryPoint getDeliveryPoint() {
+        return deliveryPoint;
+    }
+
+    @Override
+    public String toString() {
+        return "\nRequest{" +
+                "\npickupPoint=" + pickupPoint +
+                "\n, deliveryPoint=" + deliveryPoint +
+                "\n}";
     }
 }

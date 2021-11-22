@@ -13,6 +13,22 @@ public class Segment {
         this.length = length;
     }
 
+    public Intersection getOriginIntersection() {
+        return originIntersection;
+    }
+
+    public Intersection getDestinationIntersection() {
+        return destinationIntersection;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getLength() {
+        return length;
+    }
+
     @Override
     public String toString() {
         return "Segment{" +
