@@ -1,9 +1,6 @@
 package org.hexanome.data;
 
-import org.hexanome.model.Intersection;
-import org.hexanome.model.MapIF;
-import org.hexanome.model.Request;
-import org.hexanome.model.Segment;
+import org.hexanome.model.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -94,6 +91,8 @@ public class MapDeserializer {
 
     public static void main(String args[]) {
         MapDeserializer mydom = new MapDeserializer();
+        RequestDeserializer mydomrequest = new RequestDeserializer();
+        PlanningRequest planning = new PlanningRequest();
         MapIF map = new MapIF();
 
         try {
@@ -102,6 +101,12 @@ public class MapDeserializer {
             mydom.load(map, fileXml);
 
             System.out.println(map);
+
+            File requestFile = new File("src/main/resources/org/hexanome/model/testRequest.xml");
+
+            mydomrequest.load(planning, requestFile, map);
+
+            System.out.println(planning);
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (IOException e) {
