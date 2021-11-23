@@ -2,6 +2,7 @@ package org.hexanome.controller;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -11,8 +12,13 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.hexanome.data.ExceptionXML;
+import org.hexanome.data.MapDeserializer;
 import org.hexanome.model.MapIF;
 import org.hexanome.vue.App;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 public class MainsScreenController {
     @FXML
@@ -53,6 +59,20 @@ public class MainsScreenController {
             btnAddRequest.setDisable(true);
             btnValidateRoute.setDisable(true);
         }
+        MapDeserializer domMap = new MapDeserializer();
+
+        try {
+            domMap.load(map, selectedFile);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ExceptionXML e) {
+            e.printStackTrace();
+        }
+        System.out.println(map);
 
     }
 
