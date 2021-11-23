@@ -3,6 +3,9 @@ package org.hexanome.controller;
 import java.io.File;
 import java.io.IOException;
 
+import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -22,6 +25,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import com.gluonhq.maps.MapPoint;
 import com.gluonhq.maps.MapView;
+import com.gluonhq.maps.MapLayer;
 
 public class MainsScreenController {
     @FXML
@@ -38,7 +42,12 @@ public class MainsScreenController {
 
         System.out.println(selectedFile);
 
+        // We initialize the deserializer
         MapDeserializer domMap = new MapDeserializer();
+
+        // We delete the map's content before loading the xml
+
+        map.clearMap();
 
         try {
             domMap.load(map, selectedFile);
@@ -58,19 +67,29 @@ public class MainsScreenController {
         MapView mapView = new MapView();
 
         /* Création du point avec latitude et longitude */
-        MapPoint mapPoint = new MapPoint(46.227638, 2.213749);
+
 
         /* Création et ajoute une couche à la carte */
 
-        // MapLayer mapLayer = new CustomPinLayer(mapPoint);
-        // MapLayer mapLayer = new CustomCircleMarkerLayer(mapPoint);
-        // mapView.addLayer(mapLayer);
+        //MapLayer mapLayer = new CustomPinLayer(mapPoint);
+        CustomCircleMarkerLayer mapLayer = new CustomCircleMarkerLayer();
+
+        //add points to the layer
+        map.getIntersections().forEach((id, intersection) -> {
+            MapPoint mapPoint = new MapPoint(intersection.getLatitude(), intersection.getLongitude());
+            mapLayer.addPoint(id, mapPoint);
+        });
+
+        mapView.addLayer(mapLayer);
 
         /* Zoom de 5 */
-        mapView.setZoom(5);
+        mapView.setZoom(6);
+
+        /* creation of the mapPoint on which the camera will be centered */
+        MapPoint mapPointCamera = new MapPoint(45.764043, 4.835659);
 
         /* Centre la carte sur le point */
-        mapView.flyTo(0, mapPoint, 0.1);
+        mapView.flyTo(0, mapPointCamera, 0.1);
 
         mapContainer.getChildren().add(mapView);
     }

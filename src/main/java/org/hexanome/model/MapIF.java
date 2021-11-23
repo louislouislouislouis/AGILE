@@ -25,6 +25,11 @@ public class MapIF {
         this.intersections.put(intersection.getIdIntersection(), intersection);
     }
 
+    public void clearMap(){
+        this.intersections.clear();;
+        this.segments.clear();
+    }
+
     public HashMap<Long, Intersection> getIntersections() {
         return intersections;
     }
