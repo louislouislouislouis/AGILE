@@ -78,8 +78,15 @@ public class MainsScreenController {
 
     public void addRequest(ActionEvent actionEvent) {
     }
-    /**@FXML
-    private void switchToSecondary() throws IOException {
-        App.setRoot("secondary");
-    } **/
+    public File fileChooser(ActionEvent actionEvent){
+        //method that opens the File Explorer to allow the user to get their XML files
+        Node node = (Node) actionEvent.getSource();
+        Stage thisStage = (Stage) node.getScene().getWindow();
+        FileChooser fileChooser = new FileChooser();
+        //Filter declaration for XML files
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+        fileChooser.getExtensionFilters().add(extFilter); //utilisation du filter
+        File selectedFile = fileChooser.showOpenDialog(thisStage);
+        return selectedFile;
+    }
 }
