@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javafx.geometry.Point2D;
+import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.event.ActionEvent;
@@ -16,6 +17,7 @@ import javafx.stage.Stage;
 import org.hexanome.data.ExceptionXML;
 import org.hexanome.data.MapDeserializer;
 import org.hexanome.data.RequestDeserializer;
+import org.hexanome.model.Intersection;
 import org.hexanome.model.MapIF;
 import org.hexanome.model.PlanningRequest;
 import org.hexanome.vue.App;
@@ -30,9 +32,14 @@ import com.gluonhq.maps.MapLayer;
 public class MainsScreenController {
     @FXML
     HBox mapContainer;
+    @FXML
+    Button btnLoadRequest;
 
     private MapIF map = new MapIF();
     private PlanningRequest planning = new PlanningRequest();
+
+    /* Création de la carte Gluon JavaFX */
+    private MapView mapView = new MapView();
 
     public void selectionMap(ActionEvent actionEvent) {
         Node node = (Node) actionEvent.getSource();
@@ -51,6 +58,7 @@ public class MainsScreenController {
 
         try {
             domMap.load(map, selectedFile);
+            btnLoadRequest.setDisable(false);
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (SAXException e) {
@@ -61,13 +69,7 @@ public class MainsScreenController {
             e.printStackTrace();
         }
 
-        VBox root = new VBox();
-
-        /* Création de la carte Gluon JavaFX */
-        MapView mapView = new MapView();
-
-        /* Création du point avec latitude et longitude */
-
+        //VBox root = new VBox();
 
         /* Création et ajoute une couche à la carte */
 
@@ -85,7 +87,63 @@ public class MainsScreenController {
         /* Zoom de 5 */
         mapView.setZoom(6);
 
-        /* creation of the mapPoint on which the camera will be centered */
+        /* creation of the mapPoint on which the camera will be centered
+        *  We use the longitude and latitude of Lyon
+        * */
+        MapPoint mapPointCamera = new MapPoint(45.764043, 4.835659);
+
+        /* Centre la carte sur le point */
+        mapView.flyTo(0, mapPointCamera, 0.1);
+
+        mapContainer.getChildren().add(mapView);
+    }
+
+    public void loadRequest(ActionEvent actionEvent) {
+        Node node = (Node) actionEvent.getSource();
+        Stage thisStage = (Stage) node.getScene().getWindow();
+        FileChooser fileChooser = new FileChooser();
+        File selectedFile = fileChooser.showOpenDialog(thisStage);
+
+        RequestDeserializer mydomrequest = new RequestDeserializer();
+
+        try {
+            mydomrequest.load(planning, selectedFile, map);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ExceptionXML e) {
+            e.printStackTrace();
+        }
+
+        //VBox root = new VBox();
+
+        /* Création et ajoute une couche à la carte */
+
+        //MapLayer mapLayer = new CustomPinLayer(mapPoint);
+        CustomCircleMarkerLayer mapLayer = new CustomCircleMarkerLayer();
+
+        //add points to the layer
+        planning.getRequests().forEach((Request) -> {
+            Intersection deliveryInt = Request.getDeliveryPoint().getAddress();
+            MapPoint mapPointDelivery = new MapPoint(deliveryInt.getLatitude(), deliveryInt.getLongitude());
+            mapLayer.addPointDelivery(deliveryInt.getIdIntersection(), mapPointDelivery, Color.AQUA);
+
+            Intersection pickupInt = Request.getPickupPoint().getAddress();
+            MapPoint mapPointPickup = new MapPoint(pickupInt.getLatitude(), pickupInt.getLongitude());
+            mapLayer.addPointPickup(pickupInt.getIdIntersection(), mapPointPickup, Color.AQUA);
+        });
+
+        mapView.addLayer(mapLayer);
+
+        /* Zoom de 5 */
+        mapView.setZoom(6);
+
+        /* creation of the mapPoint on which the camera will be centered
+         *  We use the longitude and latitude of Lyon
+         * */
         MapPoint mapPointCamera = new MapPoint(45.764043, 4.835659);
 
         /* Centre la carte sur le point */
@@ -99,6 +157,7 @@ public class MainsScreenController {
 
     public void calculateRoute(ActionEvent actionEvent) {
     }
+
 
     /**@FXML
     private void switchToSecondary() throws IOException {

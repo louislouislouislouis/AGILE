@@ -23,6 +23,11 @@
                   <Insets bottom="50.0" left="25.0" />
                </VBox.margin>
             </Button>
+            <Button fx:id="btnLoadRequest" disable="true" layoutX="10.0" layoutY="10.0" minWidth="100.0" mnemonicParsing="false" onAction="#loadRequest" text="Load Request" textAlignment="CENTER">
+               <VBox.margin>
+                  <Insets bottom="50.0" left="25.0" />
+               </VBox.margin>
+            </Button>
             <Button fx:id="btnAddRequest" disable="true" layoutX="10.0" layoutY="10.0" minWidth="100.0" mnemonicParsing="false" onAction="#addRequest" text="Add Request" textAlignment="CENTER">
                <VBox.margin>
                   <Insets bottom="50.0" left="25.0" />

@@ -33,6 +33,24 @@ public class CustomCircleMarkerLayer extends MapLayer {
         this.getChildren().add(circle);
     }
 
+    public void addPointDelivery(Long id, MapPoint mapPoint, Color color){
+        Circle circle = new Circle(4, color);
+
+        pointList.put(id, new Pair<>(mapPoint, circle));
+
+        /* Ajoute le cercle au MapLayer */
+        this.getChildren().add(circle);
+    }
+
+    public void addPointPickup(Long id, MapPoint mapPoint, Color color){
+        Circle circle = new Circle(4, color);
+
+        pointList.put(id, new Pair<>(mapPoint, circle));
+
+        /* Ajoute le cercle au MapLayer */
+        this.getChildren().add(circle);
+    }
+
     /* La fonction est appelée à chaque rafraichissement de la carte */
     @Override
     protected void layoutLayer() {
