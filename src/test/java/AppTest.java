@@ -7,7 +7,7 @@ import java.io.File;
 
 import static org.junit.Assert.*;
 
-public class XMLTest {
+public class AppTest {
     @Test
     public void testXML() {
         MapDeserializer md = new MapDeserializer();
