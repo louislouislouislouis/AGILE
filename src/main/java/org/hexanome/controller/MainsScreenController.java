@@ -51,7 +51,8 @@ public class MainsScreenController {
         } catch (ExceptionXML e) {
             e.printStackTrace();
         }
-        System.out.println(map);
+        System.out.println(map.getIntersections().size());
+        System.out.println(map.getSegments().size());
 
         VBox root = new VBox();
 
@@ -78,6 +79,10 @@ public class MainsScreenController {
 
     public void addRequest(ActionEvent actionEvent) {
     }
+
+    public void calculateRoute(ActionEvent actionEvent) {
+    }
+
     /**@FXML
     private void switchToSecondary() throws IOException {
         App.setRoot("secondary");
