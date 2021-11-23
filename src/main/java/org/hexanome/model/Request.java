@@ -20,8 +20,8 @@ public class Request {
     @Override
     public String toString() {
         return "\nRequest{" +
-                "\npickupPoint=" + pickupPoint +
-                "\n, deliveryPoint=" + deliveryPoint +
+                "pickupPoint=" + pickupPoint +
+                ", deliveryPoint=" + deliveryPoint +
                 "\n}";
     }
 }

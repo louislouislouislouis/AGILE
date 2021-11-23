@@ -29,7 +29,7 @@ public class Intersection {
                 "longitude=" + longitude +
                 ", latitude=" + latitude +
                 ", idIntersection=" + idIntersection +
-                '}';
+                "}";
     }
 
 }

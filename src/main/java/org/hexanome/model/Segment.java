@@ -31,11 +31,11 @@ public class Segment {
 
     @Override
     public String toString() {
-        return "Segment{" +
+        return "\nSegment{" +
                 "originIntersection=" + originIntersection +
                 ", destinationIntersection=" + destinationIntersection +
                 ", name='" + name + '\'' +
                 ", length=" + length +
-                '}';
+                "\n}";
     }
 }

@@ -14,9 +14,9 @@ public class PickupPoint extends Point{
 
     @Override
     public String toString() {
-        return "\nPickupPoint{" +
-                "\npickupDuration=" + pickupDuration +
-                "\nPoint=" + super.toString() +
-                "\n}";
+        return "PickupPoint{" +
+                "pickupDuration=" + pickupDuration +
+                "Point=" + super.toString() +
+                "}";
     }
 }

@@ -1,13 +1,16 @@
 package org.hexanome.controller;
 
 import java.io.File;
+import java.io.FileFilter;
 
+import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.hexanome.vue.App;
 
 public class MainsScreenController {
 
@@ -27,6 +30,7 @@ public class MainsScreenController {
     public void setBtnValidateRoute(Button btnValidateRoute) {this.btnValidateRoute = btnValidateRoute;}
 
     /*--------------------------------Methods----------------------------------------------------------*/
+
     public void selectionMap(ActionEvent actionEvent) {
         //method that uploads an XML file (carte)
 /*        Node node = (Node) actionEvent.getSource();
@@ -36,14 +40,27 @@ public class MainsScreenController {
 
         File selectedFile = fileChooser(actionEvent);
         System.out.println(selectedFile);
-        while(selectedFile.exists()){
+        if(selectedFile.exists()){
             btnAddRequest.setDisable(false);
             btnValidateRoute.setDisable(false);
+        }else{
+            btnAddRequest.setDisable(true);
+            btnValidateRoute.setDisable(true);
         }
+
     }
 
     public void addRequest(ActionEvent actionEvent) {
         //method that uploads an XML file with the command
+        File selectedFile = fileChooser(actionEvent);
+        System.out.println(selectedFile);
+        if(selectedFile.exists()){
+            btnAddRequest.setDisable(false);
+            btnValidateRoute.setDisable(false);
+        }else{
+            btnAddRequest.setDisable(true);
+            btnValidateRoute.setDisable(true);
+        }
     }
 
     public void calculateRoute(ActionEvent actionEvent) {
@@ -55,8 +72,10 @@ public class MainsScreenController {
         Node node = (Node) actionEvent.getSource();
         Stage thisStage = (Stage) node.getScene().getWindow();
         FileChooser fileChooser = new FileChooser();
+        //Filter declaration for XML files
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+        fileChooser.getExtensionFilters().add(extFilter); //utilisation du filter
         File selectedFile = fileChooser.showOpenDialog(thisStage);
-
         return selectedFile;
     }
     /**@FXML

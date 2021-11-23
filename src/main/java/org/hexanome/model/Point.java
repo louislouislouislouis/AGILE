@@ -13,8 +13,8 @@ public class Point {
 
     @Override
     public String toString() {
-        return "\nPoint{" +
-                "\naddress=" + address +
-                "\n}";
+        return "Point{" +
+                "address=" + address +
+                "}";
     }
 }
