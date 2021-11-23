@@ -17,6 +17,15 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        System.setProperty("javafx.platform", "desktop");
+
+        /*
+         * Définit l'user agent pour éviter l'exception
+         * "Server returned HTTP response code: 403"
+         */
+
+        System.setProperty("http.agent", "Gluon Mobile/1.0.3");
+
         loadFXML("primary");
         scene = new Scene(loadFXML("mainsScreen"), 640, 480);
         stage.setScene(scene);
