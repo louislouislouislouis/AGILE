@@ -1,6 +1,7 @@
 package org.hexanome.data;
 
 import org.hexanome.model.*;
+import org.hexanome.controller.Dijkstra;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -14,6 +15,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.lang.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class MapDeserializer {
@@ -108,6 +112,21 @@ public class MapDeserializer {
             mydomrequest.load(planning, requestFile, map);
 
             System.out.println(planning);
+
+            Set<Intersection> destinations = new HashSet<>();
+            destinations.add(planning.getWarehouse().getAddress());
+            for (Request r : planning.getRequests()) {
+                destinations.add(r.getPickupPoint().getAddress());
+                destinations.add(r.getDeliveryPoint().getAddress());
+            }
+
+            for (Intersection origin : destinations) {
+                System.out.println("Calculating shortest paths for Origin: " + origin);
+                Dijkstra dijkstra = new Dijkstra(map.getIntersections().size());
+                System.out.println(dijkstra.dijkstra(map.getIntersections(),map.getSegments(),origin,destinations));
+                System.out.println(dijkstra.getDist());
+            }
+
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (IOException e) {

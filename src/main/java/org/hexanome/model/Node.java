@@ -1,7 +1,6 @@
 package org.hexanome.model;
 
 import java.util.Comparator;
-import java.util.List;
 
 public class Node implements Comparator<Node> {
 
