@@ -13,17 +13,17 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.hexanome.controller.MainsScreenController">
    <left>
       <VBox minHeight="200.0" minWidth="150.0" prefHeight="200.0" prefWidth="150.0" BorderPane.alignment="CENTER">
          <children>
             <Region prefHeight="350.0" prefWidth="200.0" />
-            <Button defaultButton="true" minWidth="100.0" mnemonicParsing="false" text="Select Map" textAlignment="CENTER">
+            <Button fx:id="btnLoadMap" defaultButton="true" minWidth="100.0" mnemonicParsing="false" onAction="#selectionMap" text="Select Map" textAlignment="CENTER">
                <VBox.margin>
                   <Insets bottom="50.0" left="25.0" />
                </VBox.margin>
             </Button>
-            <Button disable="true" layoutX="10.0" layoutY="10.0" minWidth="100.0" mnemonicParsing="false" text="Add Request" textAlignment="CENTER">
+            <Button fx:id="btnAddRequest" disable="true" layoutX="10.0" layoutY="10.0" minWidth="100.0" mnemonicParsing="false" onAction="#addRequest" text="Add Request" textAlignment="CENTER">
                <VBox.margin>
                   <Insets left="25.0" />
                </VBox.margin>
