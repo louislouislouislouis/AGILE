@@ -9,53 +9,55 @@ import java.util.*;
 public class Dijkstra {
 
     private Map<Long,Double> dist; // idIntersection - currentDist
-    private Map<Long,List<String>> path; // idIntersection - shortestPathToIntersection
-    private Set<Long> settled; // idIntersection
+    private Map<Long,List<Intersection>> path; // idDestinationIntersection - shortestPathToIntersection
+    private Set<Long> settled; // idIntersection already explored
     private PriorityQueue<Node> pq; // representing Intersections
     private int numberOfIntersections;
     private Map<Intersection,Map<Intersection,Segment>> adj;  // startIntersection - destinationIntersection - Segment between them
 
     Dijkstra(int numberOfIntersections) {
         this.numberOfIntersections = numberOfIntersections;
-        dist = new HashMap<>();
-        path = new HashMap<>();
-        settled = new HashSet<>();
-        pq = new PriorityQueue<>(numberOfIntersections, new Node());
+        this.dist = new HashMap<>();
+        this.path = new HashMap<>();
+        this.settled = new HashSet<>();
+        this.pq = new PriorityQueue<>(numberOfIntersections, new Node());
     }
 
-    public List<String> dijkstra(Map<Long,Intersection> intersections, Map<String,Segment> segments,
-                         Intersection origin, Intersection destination) {
-        this.adj = getAdj(intersections, segments);
+    /**
+     * calculates the shortest paths from a given originIntersection to all given destinationIntersections
+     * @param intersections amount of all intersections in the map
+     * @param segments amount of all segments in the map
+     * @param origin origin intersection
+     * @param destinations list of destinations intersections
+     * @return map with key: idDestinationIntersection,
+     *         value: list of intersections from originIntersection to destinationIntersection
+     */
+    public Map<Long,List<Intersection>> dijkstra(Map<Long,Intersection> intersections, Map<String,Segment> segments,
+                         Intersection origin, List<Intersection> destinations) {
 
-        List<String> segmentNames = new ArrayList<>();
+        this.adj = getAdj(intersections, segments); // overview over intersections and their neighbours
 
+        List<Intersection> initialPath = new ArrayList<>();
         for (Intersection i : intersections.values()) {
             if (i.getIdIntersection() == origin.getIdIntersection()) {
-                dist.put(i.getIdIntersection(), (double) 0);
+                this.dist.put(i.getIdIntersection(), (double) 0); // startIntersection has currentWeight 0
+                initialPath.add(origin);
+                this.path.put(i.getIdIntersection(),initialPath); // add startIntersection
+                initialPath.remove(origin);
             }
             else {
-                dist.put(i.getIdIntersection(),(double) Integer.MAX_VALUE);
+                this.dist.put(i.getIdIntersection(),(double) Integer.MAX_VALUE); // other intersections (not start)
+                this.path.put(i.getIdIntersection(), initialPath); // no path to go to intersections
             }
-            path.put(i.getIdIntersection(), segmentNames);
         }
 
-        pq.add(new Node(origin.getIdIntersection(), (double) 0));
+        this.pq.add(new Node(origin.getIdIntersection(), (double) 0)); // add startIntersection to pq
 
         while (settled.size() != numberOfIntersections) {
             if (pq.isEmpty()) {
-                return path.get(destination.getIdIntersection());
+                return getResultList(destinations);
             }
-            if (settled.contains(destination.getIdIntersection())) {
-                boolean finished = true;
-                for (Long l : dist.keySet()) {
-                    if (dist.get(l) < dist.get(destination.getIdIntersection())) {
-                        finished = false;
-                    }
-                }
-                if (finished) {
-                    return path.get(destination.getIdIntersection());
-                }
-            }
+
             Long idNode = pq.remove().getId();
             if (settled.contains(idNode)) {
                 continue;
@@ -64,9 +66,17 @@ public class Dijkstra {
             Intersection currentNode = intersections.get(idNode);
             exploreNeighbours(currentNode);
         }
-        return path.get(destination.getIdIntersection());
+        return getResultList(destinations);
     }
 
+    /**
+     *
+     * @param intersections amount of all intersections in the map
+     * @param segments amount of all segments in the map
+     * @return map with key: startIntersection,
+     *         value: map with key: neighbourIntersection,
+     *                value: segment between startIntersection and neighbourIntersection
+     */
     public Map<Intersection,Map<Intersection,Segment>> getAdj(Map<Long,Intersection> intersections, Map<String,Segment> segments) {
         Map<Intersection,Map<Intersection,Segment>> adj = new HashMap<>();
         for (Intersection i: intersections.values()) {
@@ -78,6 +88,10 @@ public class Dijkstra {
         return adj;
     }
 
+    /**
+     *
+     * @param currentNode intersection whose neighbours are going to be explored
+     */
     public void exploreNeighbours(Intersection currentNode) {
         Double edgeDistance;
         Double newDistance;
@@ -88,12 +102,32 @@ public class Dijkstra {
                 newDistance = dist.get(currentNode.getIdIntersection()) + edgeDistance;
                 if (newDistance < dist.get(currentNode.getIdIntersection())) {
                     dist.replace(currentNode.getIdIntersection(),newDistance);
-                    List<String> newPath = path.get(currentNode.getIdIntersection());
-                    newPath.add(adj.get(currentNode).get(i).getName());
+                    List<Intersection> newPath = path.get(currentNode.getIdIntersection());
+                    newPath.add(i);
                     path.replace(i.getIdIntersection(),newPath);
                 }
-                pq.add(new Node(currentNode.getIdIntersection(),dist.get(currentNode.getIdIntersection())));
+                pq.add(new Node(i.getIdIntersection(),dist.get(i.getIdIntersection())));
             }
         }
+    }
+
+    /**
+     *
+     * @param destinations list of given destinations
+     * @return map with key: idDestinationIntersection,
+     *         value: list of intersections from origin to destination
+     */
+    public Map<Long,List<Intersection>> getResultList(List<Intersection> destinations) {
+        Map<Long, List<Intersection>> result = new HashMap<>();
+        List<Intersection> list = new ArrayList<>();
+        for (Intersection i : destinations) {
+            // check if path ends at destination intersection i
+            // otherwise path is not complete
+            if (path.get(i.getIdIntersection()).contains(i)) {
+                list = path.get(i.getIdIntersection());
+            }
+            result.put(i.getIdIntersection(), list);
+        }
+        return result;
     }
 }

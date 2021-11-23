@@ -12,9 +12,9 @@ public class Warehouse extends Point{
 
     @Override
     public String toString() {
-        return "\nWarehouse{" +
-                "\ndepartureTime=" + departureTime +
-                "\nPoint=" + super.toString() +
-                "\n}";
+        return "Warehouse{" +
+                "departureTime=" + departureTime +
+                "Point=" + super.toString() +
+                "}";
     }
 }

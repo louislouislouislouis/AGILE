@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.lang.*;
+import java.util.UUID;
 
 public class MapDeserializer {
     /**
@@ -45,7 +46,7 @@ public class MapDeserializer {
         }
 
         for (int i = 0; i < segments.getLength(); i++) {
-            map.addSegment(createSegment((Element) segments.item(i), map.getIntersections()));
+            map.addSegment(UUID.randomUUID(), createSegment((Element) segments.item(i), map.getIntersections()));
         }
     }
 
