@@ -10,9 +10,12 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.hexanome.model.MapIF;
 import org.hexanome.vue.App;
 
 public class MainsScreenController {
+
+    private MapIF map = new MapIF();
 
     /*---------------------------VARIABLES------------------------------------------------------------*/
 
