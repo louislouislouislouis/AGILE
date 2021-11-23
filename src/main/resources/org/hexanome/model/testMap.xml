@@ -30,11 +30,11 @@
     <segment destination="5" length="2" name="Rue18" origin="6"/>
     <segment destination="7" length="1" name="Rue19" origin="6"/>
     <segment destination="8" length="6" name="Rue20" origin="6"/>
-    <segment destination="0" length="8" name="Rue21" origin="6"/>
-    <segment destination="1" length="11" name="Rue22" origin="6"/>
-    <segment destination="6" length="1" name="Rue23" origin="6"/>
-    <segment destination="8" length="7" name="Rue24" origin="6"/>
-    <segment destination="2" length="2" name="Rue25" origin="6"/>
-    <segment destination="6" length="6" name="Rue26" origin="6"/>
-    <segment destination="7" length="7" name="Rue27" origin="6"/>
+    <segment destination="0" length="8" name="Rue21" origin="7"/>
+    <segment destination="1" length="11" name="Rue22" origin="7"/>
+    <segment destination="6" length="1" name="Rue23" origin="7"/>
+    <segment destination="8" length="7" name="Rue24" origin="7"/>
+    <segment destination="2" length="2" name="Rue25" origin="8"/>
+    <segment destination="6" length="6" name="Rue26" origin="8"/>
+    <segment destination="7" length="7" name="Rue27" origin="8"/>
 </map>
