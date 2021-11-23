@@ -25,6 +25,11 @@
             </Button>
             <Button fx:id="btnAddRequest" disable="true" layoutX="10.0" layoutY="10.0" minWidth="100.0" mnemonicParsing="false" onAction="#addRequest" text="Add Request" textAlignment="CENTER">
                <VBox.margin>
+                  <Insets bottom="50.0" left="25.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="btnValidateRoute" disable="true" minWidth="100.0" mnemonicParsing="false" onAction="#calculateRoute" text="Validate Route">
+               <VBox.margin>
                   <Insets left="25.0" />
                </VBox.margin>
             </Button>
@@ -33,9 +38,9 @@
       </VBox>
    </left>
    <center>
-      <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+      <SplitPane dividerPositions="0.8" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
          <items>
-            <HBox fx:id="mapContainer" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #000000;" />
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
                   <VBox prefHeight="196.0" prefWidth="498.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
