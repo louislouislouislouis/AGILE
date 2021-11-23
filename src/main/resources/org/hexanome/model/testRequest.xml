@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <planningRequest>
-    <depot address="2129259178" departureTime="8:0:0"/>
-    <request pickupAddress="25175791" deliveryAddress="2129259178" pickupDuration="420" deliveryDuration="600"/>
-    <request pickupAddress="25175791" deliveryAddress="26086130" pickupDuration="420" deliveryDuration="480"/>
+    <depot address="0" departureTime="8:0:0"/>
+    <request pickupAddress="0" deliveryAddress="1" deliveryDuration="540" pickupDuration="540"/>
+    <request pickupAddress="2" deliveryAddress="5" deliveryDuration="0" pickupDuration="360"/>
+    <request pickupAddress="5" deliveryAddress="7" deliveryDuration="600" pickupDuration="360"/>
+    <request pickupAddress="6" deliveryAddress="8" deliveryDuration="0" pickupDuration="480"/>
+    <request pickupAddress="2" deliveryAddress="4" deliveryDuration="480" pickupDuration="120"/>
+    <request pickupAddress="2" deliveryAddress="6" deliveryDuration="420" pickupDuration="360"/>
+    <request pickupAddress="1" deliveryAddress="7" deliveryDuration="60" pickupDuration="540"/>
 </planningRequest>
