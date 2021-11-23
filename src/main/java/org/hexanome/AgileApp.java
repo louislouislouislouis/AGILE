@@ -6,6 +6,5 @@ public class AgileApp {
     public static void main(String[] args) {
         App myApp = new App();
         myApp.start();
-
     }
 }
