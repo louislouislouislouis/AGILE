@@ -50,7 +50,8 @@ public class MapDeserializer {
         }
 
         for (int i = 0; i < segments.getLength(); i++) {
-            map.addSegment(UUID.randomUUID(), createSegment((Element) segments.item(i), map.getIntersections()));
+            UUID uuid = UUID.randomUUID();
+            map.addSegment(uuid, createSegment((Element) segments.item(i), map.getIntersections()));
         }
     }
 
@@ -88,8 +89,6 @@ public class MapDeserializer {
             throw new ExceptionXML("Error when reading file: length Id must be positive");
 
         String name = elt.getAttribute("name");
-        if (name.equals(""))
-            throw new ExceptionXML("Error when reading file:  name must not be empty");
 
         return new Segment(originIntersection,destinationIntersection,name, length);
     }
@@ -123,7 +122,7 @@ public class MapDeserializer {
             for (Intersection origin : destinations) {
                 System.out.println("Calculating shortest paths for Origin: " + origin);
                 Dijkstra dijkstra = new Dijkstra(map.getIntersections().size());
-                System.out.println(dijkstra.dijkstra(map.getIntersections(),map.getSegments(),origin,destinations));
+                //System.out.println(dijkstra.dijkstra(map.getIntersections(),map.getSegments(),origin,destinations));
                 System.out.println(dijkstra.getDist());
             }
 

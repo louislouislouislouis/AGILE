@@ -51,8 +51,6 @@ public class MainsScreenController {
         } catch (ExceptionXML e) {
             e.printStackTrace();
         }
-        System.out.println(map.getIntersections().size());
-        System.out.println(map.getSegments().size());
 
         VBox root = new VBox();
 
