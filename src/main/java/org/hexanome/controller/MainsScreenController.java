@@ -31,11 +31,7 @@ public class MainsScreenController {
     private PlanningRequest planning = new PlanningRequest();
 
     public void selectionMap(ActionEvent actionEvent) {
-        Node node = (Node) actionEvent.getSource();
-        Stage thisStage = (Stage) node.getScene().getWindow();
-        FileChooser fileChooser = new FileChooser();
-        File selectedFile = fileChooser.showOpenDialog(thisStage);
-
+        File selectedFile = fileChooser(actionEvent);
         System.out.println(selectedFile);
 
         MapDeserializer domMap = new MapDeserializer();
