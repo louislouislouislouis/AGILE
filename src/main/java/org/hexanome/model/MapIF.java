@@ -36,16 +36,9 @@ public class MapIF {
 
     @Override
     public String toString() {
-        String toReturn = "MapIF{" +
-                "intersections=\n";
-        for (Map.Entry<Long, Intersection> pair : intersections.entrySet()) {
-            toReturn += pair.getValue().toString() + "\n";
-        }
-        toReturn += ",\nsegments=\n";
-        for (Map.Entry<UUID, Segment> pair : segments.entrySet()) {
-            toReturn += "id: "+pair.getKey()+" "+pair.getValue().toString() + "\n";
-        }
-        toReturn += '}';
-        return toReturn;
+        return "MapIF{" +
+                "\nintersections=\n"+intersections+
+                "\n,segments=\n"+segments+
+                "\n}";
     }
 }

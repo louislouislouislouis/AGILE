@@ -29,8 +29,8 @@ public class PlanningRequest {
     @Override
     public String toString() {
         return "PlanningRequest{" +
-                "\nwarehouse=" + warehouse +
-                "\n, requests=" + requests +
+                "\nwarehouse=\n" + warehouse +
+                "\n, requests=\n" + requests +
                 "\n}";
     }
 }

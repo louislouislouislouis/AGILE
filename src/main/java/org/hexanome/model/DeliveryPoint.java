@@ -14,9 +14,9 @@ public class DeliveryPoint extends Point{
 
     @Override
     public String toString() {
-        return "\nDeliveryPoint{" +
-                "\ndeliveryDuration=" + deliveryDuration +
-                "\nPoint=" + super.toString() +
-                "\n}";
+        return "DeliveryPoint{" +
+                "deliveryDuration=" + deliveryDuration +
+                "Point=" + super.toString() +
+                "}";
     }
 }
