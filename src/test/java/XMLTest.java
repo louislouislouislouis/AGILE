@@ -6,18 +6,16 @@ import org.junit.Test;
 
 import java.io.File;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 
-public class AppTest {
-    // TODO : Test du parser XML
+public class XMLTest {
     @Test
     public void testXML() {
         MapDeserializer md = new MapDeserializer();
         MapIF map = new MapIF();
 
         try {
-            File fileXml = new File("src/main/resources/org/hexanome/model/testMap.xml");
+            File fileXml = new File("src/test/xml/testMap.xml");
             md.load(map, fileXml);
 
             // Test quantitatif
@@ -54,8 +52,8 @@ public class AppTest {
             assertEquals("Intersection 2129259176 longitude", i4.getLongitude(), 4.8718166, delta);
 
         } catch (Exception e) {
+            fail("An exception occurred");
             System.err.println(e);
         }
     }
-
 }
