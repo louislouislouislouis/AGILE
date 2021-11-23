@@ -8,12 +8,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.hexanome.model.MapIF;
 import org.hexanome.vue.App;
 
 public class MainsScreenController {
+    @FXML
+    HBox mapContainer;
 
     private MapIF map = new MapIF();
 
