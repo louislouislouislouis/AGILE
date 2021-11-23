@@ -20,6 +20,9 @@ public class MainsScreenController {
     @FXML private Button btnLoadMap;
     @FXML private Button btnAddRequest;
     @FXML private Button btnValidateRoute;
+    private static class xmlFile{
+
+    }
 
     /*-------------------------GETTERS AND SETTERS-----------------------------------------------------*/
     public Button getBtnLoadMap() {return btnLoadMap;}
@@ -33,11 +36,6 @@ public class MainsScreenController {
 
     public void selectionMap(ActionEvent actionEvent) {
         //method that uploads an XML file (carte)
-/*        Node node = (Node) actionEvent.getSource();
-        Stage thisStage = (Stage) node.getScene().getWindow();
-        FileChooser fileChooser = new FileChooser();
-        File selectedFile = fileChooser.showOpenDialog(thisStage);*/
-
         File selectedFile = fileChooser(actionEvent);
         System.out.println(selectedFile);
         if(selectedFile.exists()){
@@ -54,13 +52,8 @@ public class MainsScreenController {
         //method that uploads an XML file with the command
         File selectedFile = fileChooser(actionEvent);
         System.out.println(selectedFile);
-        if(selectedFile.exists()){
-            btnAddRequest.setDisable(false);
-            btnValidateRoute.setDisable(false);
-        }else{
-            btnAddRequest.setDisable(true);
-            btnValidateRoute.setDisable(true);
-        }
+
+        //Pour trouver les
     }
 
     public void calculateRoute(ActionEvent actionEvent) {
@@ -77,6 +70,15 @@ public class MainsScreenController {
         fileChooser.getExtensionFilters().add(extFilter); //utilisation du filter
         File selectedFile = fileChooser.showOpenDialog(thisStage);
         return selectedFile;
+    }
+
+    public boolean validationMap(File selectedFile){
+        boolean validationMap = false;
+        return validationMap;
+    }
+    public boolean validationPlaningRequest(File selectedFile){
+        boolean validationPlaningRequest = false;
+        return validationPlaningRequest;
     }
     /**@FXML
     private void switchToSecondary() throws IOException {
