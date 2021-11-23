@@ -1,7 +1,6 @@
 import org.hexanome.data.MapDeserializer;
 import org.hexanome.model.Intersection;
 import org.hexanome.model.MapIF;
-import org.hexanome.model.Segment;
 import org.junit.Test;
 
 import java.io.File;
@@ -23,14 +22,17 @@ public class XMLTest {
             assertEquals("Nombre d'intersections incorrect", map.getIntersections().size(), 4);
 
             //Test des segments
-            Segment rueDanton = map.getSegments().get("Rue Danton");
-            assertEquals("Longueur de la Rue Danton", rueDanton.getLength(), 69.979805, 0.01);
-            assertEquals("Destination de la Rue Danton", rueDanton.getDestinationIntersection().getIdIntersection(), 26086130);
-            assertEquals("Origine de la Rue Danton", rueDanton.getOriginIntersection().getIdIntersection(), 25175791);
-            Segment rueAbondance = map.getSegments().get("Rue de l'Abondance");
-            assertEquals("Longueur de la Rue de l'Abondance", rueAbondance.getLength(), 136.00636, 0.01);
-            assertEquals("Destination de la Rue de l'Abondance", rueAbondance.getDestinationIntersection().getIdIntersection(), 2129259178);
-            assertEquals("Origine de la Rue de l'Abondance", rueAbondance.getOriginIntersection().getIdIntersection(), 25175791);
+            map.getSegments().forEach(((uuid, segment) -> {
+                if (segment.getName().equals("Rue Danton")) {
+                    assertEquals("Longueur de la Rue Danton", segment.getLength(), 69.979805, 0.01);
+                    assertEquals("Destination de la Rue Danton", segment.getDestinationIntersection().getIdIntersection(), 26086130);
+                    assertEquals("Origine de la Rue Danton", segment.getOriginIntersection().getIdIntersection(), 25175791);
+                } else if (segment.getName().equals("Rue de l'Abondance")) {
+                    assertEquals("Longueur de la Rue de l'Abondance", segment.getLength(), 136.00636, 0.01);
+                    assertEquals("Destination de la Rue de l'Abondance", segment.getDestinationIntersection().getIdIntersection(), 2129259178);
+                    assertEquals("Origine de la Rue de l'Abondance", segment.getOriginIntersection().getIdIntersection(), 25175791);
+                }
+            }));
 
             //Test des intersections
             double delta = 0.00001;
