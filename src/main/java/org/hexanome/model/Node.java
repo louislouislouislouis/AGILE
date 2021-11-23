@@ -6,18 +6,17 @@ import java.util.List;
 public class Node implements Comparator<Node> {
 
     private Long id;
-    private Double currentLength;
-    private List<String> previousSegments;
+    private Double currentWeight;
 
     public Node() {}
 
     public Node(Long id, Double currentLength) {
         this.id = id;
-        this.currentLength = currentLength;
+        this.currentWeight = currentLength;
     }
 
     public Double getCurrentLength() {
-        return this.currentLength;
+        return this.currentWeight;
     }
 
     public Long getId() {
