@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
@@ -26,11 +27,6 @@
                   <Insets bottom="15.0" left="10.0" />
                </VBox.margin>
             </Button>
-            <Button disable="true" layoutX="10.0" layoutY="10.0" minWidth="84.0" mnemonicParsing="false" text="Button" textAlignment="CENTER">
-               <VBox.margin>
-                  <Insets left="10.0" />
-               </VBox.margin>
-            </Button>
             <Region layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" />
          </children>
       </VBox>
@@ -41,16 +37,29 @@
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
-                  <Label text="Label" />
-                  <TableView prefHeight="196.0" prefWidth="498.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <columns>
-                        <TableColumn prefWidth="75.0" text="Pickup point" />
-                        <TableColumn prefWidth="75.0" text="Delivery point" />
-                        <TableColumn prefWidth="75.0" text="Time" />
-                        <TableColumn prefWidth="75.0" text="Distance" />
-                        <TableColumn prefWidth="75.0" />
-                     </columns>
-                  </TableView>
+                  <VBox prefHeight="196.0" prefWidth="498.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <TableView>
+                           <columns>
+                              <TableColumn prefWidth="75.0" text="Position" />
+                              <TableColumn prefWidth="75.0" text="Pickup point" />
+                              <TableColumn prefWidth="75.0" text="Delivery point" />
+                              <TableColumn prefWidth="75.0" text="Time" />
+                              <TableColumn prefWidth="75.0" text="Distance" />
+                              <TableColumn prefWidth="75.0" />
+                           </columns>
+                        </TableView>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Label text="Total" />
+                              <Region prefHeight="200.0" prefWidth="200.0" />
+                              <Label layoutX="36.0" layoutY="10.0" text="Time" />
+                              <Region layoutX="36.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" />
+                              <Label layoutX="10.0" layoutY="10.0" text="Distance" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
                </children>
             </AnchorPane>
          </items>
