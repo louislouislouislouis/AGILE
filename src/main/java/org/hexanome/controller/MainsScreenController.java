@@ -2,7 +2,10 @@ package org.hexanome.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
 
+import com.gluonhq.maps.MapLayer;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
@@ -12,8 +15,10 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Polyline;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import org.hexanome.data.ExceptionXML;
 import org.hexanome.data.MapDeserializer;
 import org.hexanome.data.RequestDeserializer;
@@ -27,7 +32,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import com.gluonhq.maps.MapPoint;
 import com.gluonhq.maps.MapView;
-import com.gluonhq.maps.MapLayer;
 
 public class MainsScreenController {
     @FXML
@@ -41,6 +45,7 @@ public class MainsScreenController {
 
     /* Création de la carte Gluon JavaFX */
     private MapView mapView = new MapView();
+    private LinkedList<MapLayer> layerList = new LinkedList<>();
 
     //Declaration of the interactive buttons in the mainsScreen.fxml
     @FXML private Button btnLoadMap;
@@ -68,6 +73,10 @@ public class MainsScreenController {
         // We delete the map's content before loading the xml
 
         map.clearMap();
+        layerList.forEach(layer ->{
+            mapView.removeLayer(layer);
+        });
+
 
         try {
             domMap.load(map, selectedFile);
@@ -95,10 +104,26 @@ public class MainsScreenController {
             mapLayer.addPoint(id, mapPoint);
         });
 
+        //Add Segment to the layer
+
+        HashMap<Long, Pair<MapPoint, Circle>> pointList = mapLayer.getPointList();
+
+        map.getSegments().forEach((key, segment) -> {
+            Intersection start = segment.getOriginIntersection();
+            Intersection end = segment.getDestinationIntersection();
+
+            MapPoint pointStart = pointList.get(start.getIdIntersection()).getKey();
+            MapPoint pointEnd = pointList.get(end.getIdIntersection()).getKey();
+
+            mapLayer.addSegment(pointStart, pointEnd);
+        });
+
+        layerList.add(mapLayer);
+
         mapView.addLayer(mapLayer);
 
         /* Zoom de 5 */
-        mapView.setZoom(6);
+        mapView.setZoom(14);
 
         /* creation of the mapPoint on which the camera will be centered
         *  We use the longitude and latitude of Lyon
@@ -155,18 +180,9 @@ public class MainsScreenController {
             mapLayer.addPointPickup(pickupInt.getIdIntersection(), mapPointPickup, Color.AQUA);
         });
 
+        layerList.add(mapLayer);
+
         mapView.addLayer(mapLayer);
-
-        /* Zoom de 5 */
-        mapView.setZoom(6);
-
-        /* creation of the mapPoint on which the camera will be centered
-         *  We use the longitude and latitude of Lyon
-         * */
-        MapPoint mapPointCamera = new MapPoint(45.764043, 4.835659);
-
-        /* Centre la carte sur le point */
-        mapView.flyTo(0, mapPointCamera, 0.1);
 
         mapContainer.getChildren().add(mapView);
     }
