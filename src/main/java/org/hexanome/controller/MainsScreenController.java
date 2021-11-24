@@ -165,7 +165,7 @@ public class MainsScreenController {
 
         mapView.addLayer(mapLayer);
 
-        mapContainer.getChildren().add(mapView);
+        //mapContainer.getChildren().add(mapView);
     }
 
     public void addRequest(ActionEvent actionEvent) {

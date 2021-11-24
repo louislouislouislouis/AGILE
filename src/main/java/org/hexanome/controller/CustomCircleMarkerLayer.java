@@ -26,7 +26,7 @@ public class CustomCircleMarkerLayer extends MapLayer {
     }
 
     public void addPoint(Long id, MapPoint mapPoint){
-        Circle circle = new Circle(2.5, Color.RED);
+        Circle circle = new Circle(1.5, Color.FIREBRICK);
 
         pointList.put(id, new Pair<>(mapPoint, circle));
 
@@ -54,8 +54,8 @@ public class CustomCircleMarkerLayer extends MapLayer {
 
     public void addSegment(MapPoint mapPointStart, MapPoint mapPointEnd){
         Polyline polyline = new Polyline();
-        polyline.setStroke(Color.RED);
-        polyline.setStrokeWidth(1);
+        polyline.setStroke( Color.FIREBRICK);
+        polyline.setStrokeWidth(1.25);
 
         segmentList.put(polyline, new Pair<>(mapPointStart, mapPointEnd));
         this.getChildren().add(polyline);
