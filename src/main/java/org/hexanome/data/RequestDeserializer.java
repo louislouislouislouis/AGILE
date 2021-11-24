@@ -33,7 +33,7 @@ public class RequestDeserializer {
             buildFromDOMXML(root, planning, map);
         }
         else
-            throw new ExceptionXML("Wrong format");
+            throw new ExceptionXML("Wrong format the first node has this name : "+root.getNodeName());
     }
 
     private void buildFromDOMXML(Element noeudDOMRacine, PlanningRequest planning, MapIF map) throws ExceptionXML, NumberFormatException{
