@@ -4,8 +4,5 @@
     <request pickupAddress="0" deliveryAddress="1" deliveryDuration="540" pickupDuration="540"/>
     <request pickupAddress="2" deliveryAddress="5" deliveryDuration="0" pickupDuration="360"/>
     <request pickupAddress="5" deliveryAddress="7" deliveryDuration="600" pickupDuration="360"/>
-    <request pickupAddress="6" deliveryAddress="8" deliveryDuration="0" pickupDuration="480"/>
-    <request pickupAddress="2" deliveryAddress="4" deliveryDuration="480" pickupDuration="120"/>
-    <request pickupAddress="2" deliveryAddress="6" deliveryDuration="420" pickupDuration="360"/>
-    <request pickupAddress="1" deliveryAddress="7" deliveryDuration="60" pickupDuration="540"/>
+
 </planningRequest>
