@@ -35,6 +35,15 @@ public class CustomMapLayer extends MapLayer {
         this.getChildren().add(circle);
     }
 
+    public void addPointWarehouse(Long id, MapPoint mapPoint, Color color) {
+        Circle circle = new Circle(6, color);
+
+        pointList.put(id, new Pair<>(mapPoint, circle));
+
+        /* Ajoute le cercle au MapLayer */
+        this.getChildren().add(circle);
+    }
+
     public void addPointDelivery(Long id, MapPoint mapPoint, Color color) {
         Circle circle = new Circle(5, color);
 
