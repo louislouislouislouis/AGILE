@@ -52,7 +52,7 @@ public class GraphAPI {
             }
             System.out.println();
         }
-
+        return new Tour();
     }
 
     private Map<Intersection, Map<Intersection, Segment>> getAdj(MapIF myMap) {
