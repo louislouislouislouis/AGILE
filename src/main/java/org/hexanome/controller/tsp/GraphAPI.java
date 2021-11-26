@@ -112,7 +112,7 @@ public class GraphAPI {
                     + (System.currentTimeMillis() - startTime) + "ms : ");
 
 
-            // Converting LnkedHashMap to Array
+            // Converting LinkedHashMap to Array
             Intersection[] LHSArray = new Intersection[destinations.size()];
             LHSArray = destinations.toArray(LHSArray);
 
@@ -124,6 +124,24 @@ public class GraphAPI {
             for (Intersection i : pathTSP) {
                 System.out.println(i);
             }
+
+            List<Intersection> completeTour = new ArrayList<>();
+            completeTour.add(pathTSP.get(0));
+            for (int i = 0; i < pathTSP.size()-1; i++){
+                Intersection startIntersection = pathTSP.get(i);
+                Intersection destinationIntersection = pathTSP.get(i+1);
+                List<Intersection> currentPath = new ArrayList<>();
+                for ( Long l : this.getShortestPathsIntersections().get(startIntersection.getIdIntersection()).get(destinationIntersection.getIdIntersection())) {
+                    Intersection intersection = map.getIntersections().get(l);
+                    if (!intersection.equals(pathTSP.get(i))) {
+                        currentPath.add(intersection);
+                    }
+                }
+                for (Intersection intersection : currentPath) {
+                    completeTour.add(intersection);
+                }
+            }
+
             Tour tour = new Tour(pathTSP,tsp.getSolutionCost());
 
         return tour;
