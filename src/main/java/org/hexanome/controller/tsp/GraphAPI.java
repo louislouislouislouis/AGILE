@@ -19,15 +19,15 @@ public class GraphAPI {
     // key: idStartIntersection
     // value: List of Maps with key: idDestinationIntersection
     //                          value: List idIntersections to pass from start to destination
-    private Map<Long, Map<Long,List<Long>>> shortestPathsIntersections;
+    private Map<Long, Map<Long, List<Long>>> shortestPathsIntersections;
 
     // shortestPathsIntersections Map with
     // key: idStartIntersection
     // value: List of Maps with key: idDestinationIntersection
     //                          value: cost of complete shortest path between start and destination
-    private Map<Long, Map<Long,Double>> shortestPathsCost;
+    private Map<Long, Map<Long, Double>> shortestPathsCost;
 
-    public void GraphAPI() {
+    public GraphAPI() {
         this.shortestPathsIntersections = new HashMap<>();
         this.shortestPathsCost = new HashMap<>();
     }
@@ -46,7 +46,7 @@ public class GraphAPI {
         int nbVerticesTSP = destinations.size();
 
         Double[][] costTSP = new Double[nbVerticesTSP][nbVerticesTSP];
-        Map <Long, Map<Long,Double>> adjTSP = new HashMap<>();
+        Map<Long, Map<Long, Double>> adjTSP = new HashMap<>();
         Long idZero = Long.valueOf(0);
 
         for (Intersection origin : destinations) {
@@ -84,47 +84,47 @@ public class GraphAPI {
 
             adjTSP.put(idZero++, distDestinationsTSP);
         }
-            for (Map.Entry<Long, Map<Long, Double>> i : adjTSP.entrySet()) {
-                System.out.println(i.getKey() + " " + i.getValue());
-                int jj = 0;
-                for (Map.Entry<Long, Double> j : i.getValue().entrySet()) {
-                    costTSP[i.getKey().intValue()][jj++] = j.getValue();
+        for (Map.Entry<Long, Map<Long, Double>> i : adjTSP.entrySet()) {
+            System.out.println(i.getKey() + " " + i.getValue());
+            int jj = 0;
+            for (Map.Entry<Long, Double> j : i.getValue().entrySet()) {
+                costTSP[i.getKey().intValue()][jj++] = j.getValue();
+            }
+        }
+
+        for (int i = 0; i < nbVerticesTSP; i++) {
+            for (int j = 0; j < nbVerticesTSP; j++) {
+                if (costTSP[i][j] == 0) {
+                    costTSP[i][j] = Double.valueOf(-1);
                 }
+                System.out.print(costTSP[i][j] + " ");
             }
-
-            for (int i = 0; i < nbVerticesTSP; i++) {
-                for (int j = 0; j < nbVerticesTSP; j++) {
-                    if (costTSP[i][j] == 0) {
-                        costTSP[i][j] = Double.valueOf(-1);
-                    }
-                    System.out.print(costTSP[i][j] + " ");
-                }
-                System.out.println();
-            }
+            System.out.println();
+        }
 
 
-            Graph g = new CompleteGraph(nbVerticesTSP, costTSP);
+        Graph g = new CompleteGraph(nbVerticesTSP, costTSP);
 
-            long startTime = System.currentTimeMillis();
-            TSP tsp = new TSP1();
-            tsp.searchSolution(20000, g);
-            System.out.print("Solution of cost " + tsp.getSolutionCost() + " found in "
-                    + (System.currentTimeMillis() - startTime) + "ms : ");
+        long startTime = System.currentTimeMillis();
+        TSP tsp = new TSP1();
+        tsp.searchSolution(20000, g);
+        System.out.print("Solution of cost " + tsp.getSolutionCost() + " found in "
+                + (System.currentTimeMillis() - startTime) + "ms : ");
 
 
-            // Converting LnkedHashMap to Array
-            Intersection[] LHSArray = new Intersection[destinations.size()];
-            LHSArray = destinations.toArray(LHSArray);
+        // Converting LnkedHashMap to Array
+        Intersection[] LHSArray = new Intersection[destinations.size()];
+        LHSArray = destinations.toArray(LHSArray);
 
-            List<Intersection> pathTSP = new ArrayList<>();
-            for (int i = 0; i < nbVerticesTSP; i++) {
-                pathTSP.add(LHSArray[tsp.getSolution(i)]);
-            }
+        List<Intersection> pathTSP = new ArrayList<>();
+        for (int i = 0; i < nbVerticesTSP; i++) {
+            pathTSP.add(LHSArray[tsp.getSolution(i)]);
+        }
 
-            for (Intersection i : pathTSP) {
-                System.out.println(i);
-            }
-            Tour tour = new Tour(pathTSP,tsp.getSolutionCost());
+        for (Intersection i : pathTSP) {
+            System.out.println(i);
+        }
+        Tour tour = new Tour(pathTSP, tsp.getSolutionCost());
 
         return tour;
     }

@@ -223,14 +223,20 @@ public class MainsScreenController {
 
         List<Intersection> intersectionList = tour.getIntersections();
 
-        for (int i = 0; i < intersectionList.size(); i += 2) {
-            Intersection start = intersectionList.get(i);
-            Intersection end = intersectionList.get(i + 1);
+        System.out.println(intersectionList.size());
 
-            MapPoint pointStart = pointList.get(start.getIdIntersection()).getKey();
-            MapPoint pointEnd = pointList.get(end.getIdIntersection()).getKey();
+        for (int i = 0; i < intersectionList.size() - 1; i++) {
+            Intersection start;
+            Intersection end;
+            start = intersectionList.get(i);
+            end = intersectionList.get(i + 1);
+            MapPoint mapPointStart = new MapPoint(start.getLatitude(), start.getLongitude());
+            mapLayer.addPoint(start.getIdIntersection(), mapPointStart);
 
-            mapLayer.addSegment(pointStart, pointEnd);
+            MapPoint mapPointEnd = new MapPoint(end.getLatitude(), end.getLongitude());
+            mapLayer.addPoint(end.getIdIntersection(), mapPointEnd);
+
+            mapLayer.addSegment(mapPointStart, mapPointEnd);
         }
     }
 
