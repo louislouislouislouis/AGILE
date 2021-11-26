@@ -45,7 +45,7 @@ public class MainsScreenController {
 
     /* Création de la carte Gluon JavaFX */
     private MapView mapView = new MapView();
-    private LinkedList<MapLayer> layerList = new LinkedList<>();
+    private HashMap<String, MapLayer> layerList = new HashMap<>();
 
     //Declaration of the interactive buttons in the mainsScreen.fxml
     @FXML private Button btnLoadMap;
@@ -73,7 +73,7 @@ public class MainsScreenController {
         // We delete the map's content before loading the xml
 
         map.clearMap();
-        layerList.forEach(layer ->{
+        layerList.forEach((id, layer) ->{
             mapView.removeLayer(layer);
         });
 
@@ -118,7 +118,7 @@ public class MainsScreenController {
             mapLayer.addSegment(pointStart, pointEnd);
         });
 
-        layerList.add(mapLayer);
+        layerList.put("mapLayer",mapLayer);
 
         mapView.addLayer(mapLayer);
 
@@ -150,6 +150,11 @@ public class MainsScreenController {
 
         RequestDeserializer mydomrequest = new RequestDeserializer();
 
+        // We clear the requestLayer before loading an XML file with requests
+
+        planning.clearPlanning();
+        mapView.removeLayer(layerList.get("requestLayer"));
+
         try {
             mydomrequest.load(planning, selectedFile, map);
         } catch (ParserConfigurationException e) {
@@ -180,7 +185,7 @@ public class MainsScreenController {
             mapLayer.addPointPickup(pickupInt.getIdIntersection(), mapPointPickup, Color.AQUA);
         });
 
-        layerList.add(mapLayer);
+        layerList.put("requestLayer", mapLayer);
 
         mapView.addLayer(mapLayer);
 
