@@ -1,9 +1,17 @@
+import javafx.util.Pair;
+import org.hexanome.controller.Dijkstra;
+import org.hexanome.data.ExceptionXML;
 import org.hexanome.data.MapDeserializer;
 import org.hexanome.model.Intersection;
 import org.hexanome.model.MapIF;
+import org.hexanome.model.Segment;
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -37,24 +45,24 @@ public class AppTest {
             //Test des intersections
             double delta = 0.00001;
             Intersection i1 = map.getIntersections().get((long) 25175791);
-            assertNotEquals("Intersection 25175791 is null ", i1, null);
+            assertNotNull("Intersection 25175791 is null", i1);
             assertEquals("Intersection 25175791 latitude", i1.getLatitude(), 45.75406, delta);
             assertEquals("Intersection 25175791 longitude", i1.getLongitude(), 4.857418, delta);
             Intersection i2 = map.getIntersections().get((long) 2129259178);
-            assertNotEquals("Intersection 2129259178 is null", i2, null);
+            assertNotNull("Intersection 2129259178 is null", i2);
             assertEquals("Intersection 2129259178 latitude", i2.getLatitude(), 45.750404, delta);
             assertEquals("Intersection 2129259178 longitude", i2.getLongitude(), 4.8744674, delta);
             Intersection i3 = map.getIntersections().get((long) 26086130);
-            assertNotEquals("Intersection 26086130 is null", i3, null);
+            assertNotNull("Intersection 26086130 is null", i3);
             assertEquals("Intersection 26086130 latitude", i3.getLatitude(), 45.75871, delta);
             assertEquals("Intersection 26086130 longitude", i3.getLongitude(), 4.8704023, delta);
             Intersection i4 = map.getIntersections().get((long) 2129259176);
-            assertNotEquals("Intersection 2129259176 is null", i4, null);
+            assertNotNull("Intersection 2129259176 is null", i4);
             assertEquals("Intersection 2129259176 latitude", i4.getLatitude(), 45.75171, delta);
             assertEquals("Intersection 2129259176 longitude", i4.getLongitude(), 4.8718166, delta);
 
         } catch (Exception e) {
-            fail("An exception occurred");
+            fail("[testXML] An exception occurred");
             System.err.println(e);
         }
     }
