@@ -1,23 +1,19 @@
-import javafx.util.Pair;
-import org.hexanome.controller.Dijkstra;
 import org.hexanome.data.ExceptionXML;
 import org.hexanome.data.MapDeserializer;
 import org.hexanome.model.Intersection;
 import org.hexanome.model.MapIF;
-import org.hexanome.model.Segment;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
 
 import static org.junit.Assert.*;
 
-public class AppTest {
+public class XMLTest {
     @Test
-    public void testXML() {
+    public void parsing() {
         MapDeserializer md = new MapDeserializer();
         MapIF map = new MapIF();
 
@@ -65,5 +61,29 @@ public class AppTest {
             fail("[testXML] An exception occurred");
             System.err.println(e);
         }
+    }
+
+    @Test(expected = ExceptionXML.class)
+    public void negativeIntersectionId() throws ExceptionXML, ParserConfigurationException, IOException, SAXException {
+        File idNeg = new File("src/test/xml/idNeg.xml");
+        MapDeserializer md = new MapDeserializer();
+        MapIF map = new MapIF();
+        md.load(map, idNeg);
+    }
+
+    @Test(expected = ExceptionXML.class)
+    public void negativeLatitude() throws ExceptionXML, ParserConfigurationException, IOException, SAXException {
+        File negLat = new File("src/test/xml/negLat.xml");
+        MapDeserializer md = new MapDeserializer();
+        MapIF map = new MapIF();
+        md.load(map, negLat);
+    }
+
+    @Test(expected = ExceptionXML.class)
+    public void negativeLongitude() throws ExceptionXML, ParserConfigurationException, IOException, SAXException {
+        File negLong = new File("src/test/xml/negLong.xml");
+        MapDeserializer md = new MapDeserializer();
+        MapIF map = new MapIF();
+        md.load(map, negLong);
     }
 }
