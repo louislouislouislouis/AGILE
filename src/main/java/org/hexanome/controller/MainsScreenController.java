@@ -48,17 +48,37 @@ public class MainsScreenController {
     private HashMap<String, MapLayer> layerList = new HashMap<>();
 
     //Declaration of the interactive buttons in the mainsScreen.fxml
-    @FXML private Button btnLoadMap;
-    @FXML private Button btnAddRequest;
-    @FXML private Button btnValidateRoute;
+    @FXML
+    private Button btnLoadMap;
+    @FXML
+    private Button btnAddRequest;
+    @FXML
+    private Button btnValidateRoute;
 
     /*-------------------------GETTERS AND SETTERS-----------------------------------------------------*/
-    public Button getBtnLoadMap() {return btnLoadMap;}
-    public void setBtnLoadMap(Button btnLoadMap) {this.btnLoadMap = btnLoadMap;}
-    public Button getBtnAddRequest() {return btnAddRequest;}
-    public void setBtnAddRequest(Button btnAddRequest) {this.btnAddRequest = btnAddRequest;}
-    public Button getBtnValidateRoute() {return btnValidateRoute;}
-    public void setBtnValidateRoute(Button btnValidateRoute) {this.btnValidateRoute = btnValidateRoute;}
+    public Button getBtnLoadMap() {
+        return btnLoadMap;
+    }
+
+    public void setBtnLoadMap(Button btnLoadMap) {
+        this.btnLoadMap = btnLoadMap;
+    }
+
+    public Button getBtnAddRequest() {
+        return btnAddRequest;
+    }
+
+    public void setBtnAddRequest(Button btnAddRequest) {
+        this.btnAddRequest = btnAddRequest;
+    }
+
+    public Button getBtnValidateRoute() {
+        return btnValidateRoute;
+    }
+
+    public void setBtnValidateRoute(Button btnValidateRoute) {
+        this.btnValidateRoute = btnValidateRoute;
+    }
 
     /*--------------------------------Methods----------------------------------------------------------*/
 
@@ -73,7 +93,7 @@ public class MainsScreenController {
         // We delete the map's content before loading the xml
 
         map.clearMap();
-        layerList.forEach((id, layer) ->{
+        layerList.forEach((id, layer) -> {
             mapView.removeLayer(layer);
         });
 
@@ -104,7 +124,7 @@ public class MainsScreenController {
             mapLayer.addPoint(id, mapPoint);
         });
 
-        layerList.put("mapLayer",mapLayer);
+        layerList.put("mapLayer", mapLayer);
 
         mapView.addLayer(mapLayer);
 
@@ -112,8 +132,8 @@ public class MainsScreenController {
         mapView.setZoom(14);
 
         /* creation of the mapPoint on which the camera will be centered
-        *  We use the longitude and latitude of Lyon
-        * */
+         *  We use the longitude and latitude of Lyon
+         * */
         MapPoint mapPointCamera = new MapPoint(45.764043, 4.835659);
 
         /* Centre la carte sur le point */
@@ -126,10 +146,10 @@ public class MainsScreenController {
         //method that uploads an XML file (carte)
         File selectedFile = fileChooser(actionEvent);
 
-        if(selectedFile.exists()){
+        if (selectedFile.exists()) {
             btnAddRequest.setDisable(false);
             btnValidateRoute.setDisable(false);
-        }else{
+        } else {
             btnAddRequest.setDisable(true);
             btnValidateRoute.setDisable(true);
         }
@@ -186,9 +206,10 @@ public class MainsScreenController {
 
     public void computeTour(ActionEvent actionEvent) {
         //method that calculates the most optimal path of the tour
+        System.out.println("AZERTY");
     }
 
-    public File fileChooser(ActionEvent actionEvent){
+    public File fileChooser(ActionEvent actionEvent) {
         //method that opens the File Explorer to allow the user to get their XML files
         Node node = (Node) actionEvent.getSource();
         Stage thisStage = (Stage) node.getScene().getWindow();
@@ -200,19 +221,19 @@ public class MainsScreenController {
         return selectedFile;
     }
 
-    public boolean validationMap(File selectedFile){
+    public boolean validationMap(File selectedFile) {
         //method that validates de xmlFile is empty
         boolean validationMap = false;
         return validationMap;
     }
-    public boolean validationPlaningRequest(File selectedFile){
+
+    public boolean validationPlaningRequest(File selectedFile) {
         //method that validates the list of request in the xmlFile
         boolean validationPlaningRequest = false;
         return validationPlaningRequest;
     }
 
-    /**@FXML
-    private void switchToSecondary() throws IOException {
-        App.setRoot("secondary");
+    /**@FXML private void switchToSecondary() throws IOException {
+    App.setRoot("secondary");
     } **/
 }
