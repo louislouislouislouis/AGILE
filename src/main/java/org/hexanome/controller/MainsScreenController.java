@@ -79,7 +79,7 @@ public class MainsScreenController {
         File selectedFile = fileChooser(actionEvent);
         System.out.println(selectedFile);
 
-        //Pour trouver les
+        //Pour trouver les fichers XML qui ont les request
     }
 
     public void calculateRoute(ActionEvent actionEvent) {
@@ -99,10 +99,12 @@ public class MainsScreenController {
     }
 
     public boolean validationMap(File selectedFile){
+        //methode pour trouver les fichers XML qui sont sans request
         boolean validationMap = false;
         return validationMap;
     }
     public boolean validationPlaningRequest(File selectedFile){
+        //methode pour trouver les fichers XML qui ont les request
         boolean validationPlaningRequest = false;
         return validationPlaningRequest;
     }
