@@ -104,20 +104,6 @@ public class MainsScreenController {
             mapLayer.addPoint(id, mapPoint);
         });
 
-        //Add Segment to the layer
-
-        HashMap<Long, Pair<MapPoint, Circle>> pointList = mapLayer.getPointList();
-
-        map.getSegments().forEach((key, segment) -> {
-            Intersection start = segment.getOriginIntersection();
-            Intersection end = segment.getDestinationIntersection();
-
-            MapPoint pointStart = pointList.get(start.getIdIntersection()).getKey();
-            MapPoint pointEnd = pointList.get(end.getIdIntersection()).getKey();
-
-            mapLayer.addSegment(pointStart, pointEnd);
-        });
-
         layerList.put("mapLayer",mapLayer);
 
         mapView.addLayer(mapLayer);
