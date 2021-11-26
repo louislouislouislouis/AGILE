@@ -5,22 +5,21 @@ import com.gluonhq.maps.MapPoint;
 
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polyline;
+import javafx.scene.shape.*;
 import javafx.util.Pair;
 
 import java.util.HashMap;
 
 /** Affiche un point rouge sur la carte */
-public class CustomCircleMarkerLayer extends MapLayer {
+public class CustomMapLayer extends MapLayer {
 
-    private final HashMap<Long, Pair<MapPoint, Circle>> pointList;
+    private final HashMap<Long, Pair<MapPoint, Shape>> pointList;
     private final HashMap<Polyline,Pair<MapPoint, MapPoint>> segmentList;
 
     /**
      * @see com.gluonhq.maps.MapPoint
      */
-    public CustomCircleMarkerLayer(){
+    public CustomMapLayer(){
         pointList = new HashMap<>();
         segmentList = new HashMap<>();
     }
@@ -35,7 +34,15 @@ public class CustomCircleMarkerLayer extends MapLayer {
     }
 
     public void addPointDelivery(Long id, MapPoint mapPoint, Color color){
-        Circle circle = new Circle(4, color);
+        Circle circle = new Circle(5, color);
+
+
+
+        SVGPath icon = new SVGPath();
+        icon.setContent("M 45 0 C 25.463 0 9.625 15.838 9.625 35.375 c 0 8.722 3.171 16.693 8.404 22.861 L 45 90 l 26.97 -31.765 c 5.233 -6.167 8.404 -14.139 8.404 -22.861 C 80.375 15.838 64.537 0 45 0 z M 45 48.705 c -8.035 0 -14.548 -6.513 -14.548 -14.548 c 0 -8.035 6.513 -14.548 14.548 -14.548 s 14.548 6.513 14.548 14.548 C 59.548 42.192 53.035 48.705 45 48.705 z");
+        icon.setFill(color);
+        icon.setScaleX(0.25);
+        icon.setScaleY(0.25);
 
         pointList.put(id, new Pair<>(mapPoint, circle));
 
@@ -52,7 +59,7 @@ public class CustomCircleMarkerLayer extends MapLayer {
         this.getChildren().add(circle);
     }
 
-    public HashMap<Long, Pair<MapPoint, Circle>> getPointList() {
+    public HashMap<Long, Pair<MapPoint, Shape>> getPointList() {
         return pointList;
     }
 
@@ -63,12 +70,13 @@ public class CustomCircleMarkerLayer extends MapLayer {
 
         pointList.forEach( (key, value) -> {
             MapPoint mapPoint = value.getKey();
-            Circle circle = value.getValue();
-            Point2D point2d = this.getMapPoint(mapPoint.getLatitude(), mapPoint.getLongitude());
 
+            Shape shape = value.getValue();
+
+            Point2D point2d = this.getMapPoint(mapPoint.getLatitude(), mapPoint.getLongitude());
             /* Déplace le cercle selon les coordonnées du point */
-            circle.setTranslateX(point2d.getX());
-            circle.setTranslateY(point2d.getY());
+            shape.setTranslateX(point2d.getX());
+            shape.setTranslateY(point2d.getY());
         });
 
         segmentList.forEach((polyline,pair) -> {

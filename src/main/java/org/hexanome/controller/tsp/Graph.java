@@ -7,11 +7,11 @@ public interface Graph {
 	public abstract int getNbVertices();
 
 	/**
-	 * @param i 
-	 * @param j 
+	 * @param i
+	 * @param j
 	 * @return the cost of arc (i,j) if (i,j) is an arc; -1 otherwise
 	 */
-	public abstract int getCost(int i, int j);
+	public abstract Double getCost(int i, int j);
 
 	/**
 	 * @param i 
