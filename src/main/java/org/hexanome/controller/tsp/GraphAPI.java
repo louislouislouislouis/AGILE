@@ -142,7 +142,7 @@ public class GraphAPI {
                 }
             }
 
-            Tour tour = new Tour(pathTSP,tsp.getSolutionCost());
+            Tour tour = new Tour(completeTour,tsp.getSolutionCost());
 
         return tour;
     }
