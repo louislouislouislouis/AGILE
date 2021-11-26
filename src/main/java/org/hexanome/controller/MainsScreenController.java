@@ -184,11 +184,11 @@ public class MainsScreenController {
         planning.getRequests().forEach((Request) -> {
             Intersection deliveryInt = Request.getDeliveryPoint().getAddress();
             MapPoint mapPointDelivery = new MapPoint(deliveryInt.getLatitude(), deliveryInt.getLongitude());
-            mapLayer.addPointDelivery(deliveryInt.getIdIntersection(), mapPointDelivery, Color.RED);
+            mapLayer.addPointDelivery(deliveryInt.getIdIntersection(), mapPointDelivery, Color.AQUA);
 
             Intersection pickupInt = Request.getPickupPoint().getAddress();
             MapPoint mapPointPickup = new MapPoint(pickupInt.getLatitude(), pickupInt.getLongitude());
-            mapLayer.addPointPickup(pickupInt.getIdIntersection(), mapPointPickup, Color.RED);
+            mapLayer.addPointPickup(pickupInt.getIdIntersection(), mapPointPickup, Color.AQUA);
         });
 
         layerList.put("requestLayer", mapLayer);
@@ -202,14 +202,15 @@ public class MainsScreenController {
         //method that uploads an XML file with the command
         File selectedFile = fileChooser(actionEvent);
         System.out.println(selectedFile);
+
+        //Pour trouver les
     }
 
-    public void computeTour(ActionEvent actionEvent) {
+    public void calculateRoute(ActionEvent actionEvent) {
         //method that calculates the most optimal path of the tour
-        System.out.println("AZERTY");
     }
 
-    public File fileChooser(ActionEvent actionEvent) {
+    public File fileChooser(ActionEvent actionEvent){
         //method that opens the File Explorer to allow the user to get their XML files
         Node node = (Node) actionEvent.getSource();
         Stage thisStage = (Stage) node.getScene().getWindow();
@@ -221,19 +222,19 @@ public class MainsScreenController {
         return selectedFile;
     }
 
-    public boolean validationMap(File selectedFile) {
+    public boolean validationMap(File selectedFile){
         //method that validates de xmlFile is empty
         boolean validationMap = false;
         return validationMap;
     }
-
-    public boolean validationPlaningRequest(File selectedFile) {
+    public boolean validationPlaningRequest(File selectedFile){
         //method that validates the list of request in the xmlFile
         boolean validationPlaningRequest = false;
         return validationPlaningRequest;
     }
 
-    /**@FXML private void switchToSecondary() throws IOException {
-    App.setRoot("secondary");
+    /**@FXML
+    private void switchToSecondary() throws IOException {
+        App.setRoot("secondary");
     } **/
 }
