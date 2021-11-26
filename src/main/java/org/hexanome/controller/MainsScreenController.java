@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 import com.gluonhq.maps.MapLayer;
 import javafx.geometry.Point2D;
@@ -16,15 +17,19 @@ import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Polyline;
+import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import org.hexanome.controller.tsp.Graph;
+import org.hexanome.controller.tsp.GraphAPI;
 import org.hexanome.data.ExceptionXML;
 import org.hexanome.data.MapDeserializer;
 import org.hexanome.data.RequestDeserializer;
 import org.hexanome.model.Intersection;
 import org.hexanome.model.MapIF;
 import org.hexanome.model.PlanningRequest;
+import org.hexanome.model.Tour;
 import org.hexanome.vue.App;
 import org.xml.sax.SAXException;
 
@@ -42,6 +47,7 @@ public class MainsScreenController {
     /*---------------------------VARIABLES------------------------------------------------------------*/
     private MapIF map = new MapIF();
     private PlanningRequest planning = new PlanningRequest();
+    private Tour tour;
 
     /* Création de la carte Gluon JavaFX */
     private MapView mapView = new MapView();
@@ -206,6 +212,26 @@ public class MainsScreenController {
 
     public void computeTour(ActionEvent actionEvent) {
         //method that calculates the most optimal path of the tour
+
+        tour = new GraphAPI().V1_TSP(planning, map);
+
+        //Add Segment to the layer
+
+        CustomMapLayer mapLayer = (CustomMapLayer) layerList.get("requestLayer");
+
+        HashMap<Long, Pair<MapPoint, Shape>> pointList = mapLayer.getPointList();
+
+        List<Intersection> intersectionList = tour.getIntersections();
+
+        for (int i = 0; i < intersectionList.size(); i += 2) {
+            Intersection start = intersectionList.get(i);
+            Intersection end = intersectionList.get(i + 1);
+
+            MapPoint pointStart = pointList.get(start.getIdIntersection()).getKey();
+            MapPoint pointEnd = pointList.get(end.getIdIntersection()).getKey();
+
+            mapLayer.addSegment(pointStart, pointEnd);
+        }
     }
 
     public File fileChooser(ActionEvent actionEvent) {
