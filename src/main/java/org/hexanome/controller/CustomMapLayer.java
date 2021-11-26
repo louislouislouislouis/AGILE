@@ -12,7 +12,7 @@ import javafx.util.Pair;
 import java.util.HashMap;
 
 /** Affiche un point rouge sur la carte */
-public class CustomCircleMarkerLayer extends MapLayer {
+public class CustomMapLayer extends MapLayer {
 
     private final HashMap<Long, Pair<MapPoint, Circle>> pointList;
     private final HashMap<Polyline,Pair<MapPoint, MapPoint>> segmentList;
@@ -20,7 +20,7 @@ public class CustomCircleMarkerLayer extends MapLayer {
     /**
      * @see com.gluonhq.maps.MapPoint
      */
-    public CustomCircleMarkerLayer(){
+    public CustomMapLayer(){
         pointList = new HashMap<>();
         segmentList = new HashMap<>();
     }

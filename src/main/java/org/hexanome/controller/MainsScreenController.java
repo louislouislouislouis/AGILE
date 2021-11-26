@@ -89,7 +89,7 @@ public class MainsScreenController {
         /* Création et ajoute une couche à la carte */
 
         //MapLayer mapLayer = new CustomPinLayer(mapPoint);
-        CustomCircleMarkerLayer mapLayer = new CustomCircleMarkerLayer();
+        CustomMapLayer mapLayer = new CustomMapLayer();
 
         //add points to the layer
         map.getIntersections().forEach((id, intersection) -> {
@@ -151,7 +151,7 @@ public class MainsScreenController {
         /* Création et ajoute une couche à la carte */
 
         //MapLayer mapLayer = new CustomPinLayer(mapPoint);
-        CustomCircleMarkerLayer mapLayer = new CustomCircleMarkerLayer();
+        CustomMapLayer mapLayer = new CustomMapLayer();
 
         //add points to the layer
         planning.getRequests().forEach((Request) -> {
