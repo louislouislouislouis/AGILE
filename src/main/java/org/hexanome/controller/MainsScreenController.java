@@ -206,6 +206,7 @@ public class MainsScreenController {
 
     public void computeTour(ActionEvent actionEvent) {
         //method that calculates the most optimal path of the tour
+
     }
 
     public File fileChooser(ActionEvent actionEvent) {

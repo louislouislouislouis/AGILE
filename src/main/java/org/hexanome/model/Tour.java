@@ -5,13 +5,13 @@ import java.util.List;
 
 public class Tour {
     private List<Intersection> intersections = new ArrayList();
-    private double cost;
+    private Double cost;
 
     public Tour(){
 
     }
     
-    public Tour(List<Intersection> intersections, float cost) {
+    public Tour(List<Intersection> intersections, Double cost) {
         this.intersections = intersections;
         this.cost = cost;
     }
