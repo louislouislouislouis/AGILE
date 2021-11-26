@@ -26,6 +26,10 @@ public class PlanningRequest {
         requests.add(request);
     }
 
+    public void clearPlanning(){
+        requests.clear();
+    }
+
     @Override
     public String toString() {
         return "PlanningRequest{" +

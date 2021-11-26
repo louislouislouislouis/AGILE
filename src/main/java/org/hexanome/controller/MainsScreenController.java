@@ -45,20 +45,40 @@ public class MainsScreenController {
 
     /* Création de la carte Gluon JavaFX */
     private MapView mapView = new MapView();
-    private LinkedList<MapLayer> layerList = new LinkedList<>();
+    private HashMap<String, MapLayer> layerList = new HashMap<>();
 
     //Declaration of the interactive buttons in the mainsScreen.fxml
-    @FXML private Button btnLoadMap;
-    @FXML private Button btnAddRequest;
-    @FXML private Button btnValidateRoute;
+    @FXML
+    private Button btnLoadMap;
+    @FXML
+    private Button btnAddRequest;
+    @FXML
+    private Button btnValidateRoute;
 
     /*-------------------------GETTERS AND SETTERS-----------------------------------------------------*/
-    public Button getBtnLoadMap() {return btnLoadMap;}
-    public void setBtnLoadMap(Button btnLoadMap) {this.btnLoadMap = btnLoadMap;}
-    public Button getBtnAddRequest() {return btnAddRequest;}
-    public void setBtnAddRequest(Button btnAddRequest) {this.btnAddRequest = btnAddRequest;}
-    public Button getBtnValidateRoute() {return btnValidateRoute;}
-    public void setBtnValidateRoute(Button btnValidateRoute) {this.btnValidateRoute = btnValidateRoute;}
+    public Button getBtnLoadMap() {
+        return btnLoadMap;
+    }
+
+    public void setBtnLoadMap(Button btnLoadMap) {
+        this.btnLoadMap = btnLoadMap;
+    }
+
+    public Button getBtnAddRequest() {
+        return btnAddRequest;
+    }
+
+    public void setBtnAddRequest(Button btnAddRequest) {
+        this.btnAddRequest = btnAddRequest;
+    }
+
+    public Button getBtnValidateRoute() {
+        return btnValidateRoute;
+    }
+
+    public void setBtnValidateRoute(Button btnValidateRoute) {
+        this.btnValidateRoute = btnValidateRoute;
+    }
 
     /*--------------------------------Methods----------------------------------------------------------*/
 
@@ -73,7 +93,7 @@ public class MainsScreenController {
         // We delete the map's content before loading the xml
 
         map.clearMap();
-        layerList.forEach(layer ->{
+        layerList.forEach((id, layer) -> {
             mapView.removeLayer(layer);
         });
 
@@ -96,7 +116,7 @@ public class MainsScreenController {
         /* Création et ajoute une couche à la carte */
 
         //MapLayer mapLayer = new CustomPinLayer(mapPoint);
-        CustomCircleMarkerLayer mapLayer = new CustomCircleMarkerLayer();
+        CustomMapLayer mapLayer = new CustomMapLayer();
 
         //add points to the layer
         map.getIntersections().forEach((id, intersection) -> {
@@ -104,21 +124,7 @@ public class MainsScreenController {
             mapLayer.addPoint(id, mapPoint);
         });
 
-        //Add Segment to the layer
-
-        HashMap<Long, Pair<MapPoint, Circle>> pointList = mapLayer.getPointList();
-
-        map.getSegments().forEach((key, segment) -> {
-            Intersection start = segment.getOriginIntersection();
-            Intersection end = segment.getDestinationIntersection();
-
-            MapPoint pointStart = pointList.get(start.getIdIntersection()).getKey();
-            MapPoint pointEnd = pointList.get(end.getIdIntersection()).getKey();
-
-            mapLayer.addSegment(pointStart, pointEnd);
-        });
-
-        layerList.add(mapLayer);
+        layerList.put("mapLayer", mapLayer);
 
         mapView.addLayer(mapLayer);
 
@@ -126,8 +132,8 @@ public class MainsScreenController {
         mapView.setZoom(14);
 
         /* creation of the mapPoint on which the camera will be centered
-        *  We use the longitude and latitude of Lyon
-        * */
+         *  We use the longitude and latitude of Lyon
+         * */
         MapPoint mapPointCamera = new MapPoint(45.764043, 4.835659);
 
         /* Centre la carte sur le point */
@@ -140,15 +146,20 @@ public class MainsScreenController {
         //method that uploads an XML file (carte)
         File selectedFile = fileChooser(actionEvent);
 
-        if(selectedFile.exists()){
+        if (selectedFile.exists()) {
             btnAddRequest.setDisable(false);
             btnValidateRoute.setDisable(false);
-        }else{
+        } else {
             btnAddRequest.setDisable(true);
             btnValidateRoute.setDisable(true);
         }
 
         RequestDeserializer mydomrequest = new RequestDeserializer();
+
+        // We clear the requestLayer before loading an XML file with requests
+
+        planning.clearPlanning();
+        mapView.removeLayer(layerList.get("requestLayer"));
 
         try {
             mydomrequest.load(planning, selectedFile, map);
@@ -167,20 +178,20 @@ public class MainsScreenController {
         /* Création et ajoute une couche à la carte */
 
         //MapLayer mapLayer = new CustomPinLayer(mapPoint);
-        CustomCircleMarkerLayer mapLayer = new CustomCircleMarkerLayer();
+        CustomMapLayer mapLayer = new CustomMapLayer();
 
         //add points to the layer
         planning.getRequests().forEach((Request) -> {
             Intersection deliveryInt = Request.getDeliveryPoint().getAddress();
             MapPoint mapPointDelivery = new MapPoint(deliveryInt.getLatitude(), deliveryInt.getLongitude());
-            mapLayer.addPointDelivery(deliveryInt.getIdIntersection(), mapPointDelivery, Color.AQUA);
+            mapLayer.addPointDelivery(deliveryInt.getIdIntersection(), mapPointDelivery, Color.RED);
 
             Intersection pickupInt = Request.getPickupPoint().getAddress();
             MapPoint mapPointPickup = new MapPoint(pickupInt.getLatitude(), pickupInt.getLongitude());
-            mapLayer.addPointPickup(pickupInt.getIdIntersection(), mapPointPickup, Color.AQUA);
+            mapLayer.addPointPickup(pickupInt.getIdIntersection(), mapPointPickup, Color.RED);
         });
 
-        layerList.add(mapLayer);
+        layerList.put("requestLayer", mapLayer);
 
         mapView.addLayer(mapLayer);
 
@@ -191,15 +202,13 @@ public class MainsScreenController {
         //method that uploads an XML file with the command
         File selectedFile = fileChooser(actionEvent);
         System.out.println(selectedFile);
-
-        //Pour trouver les
     }
 
-    public void calculateRoute(ActionEvent actionEvent) {
+    public void computeTour(ActionEvent actionEvent) {
         //method that calculates the most optimal path of the tour
     }
 
-    public File fileChooser(ActionEvent actionEvent){
+    public File fileChooser(ActionEvent actionEvent) {
         //method that opens the File Explorer to allow the user to get their XML files
         Node node = (Node) actionEvent.getSource();
         Stage thisStage = (Stage) node.getScene().getWindow();
@@ -211,19 +220,19 @@ public class MainsScreenController {
         return selectedFile;
     }
 
-    public boolean validationMap(File selectedFile){
+    public boolean validationMap(File selectedFile) {
         //method that validates de xmlFile is empty
         boolean validationMap = false;
         return validationMap;
     }
-    public boolean validationPlaningRequest(File selectedFile){
+
+    public boolean validationPlaningRequest(File selectedFile) {
         //method that validates the list of request in the xmlFile
         boolean validationPlaningRequest = false;
         return validationPlaningRequest;
     }
 
-    /**@FXML
-    private void switchToSecondary() throws IOException {
-        App.setRoot("secondary");
+    /**@FXML private void switchToSecondary() throws IOException {
+    App.setRoot("secondary");
     } **/
 }
