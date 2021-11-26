@@ -96,7 +96,7 @@ public class MainsScreenController {
         /* Création et ajoute une couche à la carte */
 
         //MapLayer mapLayer = new CustomPinLayer(mapPoint);
-        CustomCircleMarkerLayer mapLayer = new CustomCircleMarkerLayer();
+        CustomMapLayer mapLayer = new CustomMapLayer();
 
         //add points to the layer
         map.getIntersections().forEach((id, intersection) -> {
@@ -158,17 +158,17 @@ public class MainsScreenController {
         /* Création et ajoute une couche à la carte */
 
         //MapLayer mapLayer = new CustomPinLayer(mapPoint);
-        CustomCircleMarkerLayer mapLayer = new CustomCircleMarkerLayer();
+        CustomMapLayer mapLayer = new CustomMapLayer();
 
         //add points to the layer
         planning.getRequests().forEach((Request) -> {
             Intersection deliveryInt = Request.getDeliveryPoint().getAddress();
             MapPoint mapPointDelivery = new MapPoint(deliveryInt.getLatitude(), deliveryInt.getLongitude());
-            mapLayer.addPointDelivery(deliveryInt.getIdIntersection(), mapPointDelivery, Color.AQUA);
+            mapLayer.addPointDelivery(deliveryInt.getIdIntersection(), mapPointDelivery, Color.RED);
 
             Intersection pickupInt = Request.getPickupPoint().getAddress();
             MapPoint mapPointPickup = new MapPoint(pickupInt.getLatitude(), pickupInt.getLongitude());
-            mapLayer.addPointPickup(pickupInt.getIdIntersection(), mapPointPickup, Color.AQUA);
+            mapLayer.addPointPickup(pickupInt.getIdIntersection(), mapPointPickup, Color.RED);
         });
 
         layerList.put("requestLayer", mapLayer);
@@ -182,11 +182,9 @@ public class MainsScreenController {
         //method that uploads an XML file with the command
         File selectedFile = fileChooser(actionEvent);
         System.out.println(selectedFile);
-
-        //Pour trouver les
     }
 
-    public void calculateRoute(ActionEvent actionEvent) {
+    public void computeTour(ActionEvent actionEvent) {
         //method that calculates the most optimal path of the tour
     }
 
