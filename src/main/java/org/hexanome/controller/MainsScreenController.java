@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 import com.gluonhq.maps.MapLayer;
 import javafx.geometry.Point2D;
@@ -16,15 +17,19 @@ import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Polyline;
+import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import org.hexanome.controller.tsp.Graph;
+import org.hexanome.controller.tsp.GraphAPI;
 import org.hexanome.data.ExceptionXML;
 import org.hexanome.data.MapDeserializer;
 import org.hexanome.data.RequestDeserializer;
 import org.hexanome.model.Intersection;
 import org.hexanome.model.MapIF;
 import org.hexanome.model.PlanningRequest;
+import org.hexanome.model.Tour;
 import org.hexanome.vue.App;
 import org.xml.sax.SAXException;
 
@@ -42,10 +47,12 @@ public class MainsScreenController {
     /*---------------------------VARIABLES------------------------------------------------------------*/
     private MapIF map = new MapIF();
     private PlanningRequest planning = new PlanningRequest();
+    private Tour tour;
 
     /* Création de la carte Gluon JavaFX */
     private MapView mapView = new MapView();
-    private HashMap<String, MapLayer> layerList = new HashMap<>();
+    private MapLayer requestLayer = new MapLayer();
+    private MapLayer tourLayer = new MapLayer();
 
     //Declaration of the interactive buttons in the mainsScreen.fxml
     @FXML
@@ -93,10 +100,8 @@ public class MainsScreenController {
         // We delete the map's content before loading the xml
 
         map.clearMap();
-        layerList.forEach((id, layer) -> {
-            mapView.removeLayer(layer);
-        });
-
+        mapView.removeLayer(requestLayer);
+        mapView.removeLayer(tourLayer);
 
         try {
             domMap.load(map, selectedFile);
@@ -116,7 +121,7 @@ public class MainsScreenController {
         /* Création et ajoute une couche à la carte */
 
         //MapLayer mapLayer = new CustomPinLayer(mapPoint);
-        CustomMapLayer mapLayer = new CustomMapLayer();
+        /*CustomMapLayer mapLayer = new CustomMapLayer();
 
         //add points to the layer
         map.getIntersections().forEach((id, intersection) -> {
@@ -124,9 +129,7 @@ public class MainsScreenController {
             mapLayer.addPoint(id, mapPoint);
         });
 
-        layerList.put("mapLayer", mapLayer);
-
-        mapView.addLayer(mapLayer);
+        mapView.addLayer(mapLayer);*/
 
         /* Zoom de 5 */
         mapView.setZoom(14);
@@ -139,12 +142,19 @@ public class MainsScreenController {
         /* Centre la carte sur le point */
         mapView.flyTo(0, mapPointCamera, 0.1);
 
+        //force la mise à jour de la carte en la supprimant et la rajoutant dans le conteneur
+        mapContainer.getChildren().clear();
         mapContainer.getChildren().add(mapView);
     }
 
     public void loadRequest(ActionEvent actionEvent) {
         //method that uploads an XML file (carte)
         File selectedFile = fileChooser(actionEvent);
+
+        // on enleve les laers actuels
+
+        mapView.removeLayer(requestLayer);
+        mapView.removeLayer(tourLayer);
 
         if (selectedFile.exists()) {
             btnAddRequest.setDisable(false);
@@ -159,7 +169,6 @@ public class MainsScreenController {
         // We clear the requestLayer before loading an XML file with requests
 
         planning.clearPlanning();
-        mapView.removeLayer(layerList.get("requestLayer"));
 
         try {
             mydomrequest.load(planning, selectedFile, map);
@@ -181,6 +190,13 @@ public class MainsScreenController {
         CustomMapLayer mapLayer = new CustomMapLayer();
 
         //add points to the layer
+
+        //warehouse
+        Intersection warehouse = planning.getWarehouse().getAddress();
+        mapLayer.addPointWarehouse(warehouse.getIdIntersection(),
+                new MapPoint(warehouse.getLatitude(), warehouse.getLongitude()), Color.DARKGOLDENROD);
+
+        //requests
         planning.getRequests().forEach((Request) -> {
             Intersection deliveryInt = Request.getDeliveryPoint().getAddress();
             MapPoint mapPointDelivery = new MapPoint(deliveryInt.getLatitude(), deliveryInt.getLongitude());
@@ -191,11 +207,13 @@ public class MainsScreenController {
             mapLayer.addPointPickup(pickupInt.getIdIntersection(), mapPointPickup, Color.RED);
         });
 
-        layerList.put("requestLayer", mapLayer);
+        requestLayer = mapLayer;
 
-        mapView.addLayer(mapLayer);
+        mapView.addLayer(requestLayer);
 
-        //mapContainer.getChildren().add(mapView);
+        //force la mise à jour de la carte en la supprimant et la rajoutant dans le conteneur
+        mapContainer.getChildren().clear();
+        mapContainer.getChildren().add(mapView);
     }
 
     public void addRequest(ActionEvent actionEvent) {
@@ -207,6 +225,39 @@ public class MainsScreenController {
     public void computeTour(ActionEvent actionEvent) {
         //method that calculates the most optimal path of the tour
 
+        mapView.removeLayer(tourLayer);
+
+        tour = new GraphAPI().V1_TSP(planning, map);
+
+        //Add Segment to the layer
+
+        CustomMapLayer mapLayer = new CustomMapLayer();
+
+        List<Intersection> intersectionList = tour.getIntersections();
+
+        System.out.println(intersectionList.size());
+
+        for (int i = 0; i < intersectionList.size() - 1; i++) {
+            Intersection start;
+            Intersection end;
+            start = intersectionList.get(i);
+            end = intersectionList.get(i + 1);
+            MapPoint mapPointStart = new MapPoint(start.getLatitude(), start.getLongitude());
+            mapLayer.addPoint(start.getIdIntersection(), mapPointStart);
+
+            MapPoint mapPointEnd = new MapPoint(end.getLatitude(), end.getLongitude());
+            mapLayer.addPoint(end.getIdIntersection(), mapPointEnd);
+
+            mapLayer.addSegment(mapPointStart, mapPointEnd);
+        }
+
+        tourLayer = mapLayer;
+
+        mapView.addLayer(tourLayer);
+
+        //force la mise à jour de la carte en la supprimant et la rajoutant dans le conteneur
+        mapContainer.getChildren().clear();
+        mapContainer.getChildren().add(mapView);
     }
 
     public File fileChooser(ActionEvent actionEvent) {

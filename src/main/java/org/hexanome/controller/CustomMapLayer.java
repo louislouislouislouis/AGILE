@@ -10,21 +10,23 @@ import javafx.util.Pair;
 
 import java.util.HashMap;
 
-/** Affiche un point rouge sur la carte */
+/**
+ * Affiche un point rouge sur la carte
+ */
 public class CustomMapLayer extends MapLayer {
 
     private final HashMap<Long, Pair<MapPoint, Shape>> pointList;
-    private final HashMap<Polyline,Pair<MapPoint, MapPoint>> segmentList;
+    private final HashMap<Polyline, Pair<MapPoint, MapPoint>> segmentList;
 
     /**
      * @see com.gluonhq.maps.MapPoint
      */
-    public CustomMapLayer(){
+    public CustomMapLayer() {
         pointList = new HashMap<>();
         segmentList = new HashMap<>();
     }
 
-    public void addPoint(Long id, MapPoint mapPoint){
+    public void addPoint(Long id, MapPoint mapPoint) {
         Circle circle = new Circle(1.5, Color.FIREBRICK);
 
         pointList.put(id, new Pair<>(mapPoint, circle));
@@ -33,9 +35,17 @@ public class CustomMapLayer extends MapLayer {
         this.getChildren().add(circle);
     }
 
-    public void addPointDelivery(Long id, MapPoint mapPoint, Color color){
-        Circle circle = new Circle(5, color);
+    public void addPointWarehouse(Long id, MapPoint mapPoint, Color color) {
+        Circle circle = new Circle(6, color);
 
+        pointList.put(id, new Pair<>(mapPoint, circle));
+
+        /* Ajoute le cercle au MapLayer */
+        this.getChildren().add(circle);
+    }
+
+    public void addPointDelivery(Long id, MapPoint mapPoint, Color color) {
+        Circle circle = new Circle(5, color);
 
 
         SVGPath icon = new SVGPath();
@@ -50,13 +60,22 @@ public class CustomMapLayer extends MapLayer {
         this.getChildren().add(circle);
     }
 
-    public void addPointPickup(Long id, MapPoint mapPoint, Color color){
+    public void addPointPickup(Long id, MapPoint mapPoint, Color color) {
         Circle circle = new Circle(4, color);
 
         pointList.put(id, new Pair<>(mapPoint, circle));
 
         /* Ajoute le cercle au MapLayer */
         this.getChildren().add(circle);
+    }
+
+    public void addSegment(MapPoint mapPointStart, MapPoint mapPointEnd) {
+        Polyline polyline = new Polyline();
+        polyline.setStroke(Color.RED);
+        polyline.setStrokeWidth(2.5);
+
+        segmentList.put(polyline, new Pair<>(mapPointStart, mapPointEnd));
+        this.getChildren().add(polyline);
     }
 
     public HashMap<Long, Pair<MapPoint, Shape>> getPointList() {
@@ -68,7 +87,7 @@ public class CustomMapLayer extends MapLayer {
     protected void layoutLayer() {
         /* Conversion des MapPoint vers Point2D */
 
-        pointList.forEach( (key, value) -> {
+        pointList.forEach((key, value) -> {
             MapPoint mapPoint = value.getKey();
 
             Shape shape = value.getValue();
@@ -79,7 +98,7 @@ public class CustomMapLayer extends MapLayer {
             shape.setTranslateY(point2d.getY());
         });
 
-        segmentList.forEach((polyline,pair) -> {
+        segmentList.forEach((polyline, pair) -> {
             MapPoint mapPointStart = pair.getKey();
             MapPoint mapPointEnd = pair.getValue();
 

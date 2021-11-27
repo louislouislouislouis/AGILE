@@ -7,13 +7,16 @@ public class Tour {
     private List<Intersection> intersections = new ArrayList();
     private Double cost;
 
-    public Tour(){
+    public Tour() {
 
     }
-    
+
     public Tour(List<Intersection> intersections, Double cost) {
         this.intersections = intersections;
         this.cost = cost;
     }
 
+    public List<Intersection> getIntersections() {
+        return intersections;
+    }
 }
