@@ -2,7 +2,6 @@ import org.hexanome.data.ExceptionXML;
 import org.hexanome.data.MapDeserializer;
 import org.hexanome.data.RequestDeserializer;
 import org.hexanome.model.*;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.SAXException;
