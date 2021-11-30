@@ -32,4 +32,17 @@ public class Intersection {
                 "}";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        double delta = 0.00000001;
+        if (o instanceof Intersection) {
+            Intersection other = (Intersection) o;
+            long deltaId = this.idIntersection - other.getIdIntersection();
+            double deltaLat = this.latitude - other.getLatitude();
+            double deltaLong = this.longitude - other.getLongitude();
+            return deltaId == 0 && deltaLat > -delta && deltaLat < delta && deltaLong > -delta && deltaLong < delta;
+        } else {
+            return false;
+        }
+    }
 }
