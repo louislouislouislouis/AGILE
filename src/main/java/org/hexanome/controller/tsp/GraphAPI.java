@@ -105,7 +105,7 @@ public class GraphAPI {
         Graph g = new CompleteGraph(nbVerticesTSP, costTSP);
 
         long startTime = System.currentTimeMillis();
-        TSP tsp = new TSP1();
+        TSP tsp = new TSP1(costTSP);
         tsp.searchSolution(20000, g);
         System.out.print("Solution of cost " + tsp.getSolutionCost() + " found in "
                 + (System.currentTimeMillis() - startTime) + "ms : ");
