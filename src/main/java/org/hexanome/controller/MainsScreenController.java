@@ -156,7 +156,7 @@ public class MainsScreenController implements Observer {
         mapContainer.getChildren().add(mapView);
 
         //Force rerender (Bug fix - Gluon Maps Issue drag)
-        mapView.setOnMouseDragged(e -> {
+        mapView.setOnMouseReleased(e -> {
             System.out.println("onMousedetect");
             //Pour les layers de request
             requestLayer.forceReRender();
@@ -242,7 +242,7 @@ public class MainsScreenController implements Observer {
 
     public void computeTour(ActionEvent actionEvent) {
         //method that calculates the most optimal path of the tour
-        tour = new Tour(null, null, this);
+        tour = new Tour(new ArrayList<>(), null, this);
         mapView.removeLayer(tourLayer);
         new GraphAPI().V1_TSP(planning, map, tour);
 
