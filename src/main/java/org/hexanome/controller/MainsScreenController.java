@@ -113,10 +113,6 @@ public class MainsScreenController implements Observer {
         mapView.removeLayer(requestLayer);
         mapView.removeLayer(tourLayer);
 
-        // we delete the content of the tableview
-        data.clear();
-        updateTableView();
-
         try {
             domMap.load(map, selectedFile);
             btnLoadRequest.setDisable(false);
@@ -245,7 +241,6 @@ public class MainsScreenController implements Observer {
         tour = new Tour(new ArrayList<>(), null, this);
 
         // clear
-        data.clear();
         mapView.removeLayer(tourLayer);
 
         new GraphAPI().V1_TSP(planning, map, tour);
