@@ -93,13 +93,13 @@ public class XMLTest {
             assertEquals("Nombre de commandes", requests.size(), 1);
 
             PickupPoint pp = requests.getFirst().getPickupPoint();
-            assertEquals(pp.getPickupDuration(), 60);
+            assertEquals(pp.getDuration(), 60);
             assertEquals(pp.getAddress().getIdIntersection(), 25175791);
             assertEquals(pp.getAddress().getLatitude(), 45.75406, delta);
             assertEquals(pp.getAddress().getLongitude(), 4.857418, delta);
 
             DeliveryPoint dp = requests.getFirst().getDeliveryPoint();
-            assertEquals(dp.getDeliveryDuration(), 420);
+            assertEquals(dp.getDuration(), 420);
             assertEquals(dp.getAddress().getIdIntersection(), 26086130);
             assertEquals(dp.getAddress().getLatitude(), 45.75871, delta);
             assertEquals(dp.getAddress().getLongitude(), 4.8704023, delta);
