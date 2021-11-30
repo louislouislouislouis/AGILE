@@ -4,6 +4,7 @@ import com.gluonhq.maps.MapLayer;
 import com.gluonhq.maps.MapPoint;
 
 import javafx.geometry.Point2D;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.util.Pair;
@@ -15,71 +16,75 @@ import java.util.HashMap;
  */
 public class CustomMapLayer extends MapLayer {
 
-    private final HashMap<Long, Pair<MapPoint, Shape>> pointList;
-    private final HashMap<Polyline, Pair<MapPoint, MapPoint>> segmentList;
+    private final HashMap<Long, MapPoint> pointList;
+    private final HashMap<Long, Circle> circleList;
+    private final HashMap<Long, Polyline> polylineList;
+    private final HashMap<Long, Pair<MapPoint, MapPoint>> segmentList;
 
     /**
      * @see com.gluonhq.maps.MapPoint
      */
     public CustomMapLayer() {
         pointList = new HashMap<>();
+        circleList = new HashMap<>();
         segmentList = new HashMap<>();
+        polylineList = new HashMap<>();
     }
 
     public void addPoint(Long id, MapPoint mapPoint) {
         Circle circle = new Circle(1.5, Color.FIREBRICK);
 
-        pointList.put(id, new Pair<>(mapPoint, circle));
+        pointList.put(id, mapPoint);
+        circleList.put(id, circle);
 
         /* Ajoute le cercle au MapLayer */
         this.getChildren().add(circle);
     }
 
-    public void addPointWarehouse(Long id, MapPoint mapPoint, Color color) {
-        Circle circle = new Circle(6, color);
+    public void addSpecialPoint(Long id, MapPoint mapPoint, Color color) {
+        Circle circle = new Circle(10, color);
 
-        pointList.put(id, new Pair<>(mapPoint, circle));
+        circle.setId(id.toString());
+        DropShadow e = new DropShadow();
 
-        /* Ajoute le cercle au MapLayer */
-        this.getChildren().add(circle);
-    }
+        e.setRadius(12);
 
-    public void addPointDelivery(Long id, MapPoint mapPoint, Color color) {
-        Circle circle = new Circle(5, color);
+        circle.setEffect(e);
 
-
-        SVGPath icon = new SVGPath();
-        icon.setContent("M 45 0 C 25.463 0 9.625 15.838 9.625 35.375 c 0 8.722 3.171 16.693 8.404 22.861 L 45 90 l 26.97 -31.765 c 5.233 -6.167 8.404 -14.139 8.404 -22.861 C 80.375 15.838 64.537 0 45 0 z M 45 48.705 c -8.035 0 -14.548 -6.513 -14.548 -14.548 c 0 -8.035 6.513 -14.548 14.548 -14.548 s 14.548 6.513 14.548 14.548 C 59.548 42.192 53.035 48.705 45 48.705 z");
-        icon.setFill(color);
-        icon.setScaleX(0.25);
-        icon.setScaleY(0.25);
-
-        pointList.put(id, new Pair<>(mapPoint, circle));
+        pointList.put(id, mapPoint);
+        circleList.put(id, circle);
 
         /* Ajoute le cercle au MapLayer */
         this.getChildren().add(circle);
     }
 
-    public void addPointPickup(Long id, MapPoint mapPoint, Color color) {
-        Circle circle = new Circle(4, color);
-
-        pointList.put(id, new Pair<>(mapPoint, circle));
-
-        /* Ajoute le cercle au MapLayer */
-        this.getChildren().add(circle);
-    }
-
-    public void addSegment(MapPoint mapPointStart, MapPoint mapPointEnd) {
+    public void addSegment(MapPoint mapPointStart, MapPoint mapPointEnd, Long id) {
         Polyline polyline = new Polyline();
         polyline.setStroke(Color.RED);
-        polyline.setStrokeWidth(2.5);
+        polyline.setStrokeWidth(5);
+        polyline.setOpacity(0.5);
+        polyline.setId(id.toString());
 
-        segmentList.put(polyline, new Pair<>(mapPointStart, mapPointEnd));
+        segmentList.put(id, new Pair<>(mapPointStart, mapPointEnd));
+        polylineList.put(id, polyline);
+
         this.getChildren().add(polyline);
     }
 
-    public HashMap<Long, Pair<MapPoint, Shape>> getPointList() {
+    public HashMap<Long, MapPoint> getPointList() {
         return pointList;
+    }
+
+    public HashMap<Long, Circle> getCircleList() {
+        return circleList;
+    }
+
+    public HashMap<Long, Polyline> getPolylineList() {
+        return polylineList;
+    }
+
+    public HashMap<Long, Pair<MapPoint, MapPoint>> getSegmentList() {
+        return segmentList;
     }
 
     public void forceReRender() {
@@ -92,10 +97,9 @@ public class CustomMapLayer extends MapLayer {
     protected void layoutLayer() {
         /* Conversion des MapPoint vers Point2D */
         System.out.println("LayoutLayer is Called");
-        pointList.forEach((key, value) -> {
-            MapPoint mapPoint = value.getKey();
+        pointList.forEach((id, mapPoint) -> {
 
-            Shape shape = value.getValue();
+            Shape shape = circleList.get(id);
 
             Point2D point2d = this.getMapPoint(mapPoint.getLatitude(), mapPoint.getLongitude());
             /* Déplace le cercle selon les coordonnées du point */
@@ -103,12 +107,14 @@ public class CustomMapLayer extends MapLayer {
             shape.setTranslateY(point2d.getY());
         });
 
-        segmentList.forEach((polyline, pair) -> {
+        segmentList.forEach((id, pair) -> {
             MapPoint mapPointStart = pair.getKey();
             MapPoint mapPointEnd = pair.getValue();
 
             Point2D point2dStart = this.getMapPoint(mapPointStart.getLatitude(), mapPointStart.getLongitude());
             Point2D point2dEnd = this.getMapPoint(mapPointEnd.getLatitude(), mapPointEnd.getLongitude());
+
+            Polyline polyline = polylineList.get(id);
 
             polyline.getPoints().clear();
 
