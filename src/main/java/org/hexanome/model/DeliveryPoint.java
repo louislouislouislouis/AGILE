@@ -1,21 +1,43 @@
 package org.hexanome.model;
 
-public class DeliveryPoint extends Point{
-    private int deliveryDuration;
+import java.time.LocalTime;
 
-    public DeliveryPoint(Intersection address, int deliveryDuration) {
-        super(address);
-        this.deliveryDuration = deliveryDuration;
+public class DeliveryPoint extends Point {
+    private int duration;
+    private LocalTime arrivalTime;
+    private LocalTime departureTime;
+
+    public DeliveryPoint(Intersection address, int duration) {
+        super(address, "delivery");
+        this.duration = duration;
+        departureTime = LocalTime.MIDNIGHT;
+        arrivalTime = LocalTime.MIDNIGHT;
     }
 
-    public int getDeliveryDuration() {
-        return deliveryDuration;
+    public int getDuration() {
+        return duration;
+    }
+
+    public LocalTime getDepartureTime() {
+        return departureTime;
+    }
+
+    public void setDepartureTime(LocalTime departureTime) {
+        this.departureTime = departureTime;
+    }
+
+    public LocalTime getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public void setArrivalTime(LocalTime arrivalTime) {
+        this.arrivalTime = arrivalTime;
     }
 
     @Override
     public String toString() {
         return "DeliveryPoint{" +
-                "deliveryDuration=" + deliveryDuration +
+                "duration=" + duration +
                 "Point=" + super.toString() +
                 "}";
     }

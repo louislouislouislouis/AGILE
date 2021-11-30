@@ -1,21 +1,43 @@
 package org.hexanome.model;
 
-public class PickupPoint extends Point{
-    private int pickupDuration;
+import java.time.LocalTime;
 
-    public PickupPoint(Intersection address, int pickupDuration) {
-        super(address);
-        this.pickupDuration = pickupDuration;
+public class PickupPoint extends Point {
+    private int duration;
+    private LocalTime departureTime;
+    private LocalTime arrivalTime;
+
+    public PickupPoint(Intersection address, int duration) {
+        super(address, "pickup");
+        this.duration = duration;
+        departureTime = LocalTime.MIDNIGHT;
+        arrivalTime = LocalTime.MIDNIGHT;
     }
 
-    public int getPickupDuration() {
-        return pickupDuration;
+    public LocalTime getDepartureTime() {
+        return departureTime;
+    }
+
+    public void setDepartureTime(LocalTime departureTime) {
+        this.departureTime = departureTime;
+    }
+
+    public LocalTime getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public void setArrivalTime(LocalTime arrivalTime) {
+        this.arrivalTime = arrivalTime;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 
     @Override
     public String toString() {
         return "PickupPoint{" +
-                "pickupDuration=" + pickupDuration +
+                "duration=" + duration +
                 "Point=" + super.toString() +
                 "}";
     }

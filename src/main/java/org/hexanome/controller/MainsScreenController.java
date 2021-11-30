@@ -7,8 +7,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.gluonhq.maps.MapLayer;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.event.ActionEvent;
@@ -42,11 +47,15 @@ public class MainsScreenController {
     HBox mapContainer;
     @FXML
     Button btnLoadRequest;
+    @FXML
+    TableView tableView;
 
     /*---------------------------VARIABLES------------------------------------------------------------*/
     private MapIF map = new MapIF();
     private PlanningRequest planning = new PlanningRequest();
     private Tour tour;
+
+    private static final ObservableList<Point> data = FXCollections.observableArrayList();
 
     /* Création de la carte Gluon JavaFX */
     private MapView mapView = new MapView();
@@ -114,21 +123,6 @@ public class MainsScreenController {
         } catch (ExceptionXML e) {
             e.printStackTrace();
         }
-
-        //VBox root = new VBox();
-
-        /* Création et ajoute une couche à la carte */
-
-        //MapLayer mapLayer = new CustomPinLayer(mapPoint);
-        /*CustomMapLayer mapLayer = new CustomMapLayer();
-
-        //add points to the layer
-        map.getIntersections().forEach((id, intersection) -> {
-            MapPoint mapPoint = new MapPoint(intersection.getLatitude(), intersection.getLongitude());
-            mapLayer.addPoint(id, mapPoint);
-        });
-
-        mapView.addLayer(mapLayer);*/
 
         /* Zoom de 5 */
         mapView.setZoom(14);
@@ -258,6 +252,8 @@ public class MainsScreenController {
         //force la mise à jour de la carte en la supprimant et la rajoutant dans le conteneur
         mapContainer.getChildren().clear();
         mapContainer.getChildren().add(mapView);
+
+        updateTableView();
     }
 
     public File fileChooser(ActionEvent actionEvent) {
@@ -284,7 +280,30 @@ public class MainsScreenController {
         return validationPlaningRequest;
     }
 
-    /**@FXML private void switchToSecondary() throws IOException {
-    App.setRoot("secondary");
-    } **/
+    private void updateTableView() {
+        // columns initialization
+        TableColumn idCol = (TableColumn) tableView.getColumns().get(0);
+        TableColumn typeCol = (TableColumn) tableView.getColumns().get(1);
+        TableColumn arrivalCol = (TableColumn) tableView.getColumns().get(2);
+        TableColumn waitingCol = (TableColumn) tableView.getColumns().get(3);
+        TableColumn departureCol = (TableColumn) tableView.getColumns().get(4);
+
+        // cell factory
+        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        arrivalCol.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
+        waitingCol.setCellValueFactory(new PropertyValueFactory<>("duration"));
+        departureCol.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
+
+        tableView.setItems(data);
+
+        data.add(planning.getWarehouse());
+
+        planning.getRequests().forEach(request -> {
+            data.add(request.getDeliveryPoint());
+            data.add(request.getPickupPoint());
+        });
+    }
+
+
 }

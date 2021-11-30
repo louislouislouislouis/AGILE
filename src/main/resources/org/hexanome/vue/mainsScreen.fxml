@@ -58,7 +58,7 @@
                         <VBox prefHeight="196.0" prefWidth="498.4" AnchorPane.bottomAnchor="0.0"
                               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <children>
-                                <TableView>
+                                <TableView fx:id="tableView">
                                     <columns>
                                         <TableColumn id="columnIDofIntersection" prefWidth="75.0" text="ID"/>
                                         <TableColumn id="columnTypOfPoint" prefWidth="75.0" text="Type"/>
@@ -72,6 +72,7 @@
                                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
                                     </columnResizePolicy>
                                 </TableView>
+
                                 <HBox prefHeight="100.0" prefWidth="200.0">
                                     <children>
                                         <Label text="Total">
