@@ -229,11 +229,15 @@ public class MainsScreenController implements Observer {
         HashMap<Long, Circle> circleList = requestLayer.getCircleList();
 
         circleList.forEach((id, circle) -> {
-            circle.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-                if (newValue) {
-                    circle.setRadius(10);
-                } else {
-                    circle.setRadius(10);
+            circle.setOnMouseClicked(mouseEvent -> {
+
+                for (int i = 0; i < tableView.getItems().size(); i++) {
+                    Point point = (Point) tableView.getItems().get(i);
+                    if (Objects.equals(point.getId(), id)) {
+                        System.out.println(i);
+                        tableView.scrollTo(i);
+                        break;
+                    }
                 }
             });
         });
