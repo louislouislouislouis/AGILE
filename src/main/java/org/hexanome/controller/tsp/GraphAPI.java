@@ -83,13 +83,18 @@ public class GraphAPI {
 
             adjTSP.put(idZero++, distDestinationsTSP);
         }
+        Map<Integer,Long> mapIdTSP = new HashMap<>();
         for (Map.Entry<Long, Map<Long, Double>> i : adjTSP.entrySet()) {
             System.out.println(i.getKey() + " " + i.getValue());
             int jj = 0;
             for (Map.Entry<Long, Double> j : i.getValue().entrySet()) {
+                if (j.getValue() == 0) {
+                    mapIdTSP.put(i.getKey().intValue(),j.getKey());
+                }
                 costTSP[i.getKey().intValue()][jj++] = j.getValue();
             }
         }
+        System.out.println("MapIdTSP: " + mapIdTSP);
 
         for (int i = 0; i < nbVerticesTSP; i++) {
             for (int j = 0; j < nbVerticesTSP; j++) {
@@ -105,7 +110,7 @@ public class GraphAPI {
         Graph g = new CompleteGraph(nbVerticesTSP, costTSP);
 
         long startTime = System.currentTimeMillis();
-        TSP tsp = new TSP1(costTSP);
+        TSP tsp = new TSP1(costTSP, mapIdTSP, planning.getRequests());
         tsp.searchSolution(20000, g);
         System.out.print("Solution of cost " + tsp.getSolutionCost() + " found in "
                 + (System.currentTimeMillis() - startTime) + "ms : ");

@@ -1,8 +1,8 @@
 package org.hexanome.controller.tsp;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+import org.hexanome.model.Request;
+
+import java.util.*;
 
 public abstract class TemplateTSP implements TSP {
 	private Integer[] bestSol;
