@@ -44,4 +44,7 @@ public class Tour extends Observable {
         return intersections;
     }
 
+    public Double getCost() {
+        return cost;
+    }
 }
