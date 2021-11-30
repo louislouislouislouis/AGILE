@@ -113,6 +113,10 @@ public class MainsScreenController implements Observer {
         mapView.removeLayer(requestLayer);
         mapView.removeLayer(tourLayer);
 
+        // we delete the content of the tableview
+        data.clear();
+        updateTableView();
+
         try {
             domMap.load(map, selectedFile);
             btnLoadRequest.setDisable(false);
@@ -220,7 +224,6 @@ public class MainsScreenController implements Observer {
                     Point point = (Point) tableView.getItems().get(i);
                     if (Objects.equals(point.getId(), id)) {
                         tableView.scrollTo(i);
-                        System.out.println(i);
                         break;
                     }
                 }
@@ -240,7 +243,11 @@ public class MainsScreenController implements Observer {
     public void computeTour(ActionEvent actionEvent) {
         //method that calculates the most optimal path of the tour
         tour = new Tour(new ArrayList<>(), null, this);
+
+        // clear
+        data.clear();
         mapView.removeLayer(tourLayer);
+
         new GraphAPI().V1_TSP(planning, map, tour);
 
         //Add Segment to the layer
@@ -362,7 +369,11 @@ public class MainsScreenController implements Observer {
                 super.updateItem(item, empty);
                 TableRow currentRow = getTableRow();
                 if (item != null) {
-                    currentRow.setStyle("-fx-background-color: rgb(" + item.getRed() * 255 + ", " + item.getGreen() * 255 + ", " + item.getBlue() * 255 + ");");
+                    double r = item.getRed() * 255;
+                    double g = item.getGreen() * 255;
+                    double b = item.getBlue() * 255;
+                    this.setStyle("-fx-background-color: rgb(" + r + ", " + g + ", " + b + ");");
+
                 }
 
             }
