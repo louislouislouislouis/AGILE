@@ -67,6 +67,7 @@
                                         <TableColumn id="columnDepartureTime" prefWidth="75.0" text="Departure Time"/>
                                         <TableColumn id="columnDistanceToNextPoint" prefWidth="75.0"
                                                      text="Distance To Next Point"/>
+                                        <TableColumn id="columnColor" prefWidth="10.0" text="Color"/>
                                     </columns>
                                     <columnResizePolicy>
                                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>

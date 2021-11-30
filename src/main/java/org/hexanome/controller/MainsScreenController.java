@@ -6,15 +6,14 @@ import java.util.*;
 
 import com.gluonhq.maps.MapLayer;
 import javafx.beans.value.ChangeListener;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -27,6 +26,7 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javafx.util.Pair;
 import org.hexanome.controller.tsp.Graph;
 import org.hexanome.controller.tsp.GraphAPI;
@@ -126,21 +126,6 @@ public class MainsScreenController implements Observer {
             e.printStackTrace();
         }
 
-        //VBox root = new VBox();
-
-        /* Création et ajoute une couche à la carte */
-
-        //MapLayer mapLayer = new CustomPinLayer(mapPoint);
-        /*CustomMapLayer mapLayer = new CustomMapLayer();
-
-        //add points to the layer
-        map.getIntersections().forEach((id, intersection) -> {
-            MapPoint mapPoint = new MapPoint(intersection.getLatitude(), intersection.getLongitude());
-            mapLayer.addPoint(id, mapPoint);
-        });
-
-        mapView.addLayer(mapLayer);*/
-
         /* Zoom de 5 */
         mapView.setZoom(14);
 
@@ -234,8 +219,8 @@ public class MainsScreenController implements Observer {
                 for (int i = 0; i < tableView.getItems().size(); i++) {
                     Point point = (Point) tableView.getItems().get(i);
                     if (Objects.equals(point.getId(), id)) {
-                        System.out.println(i);
                         tableView.scrollTo(i);
+                        System.out.println(i);
                         break;
                     }
                 }
@@ -356,11 +341,12 @@ public class MainsScreenController implements Observer {
 
     private void updateTableView() {
         // columns initialization
-        TableColumn idCol = (TableColumn) tableView.getColumns().get(0);
-        TableColumn typeCol = (TableColumn) tableView.getColumns().get(1);
-        TableColumn arrivalCol = (TableColumn) tableView.getColumns().get(2);
-        TableColumn waitingCol = (TableColumn) tableView.getColumns().get(3);
-        TableColumn departureCol = (TableColumn) tableView.getColumns().get(4);
+        TableColumn<Point, String> idCol = (TableColumn) tableView.getColumns().get(0);
+        TableColumn<Point, String> typeCol = (TableColumn) tableView.getColumns().get(1);
+        TableColumn<Point, String> arrivalCol = (TableColumn) tableView.getColumns().get(2);
+        TableColumn<Point, String> waitingCol = (TableColumn) tableView.getColumns().get(3);
+        TableColumn<Point, String> departureCol = (TableColumn) tableView.getColumns().get(4);
+        TableColumn<Point, Color> colorCol = (TableColumn) tableView.getColumns().get(6);
 
         // cell factory
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -368,6 +354,19 @@ public class MainsScreenController implements Observer {
         arrivalCol.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
         waitingCol.setCellValueFactory(new PropertyValueFactory<>("duration"));
         departureCol.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
+        colorCol.setCellValueFactory(new PropertyValueFactory<>("color"));
+
+        colorCol.setCellFactory(tv -> new TableCell<Point, Color>() {
+            @Override
+            protected void updateItem(Color item, boolean empty) {
+                super.updateItem(item, empty);
+                TableRow currentRow = getTableRow();
+                if (item != null) {
+                    currentRow.setStyle("-fx-background-color: rgb(" + item.getRed() * 255 + ", " + item.getGreen() * 255 + ", " + item.getBlue() * 255 + ");");
+                }
+
+            }
+        });
 
         tableView.setItems(data);
 
@@ -378,6 +377,5 @@ public class MainsScreenController implements Observer {
             data.add(request.getPickupPoint());
         });
     }
-
 
 }
