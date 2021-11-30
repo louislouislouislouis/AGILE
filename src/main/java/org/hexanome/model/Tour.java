@@ -15,7 +15,6 @@ public class Tour extends Observable {
 
     }
 
-
     public Tour(List<Intersection> intersections, Double cost) {
         this.intersections = intersections;
         this.cost = cost;
@@ -29,6 +28,10 @@ public class Tour extends Observable {
 
     public void setIntersections(List<Intersection> intersections) {
         this.intersections = intersections;
+    }
+
+    public void addIntersection(Intersection intersection) {
+        this.intersections.add(intersection);
     }
 
     public void setCost(Double cost) {
@@ -46,5 +49,21 @@ public class Tour extends Observable {
 
     public Double getCost() {
         return cost;
+    }
+
+    public Intersection getLastIntersection() {
+        if (intersections.size() == 0) {
+            return null;
+        }
+        return this.intersections.get(intersections.size()-1);
+    }
+
+    public void deleteIntersectionsAfter(Intersection lastIntersection) {
+        int index = intersections.indexOf(lastIntersection);
+        for (Intersection i : intersections) {
+            if( intersections.indexOf(i) > index) {
+                intersections.remove(i);
+            }
+        }
     }
 }

@@ -1,22 +1,25 @@
 package org.hexanome.controller.tsp;
 
 import org.hexanome.model.Intersection;
+import org.hexanome.model.MapIF;
 import org.hexanome.model.Request;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 public class TSP1 extends TemplateTSP {
 
 	private Double[][] costTSP;
-	private Map<Integer,Long> mapIdTSP;
 	private LinkedList<Request> requests;
 
-	public  TSP1(Double[][] costTSP, Map<Integer,Long> mapIdTSP, LinkedList<Request> requests) {
+
+	public  TSP1(
+			Double[][] costTSP,
+			Map<Integer,Long> mapIdTSP, LinkedList<Request> requests,
+			Map<Long, Map<Long, List<Long>>> shortestPathsIntersection,
+			Map<Long, Map<Long, Double>> shortestPathsCost,
+			MapIF map) {
+		super(mapIdTSP, shortestPathsIntersection, shortestPathsCost, map);
 		this.costTSP = costTSP;
-		this.mapIdTSP = mapIdTSP;
 		this.requests = requests;
 	}
 
@@ -38,7 +41,7 @@ public class TSP1 extends TemplateTSP {
 
 	@Override
 	protected Iterator<Integer> iterator(Integer currentVertex, Collection<Integer> unvisited, Graph g) {
-		return new SeqIter(unvisited, currentVertex, g, mapIdTSP, requests);
+		return new SeqIter(unvisited, currentVertex, g, super.mapIdTSP, requests);
 	}
 
 }
