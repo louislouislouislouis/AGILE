@@ -1,5 +1,6 @@
 package org.hexanome.data;
 
+import javafx.scene.paint.Color;
 import org.hexanome.model.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -13,30 +14,31 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Random;
 
 public class RequestDeserializer {
     /**
      * Open an XML file and create plan from this file
+     *
      * @param planning the planning to create from the file
-     * @param xml file that contain the xml
-     * @param map object that contains map's data
+     * @param xml      file that contain the xml
+     * @param map      object that contains map's data
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException
      * @throws ExceptionXML
      */
-    public void load(PlanningRequest planning, File xml, MapIF map) throws ParserConfigurationException, SAXException, IOException, ExceptionXML{
+    public void load(PlanningRequest planning, File xml, MapIF map) throws ParserConfigurationException, SAXException, IOException, ExceptionXML {
         DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document document = docBuilder.parse(xml);
         Element root = document.getDocumentElement();
         if (root.getNodeName().equals("planningRequest")) {
             buildFromDOMXML(root, planning, map);
-        }
-        else
-            throw new ExceptionXML("Wrong format the first node has this name : "+root.getNodeName());
+        } else
+            throw new ExceptionXML("Wrong format the first node has this name : " + root.getNodeName());
     }
 
-    private void buildFromDOMXML(Element noeudDOMRacine, PlanningRequest planning, MapIF map) throws ExceptionXML, NumberFormatException{
+    private void buildFromDOMXML(Element noeudDOMRacine, PlanningRequest planning, MapIF map) throws ExceptionXML, NumberFormatException {
         NodeList warehouses = noeudDOMRacine.getElementsByTagName("depot");
         NodeList requests = noeudDOMRacine.getElementsByTagName("request");
 
@@ -44,13 +46,22 @@ public class RequestDeserializer {
             planning.addRequest(createRequest((Element) requests.item(i), map));
         }
 
-        if(warehouses.getLength()!=1)
+        if (warehouses.getLength() != 1)
             throw new ExceptionXML("Error when reading file: xml must contain one and only one warehouse");
 
         planning.setWarehouse(createWarehouse((Element) warehouses.item(0), map));
     }
 
-    private Request createRequest(Element elt, MapIF map) throws ExceptionXML{
+    private Request createRequest(Element elt, MapIF map) throws ExceptionXML {
+        // random color generation
+
+        Random rand = new Random();
+
+        float r = rand.nextFloat();
+        float g = rand.nextFloat();
+        float b = rand.nextFloat();
+        Color randomColor = Color.color(r, g, b);
+
         int pickupDuration = Integer.parseInt(elt.getAttribute("pickupDuration"));
         if (pickupDuration < 0)
             throw new ExceptionXML("Error when reading file: pickup duration must be positive");
@@ -63,18 +74,18 @@ public class RequestDeserializer {
         if (pickupAddress < 0)
             throw new ExceptionXML("Error when reading file: pickupAddress must be positive");
 
-        PickupPoint pickupPoint = new PickupPoint(map.getIntersections().get(pickupAddress), pickupDuration);
+        PickupPoint pickupPoint = new PickupPoint(map.getIntersections().get(pickupAddress), pickupDuration, randomColor);
 
         Long deliveryAddress = Long.parseLong(elt.getAttribute("deliveryAddress"));
         if (deliveryAddress < 0)
             throw new ExceptionXML("Error when reading file: deliveryAddress must be positive");
 
-        DeliveryPoint deliveryPoint = new DeliveryPoint(map.getIntersections().get(deliveryAddress), deliveryDuration);
+        DeliveryPoint deliveryPoint = new DeliveryPoint(map.getIntersections().get(deliveryAddress), deliveryDuration, randomColor);
 
         return new Request(pickupPoint, deliveryPoint);
     }
 
-    private Warehouse createWarehouse(Element elt, MapIF map) throws ExceptionXML{
+    private Warehouse createWarehouse(Element elt, MapIF map) throws ExceptionXML {
         long address = Long.parseLong(elt.getAttribute("address"));
         if (address < 0)
             throw new ExceptionXML("Error when reading file: address must be positive");
@@ -85,6 +96,6 @@ public class RequestDeserializer {
 
         LocalTime departureTime = LocalTime.parse(elt.getAttribute("departureTime"), formatter);
 
-        return new Warehouse(departureTime, departureAddress);
+        return new Warehouse(departureTime, departureAddress, Color.GOLD);
     }
 }

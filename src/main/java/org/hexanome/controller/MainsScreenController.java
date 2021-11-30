@@ -194,17 +194,17 @@ public class MainsScreenController implements Observer {
         //warehouse
         Intersection warehouse = planning.getWarehouse().getAddress();
         mapLayer.addPointWarehouse(warehouse.getIdIntersection(),
-                new MapPoint(warehouse.getLatitude(), warehouse.getLongitude()), Color.DARKGOLDENROD);
+                new MapPoint(warehouse.getLatitude(), warehouse.getLongitude()), planning.getWarehouse().getColor());
 
         //requests
-        planning.getRequests().forEach((Request) -> {
-            Intersection deliveryInt = Request.getDeliveryPoint().getAddress();
+        planning.getRequests().forEach((request) -> {
+            Intersection deliveryInt = request.getDeliveryPoint().getAddress();
             MapPoint mapPointDelivery = new MapPoint(deliveryInt.getLatitude(), deliveryInt.getLongitude());
-            mapLayer.addPointDelivery(deliveryInt.getIdIntersection(), mapPointDelivery, Color.RED);
+            mapLayer.addPointDelivery(deliveryInt.getIdIntersection(), mapPointDelivery, request.getDeliveryPoint().getColor());
 
-            Intersection pickupInt = Request.getPickupPoint().getAddress();
+            Intersection pickupInt = request.getPickupPoint().getAddress();
             MapPoint mapPointPickup = new MapPoint(pickupInt.getLatitude(), pickupInt.getLongitude());
-            mapLayer.addPointPickup(pickupInt.getIdIntersection(), mapPointPickup, Color.RED);
+            mapLayer.addPointPickup(pickupInt.getIdIntersection(), mapPointPickup, request.getPickupPoint().getColor());
         });
 
         requestLayer = mapLayer;
@@ -250,6 +250,8 @@ public class MainsScreenController implements Observer {
         tourLayer = mapLayer;
 
         mapView.addLayer(tourLayer);
+
+        updateTableView();
     }
 
     public File fileChooser(ActionEvent actionEvent) {
