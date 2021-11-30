@@ -7,4 +7,6 @@ module org.hexanome {
     exports org.hexanome.vue;
     exports org.hexanome.data;
     exports org.hexanome.model;
+    exports org.hexanome.controller;
+    exports org.hexanome.controller.tsp;
 }

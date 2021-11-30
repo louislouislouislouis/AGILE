@@ -16,6 +16,10 @@ public class Tour {
         this.cost = cost;
     }
 
+    public Double getCost() {
+        return cost;
+    }
+   
     public List<Intersection> getIntersections() {
         return intersections;
     }
