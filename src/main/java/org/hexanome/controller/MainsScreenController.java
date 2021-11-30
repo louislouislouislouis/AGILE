@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.*;
 
 import com.gluonhq.maps.MapLayer;
+import javafx.beans.value.ChangeListener;
 import javafx.event.EventHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -203,32 +204,39 @@ public class MainsScreenController implements Observer {
             e.printStackTrace();
         }
 
-        //VBox root = new VBox();
-
         /* Création et ajoute une couche à la carte */
 
-        //MapLayer mapLayer = new CustomPinLayer(mapPoint);
-        CustomMapLayer mapLayer = new CustomMapLayer();
+        requestLayer = new CustomMapLayer();
 
         //add points to the layer
 
         //warehouse
         Intersection warehouse = planning.getWarehouse().getAddress();
-        mapLayer.addPointWarehouse(warehouse.getIdIntersection(),
+        requestLayer.addSpecialPoint(warehouse.getIdIntersection(),
                 new MapPoint(warehouse.getLatitude(), warehouse.getLongitude()), planning.getWarehouse().getColor());
 
         //requests
         planning.getRequests().forEach((request) -> {
             Intersection deliveryInt = request.getDeliveryPoint().getAddress();
             MapPoint mapPointDelivery = new MapPoint(deliveryInt.getLatitude(), deliveryInt.getLongitude());
-            mapLayer.addPointDelivery(deliveryInt.getIdIntersection(), mapPointDelivery, request.getDeliveryPoint().getColor());
+            requestLayer.addSpecialPoint(deliveryInt.getIdIntersection(), mapPointDelivery, request.getDeliveryPoint().getColor());
 
             Intersection pickupInt = request.getPickupPoint().getAddress();
             MapPoint mapPointPickup = new MapPoint(pickupInt.getLatitude(), pickupInt.getLongitude());
-            mapLayer.addPointPickup(pickupInt.getIdIntersection(), mapPointPickup, request.getPickupPoint().getColor());
+            requestLayer.addSpecialPoint(pickupInt.getIdIntersection(), mapPointPickup, request.getPickupPoint().getColor());
         });
 
-        requestLayer = mapLayer;
+        HashMap<Long, Circle> circleList = requestLayer.getCircleList();
+
+        circleList.forEach((id, circle) -> {
+            circle.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+                if (newValue) {
+                    circle.setRadius(10);
+                } else {
+                    circle.setRadius(10);
+                }
+            });
+        });
         mapView.addLayer(requestLayer);
 
     }
@@ -263,11 +271,37 @@ public class MainsScreenController implements Observer {
             tourLayer.addPoint(start.getIdIntersection(), mapPointStart);
             MapPoint mapPointEnd = new MapPoint(end.getLatitude(), end.getLongitude());
             tourLayer.addPoint(end.getIdIntersection(), mapPointEnd);
-            tourLayer.addSegment(mapPointStart, mapPointEnd);
+            tourLayer.addSegment(mapPointStart, mapPointEnd, (long) i);
         }
 
+        HashMap<Long, Polyline> polylineList = tourLayer.getPolylineList();
 
+        polylineList.forEach((aLong, polyline) -> {
+            polyline.hoverProperty().addListener((observable, oldValue, newValue) -> {
+
+                if (newValue) {
+                    polylineList.forEach((id, poly) -> {
+
+                        if (id <= aLong) {
+                            poly.setStrokeWidth(10);
+                            poly.setStroke(Color.OLIVE);
+                        }
+                    });
+                } else {
+                    polylineList.forEach((id, poly) -> {
+                        if (id <= aLong) {
+                            poly.setStrokeWidth(5);
+                            poly.setStroke(Color.RED);
+                        }
+                    });
+                }
+            });
+        });
+
+        mapView.removeLayer(requestLayer);
         mapView.addLayer(tourLayer);
+        mapView.addLayer(requestLayer);
+
         tour.notifyChange("UPDATEMAP");
 
         updateTableView();
