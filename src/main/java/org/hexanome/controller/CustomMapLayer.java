@@ -86,7 +86,7 @@ public class CustomMapLayer extends MapLayer {
     @Override
     protected void layoutLayer() {
         /* Conversion des MapPoint vers Point2D */
-
+        System.out.println("eee");
         pointList.forEach((key, value) -> {
             MapPoint mapPoint = value.getKey();
 

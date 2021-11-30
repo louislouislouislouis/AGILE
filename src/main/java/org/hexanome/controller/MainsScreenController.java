@@ -6,12 +6,24 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
+
 import com.gluonhq.maps.MapLayer;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.event.ActionEvent;
+
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+import javafx.stage.Stage;
+
+
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
@@ -116,36 +128,111 @@ public class MainsScreenController {
             e.printStackTrace();
         }
 
-        //VBox root = new VBox();
 
-        /* Création et ajoute une couche à la carte */
-
-        //MapLayer mapLayer = new CustomPinLayer(mapPoint);
-        /*CustomMapLayer mapLayer = new CustomMapLayer();
-
-        //add points to the layer
-        map.getIntersections().forEach((id, intersection) -> {
-            MapPoint mapPoint = new MapPoint(intersection.getLatitude(), intersection.getLongitude());
-            mapLayer.addPoint(id, mapPoint);
+        /* Création de la WebView et du moteur */
+        WebView webView = new WebView();
+        WebEngine webEngine = webView.getEngine();
+        System.out.println(webEngine.isJavaScriptEnabled());
+        webEngine.setOnAlert(event -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText(event.getData());
+            alert.showAndWait();
         });
+        /* Charge la carte HTML avec Leafletjs */
+        webEngine.loadContent("<!DOCTYPE html>\n"
+                + "<html lang=\"fr\">\n"
+                + "\n"
+                + "<head>\n"
+                + "    <meta charset=\"UTF-8\">\n"
+                + "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
+                + "    <title>Carte</title>\n"
+                + "    <!-- leafletjs CSS -->\n"
+                + "    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css\" />\n"
+                + "    <!-- leafletjs JS -->\n"
+                + "    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js\"></script>\n"
+                + "    <style>\n"
+                + "        /* Carte plein écran */\n"
+                + "        html,\n"
+                + "        body {\n"
+                + "            margin: 0;\n"
+                + "            height: 100%;\n"
+                + "            width: 100%;\n"
+                + "            background-color: red;\n"
+                + "        }\n"
+                + "\n"
+                + "        #map {\n"
+                + "            width: 100%;\n"
+                + "            height: 100%;\n"
+                + "        }\n"
+                + "    </style>\n"
+                + "</head>\n"
+                + "\n"
+                + "<body>\n"
+                + "\n"
+                + "    <!-- L'endroit ou la carte va s'afficher -->\n"
+                + "    <div id=\"map\"></div>\n"
+                + "\n"
+                + "    <script>\n"
+                + "        /* Les options pour afficher la France */\n"
+                + "        const mapOptions = {\n"
+                + "            center: [46.225, 0.132],\n"
+                + "            zoom: 5\n"
+                + "        }\n"
+                + "\n"
+                + "        /* Les options pour affiner la localisation */\n"
+                + "        const locationOptions = {\n"
+                + "            maximumAge: 10000,\n"
+                + "            timeout: 5000,\n"
+                + "            enableHighAccuracy: true\n"
+                + "        };\n"
+                + "\n"
+                + "        /* Création de la carte */\n"
+                + "        var map = new L.map(\"map\", mapOptions);\n"
+                + "\n"
+                + "        /* Création de la couche OpenStreetMap */\n"
+                + "        var layer = new L.TileLayer(\"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png\",\n"
+                + "            { attribution: '&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors' });\n"
+                + "\n"
+                + "        /* Ajoute la couche de la carte */\n"
+                + "        map.addLayer(layer);\n"
+                + "\n"
+                + "        /* Verifie que le navigateur est compatible avec la géolocalisation */\n"
+                + "        if (\"geolocation\" in navigator) {\n"
+                + "            navigator.geolocation.getCurrentPosition(handleLocation, handleLocationError, locationOptions);\n"
+                + "        } else {\n"
+                + "            /* Le navigateur n'est pas compatible */\n"
+                + "            alert(\"Géolocalisation indisponible\");\n"
+                + "        }\n"
+                + "\n"
+                + "        function handleLocation(position) {\n"
+                + "            /* Zoom avant de trouver la localisation */\n"
+                + "            map.setZoom(16);\n"
+                + "            /* Centre la carte sur la latitude et la longitude de la localisation de l'utilisateur */\n"
+                + "            map.panTo(new L.LatLng(position.coords.latitude, position.coords.longitude));\n"
+                + "        }\n"
+                + "\n"
+                + "        function handleLocationError(err) {\n"
+                + "            alert(`ERREUR (${err.code}): ${err.message}`);\n"
+                + "        }\n"
+                + "\n"
+                + "    </script>\n"
+                + "\n"
+                + "</body>\n"
+                + "\n"
+                + "</html>");
 
-        mapView.addLayer(mapLayer);*/
+        webView.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
-        /* Zoom de 5 */
-        mapView.setZoom(14);
-
-        /* creation of the mapPoint on which the camera will be centered
-         *  We use the longitude and latitude of Lyon
-         * */
-        MapPoint mapPointCamera = new MapPoint(45.764043, 4.835659);
-
-        /* Centre la carte sur le point */
-        mapView.flyTo(0, mapPointCamera, 0.1);
-
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println("ss");
+            }
+        });
         //force la mise à jour de la carte en la supprimant et la rajoutant dans le conteneur
         mapContainer.getChildren().clear();
-        mapContainer.getChildren().add(mapView);
+        mapContainer.getChildren().add(webView);
     }
+
 
     public void loadRequest(ActionEvent actionEvent) {
         //method that uploads an XML file (carte)
