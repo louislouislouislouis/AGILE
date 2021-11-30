@@ -1,0 +1,10 @@
+<intersection id="2774590477" latitude="45.77188" longitude="4.873784"/>
+<intersection id="110421994" latitude="45.77196" longitude="4.8751965"/>
+<intersection id="2774590462" latitude="45.771797" longitude="4.8736544"/>
+<intersection id="2774590489" latitude="45.771954" longitude="4.873676"/>
+<segment destination="2774590477" length="109.91045" name="Rue Francis de Pressensé" origin="110421994"/>
+<segment destination="2774590477" length="15.935466" name="" origin="2774590462"/>
+<segment destination="2774590489" length="12.359177" name="" origin="2774590477"/>
+<segment destination="2774590462" length="15.935466" name="" origin="2774590477"/>
+<segment destination="110421994" length="109.91045" name="Rue Francis de Pressensé" origin="2774590477"/>
+<segment destination="2774590477" length="12.359177" name="" origin="2774590489"/>

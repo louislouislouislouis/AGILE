@@ -1,10 +1,7 @@
 import org.hexanome.data.ExceptionXML;
 import org.hexanome.data.MapDeserializer;
 import org.hexanome.data.RequestDeserializer;
-import org.hexanome.model.Intersection;
-import org.hexanome.model.MapIF;
-import org.hexanome.model.PlanningRequest;
-import org.hexanome.model.Warehouse;
+import org.hexanome.model.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,6 +10,8 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalTime;
+import java.util.LinkedList;
 
 import static org.junit.Assert.*;
 
@@ -78,15 +77,33 @@ public class XMLTest {
     public void requestsParsing() {
         File xml = new File("src/test/xml/testReq.xml");
         RequestDeserializer rd = new RequestDeserializer();
-        MapIF mapIF = new MapIF();
         PlanningRequest planning = new PlanningRequest();
+        double delta = 0.00001;
 
         try {
             planning.clearPlanning();
-            rd.load(planning, xml, mapIF);
+            rd.load(planning, xml, map);
 
             Warehouse w = planning.getWarehouse();
-            assertEquals("Warehouse", w.toString(), "Warehouse{departureTime=8:0:0Point=");
+            assertEquals("Heure de départ", w.getDepartureTime(), LocalTime.of(8, 0, 0));
+            assertEquals("Longitude", w.getAddress().getLongitude(), 4.857418, delta);
+            assertEquals("Latitude", w.getAddress().getLatitude(), 45.75406, delta);
+            assertEquals("Intersection ID", w.getAddress().getIdIntersection(), 25175791, delta);
+
+            LinkedList<Request> requests = planning.getRequests();
+            assertEquals("Nombre de commandes", requests.size(), 1);
+
+            PickupPoint pp = requests.getFirst().getPickupPoint();
+            assertEquals(pp.getPickupDuration(), 60);
+            assertEquals(pp.getAddress().getIdIntersection(), 25175791);
+            assertEquals(pp.getAddress().getLatitude(), 45.75406, delta);
+            assertEquals(pp.getAddress().getLongitude(), 4.857418, delta);
+
+            DeliveryPoint dp = requests.getFirst().getDeliveryPoint();
+            assertEquals(dp.getDeliveryDuration(), 420);
+            assertEquals(dp.getAddress().getIdIntersection(), 26086130);
+            assertEquals(dp.getAddress().getLatitude(), 45.75871, delta);
+            assertEquals(dp.getAddress().getLongitude(), 4.8704023, delta);
         } catch (ParserConfigurationException | SAXException | ExceptionXML | IOException e) {
             e.printStackTrace();
             fail("[requestsParsing] An exception occured");
