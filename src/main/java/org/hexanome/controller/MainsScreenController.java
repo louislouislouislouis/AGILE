@@ -26,10 +26,7 @@ import org.hexanome.controller.tsp.GraphAPI;
 import org.hexanome.data.ExceptionXML;
 import org.hexanome.data.MapDeserializer;
 import org.hexanome.data.RequestDeserializer;
-import org.hexanome.model.Intersection;
-import org.hexanome.model.MapIF;
-import org.hexanome.model.PlanningRequest;
-import org.hexanome.model.Tour;
+import org.hexanome.model.*;
 import org.hexanome.vue.App;
 import org.xml.sax.SAXException;
 
@@ -37,6 +34,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import com.gluonhq.maps.MapPoint;
 import com.gluonhq.maps.MapView;
+
+import static org.hexanome.model.AlertBox.displayAlert;
 
 public class MainsScreenController {
     @FXML
@@ -218,8 +217,9 @@ public class MainsScreenController {
 
     public void addRequest(ActionEvent actionEvent) {
         //method that uploads an XML file with the command
-        File selectedFile = fileChooser(actionEvent);
-        System.out.println(selectedFile);
+        //File selectedFile = fileChooser(actionEvent);
+        //System.out.println(selectedFile);
+        displayAlert("ALERT!", "For the moment this functionality is not available");
     }
 
     public void computeTour(ActionEvent actionEvent) {

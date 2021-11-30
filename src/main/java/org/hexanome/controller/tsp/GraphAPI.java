@@ -15,24 +15,23 @@ import java.util.*;
 
 public class GraphAPI {
 
-    // shortestPathsIntersections Map with
-    // key: idStartIntersection
-    // value: List of Maps with key: idDestinationIntersection
-    //                          value: List idIntersections to pass from start to destination
-    private Map<Long, Map<Long, List<Long>>> shortestPathsIntersections;
-
-    // shortestPathsIntersections Map with
-    // key: idStartIntersection
-    // value: List of Maps with key: idDestinationIntersection
-    //                          value: cost of complete shortest path between start and destination
-    private Map<Long, Map<Long, Double>> shortestPathsCost;
-
     public GraphAPI() {
-        this.shortestPathsIntersections = new HashMap<>();
-        this.shortestPathsCost = new HashMap<>();
     }
 
     public Tour V1_TSP(PlanningRequest planning, MapIF map) {
+
+        // shortestPathsIntersections Map with
+        // key: idStartIntersection
+        // value: List of Maps with key: idDestinationIntersection
+        //                          value: List idIntersections to pass from start to destination
+        Map<Long, Map<Long, List<Long>>> shortestPathsIntersections = new HashMap<>();
+
+        // shortestPathsIntersections Map with
+        // key: idStartIntersection
+        // value: List of Maps with key: idDestinationIntersection
+        //                          value: cost of complete shortest path between start and destination
+        Map<Long, Map<Long, Double>> shortestPathsCost = new HashMap<>();
+
         //this.calculateDijkstra(planning,map);
         Map<Intersection, Map<Intersection, Segment>> adj = this.getAdj(map);
         Set<Intersection> destinations = new LinkedHashSet<>();
@@ -55,22 +54,22 @@ public class GraphAPI {
             dijkstra.dijkstra(map.getIntersections(), adj, origin, destinations);
 
 
-            if (!this.getShortestPathsIntersections().containsKey(origin.getIdIntersection())) {
+            if (!shortestPathsIntersections.containsKey(origin.getIdIntersection())) {
                 Map<Long, List<Long>> emptyMap = new HashMap<>();
-                this.getShortestPathsIntersections().put(origin.getIdIntersection(), emptyMap);
+                shortestPathsIntersections.put(origin.getIdIntersection(), emptyMap);
             }
             Map<Long, List<Long>> currentPaths = dijkstra.getPath();
             for (Long l : currentPaths.keySet()) {
-                this.getShortestPathsIntersections().get(origin.getIdIntersection()).put(l, currentPaths.get(l));
+                shortestPathsIntersections.get(origin.getIdIntersection()).put(l, currentPaths.get(l));
             }
 
-            if (!this.getShortestPathsCost().containsKey(origin.getIdIntersection())) {
+            if (!shortestPathsCost.containsKey(origin.getIdIntersection())) {
                 Map<Long, Double> emptyCosts = new HashMap<>();
-                this.getShortestPathsCost().put(origin.getIdIntersection(), emptyCosts);
+                shortestPathsCost.put(origin.getIdIntersection(), emptyCosts);
             }
             Map<Long, Double> currentCosts = new HashMap<>();
             for (Long l : currentCosts.keySet()) {
-                this.getShortestPathsCost().get(origin.getIdIntersection()).put(l, currentCosts.get(l));
+                shortestPathsCost.get(origin.getIdIntersection()).put(l, currentCosts.get(l));
             }
 
             Map<Long, Double> distTSP = dijkstra.getResultDistForTSP(destinations);
@@ -120,6 +119,7 @@ public class GraphAPI {
         for (int i = 0; i < nbVerticesTSP; i++) {
             pathTSP.add(LHSArray[tsp.getSolution(i)]);
         }
+        pathTSP.add(planning.getWarehouse().getAddress());
 
             for (Intersection i : pathTSP) {
                 System.out.println(i);
@@ -131,7 +131,7 @@ public class GraphAPI {
                 Intersection startIntersection = pathTSP.get(i);
                 Intersection destinationIntersection = pathTSP.get(i+1);
                 List<Intersection> currentPath = new ArrayList<>();
-                for ( Long l : this.getShortestPathsIntersections().get(startIntersection.getIdIntersection()).get(destinationIntersection.getIdIntersection())) {
+                for ( Long l : shortestPathsIntersections.get(startIntersection.getIdIntersection()).get(destinationIntersection.getIdIntersection())) {
                     Intersection intersection = map.getIntersections().get(l);
                     if (!intersection.equals(pathTSP.get(i))) {
                         currentPath.add(intersection);
@@ -158,14 +158,6 @@ public class GraphAPI {
         }
         return adj;
 
-    }
-
-    public Map<Long, Map<Long, List<Long>>> getShortestPathsIntersections() {
-        return shortestPathsIntersections;
-    }
-
-    public Map<Long, Map<Long, Double>> getShortestPathsCost() {
-        return shortestPathsCost;
     }
 
     private void calculateDijkstra(PlanningRequest planning, MapIF map) {
