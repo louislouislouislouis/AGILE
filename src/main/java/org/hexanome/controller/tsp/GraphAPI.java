@@ -32,7 +32,7 @@ public class GraphAPI {
         this.shortestPathsCost = new HashMap<>();
     }
 
-    public Tour V1_TSP(PlanningRequest planning, MapIF map) {
+    public void V1_TSP(PlanningRequest planning, MapIF map, Tour tour) {
         //this.calculateDijkstra(planning,map);
         Map<Intersection, Map<Intersection, Segment>> adj = this.getAdj(map);
         Set<Intersection> destinations = new LinkedHashSet<>();
@@ -112,39 +112,40 @@ public class GraphAPI {
                 + (System.currentTimeMillis() - startTime) + "ms : ");
 
 
-            // Converting LinkedHashMap to Array
-            Intersection[] LHSArray = new Intersection[destinations.size()];
-            LHSArray = destinations.toArray(LHSArray);
+        // Converting LinkedHashMap to Array
+        Intersection[] LHSArray = new Intersection[destinations.size()];
+        LHSArray = destinations.toArray(LHSArray);
 
         List<Intersection> pathTSP = new ArrayList<>();
         for (int i = 0; i < nbVerticesTSP; i++) {
             pathTSP.add(LHSArray[tsp.getSolution(i)]);
         }
 
-            for (Intersection i : pathTSP) {
-                System.out.println(i);
-            }
+        for (Intersection i : pathTSP) {
+            System.out.println(i);
+        }
 
-            List<Intersection> completeTour = new ArrayList<>();
-            completeTour.add(pathTSP.get(0));
-            for (int i = 0; i < pathTSP.size()-1; i++){
-                Intersection startIntersection = pathTSP.get(i);
-                Intersection destinationIntersection = pathTSP.get(i+1);
-                List<Intersection> currentPath = new ArrayList<>();
-                for ( Long l : this.getShortestPathsIntersections().get(startIntersection.getIdIntersection()).get(destinationIntersection.getIdIntersection())) {
-                    Intersection intersection = map.getIntersections().get(l);
-                    if (!intersection.equals(pathTSP.get(i))) {
-                        currentPath.add(intersection);
-                    }
-                }
-                for (Intersection intersection : currentPath) {
-                    completeTour.add(intersection);
+        List<Intersection> completeTour = new ArrayList<>();
+        completeTour.add(pathTSP.get(0));
+        for (int i = 0; i < pathTSP.size() - 1; i++) {
+            Intersection startIntersection = pathTSP.get(i);
+            Intersection destinationIntersection = pathTSP.get(i + 1);
+            List<Intersection> currentPath = new ArrayList<>();
+            for (Long l : this.getShortestPathsIntersections().get(startIntersection.getIdIntersection()).get(destinationIntersection.getIdIntersection())) {
+                Intersection intersection = map.getIntersections().get(l);
+                if (!intersection.equals(pathTSP.get(i))) {
+                    currentPath.add(intersection);
                 }
             }
+            for (Intersection intersection : currentPath) {
+                completeTour.add(intersection);
+            }
+        }
 
-            Tour tour = new Tour(completeTour,tsp.getSolutionCost());
+        tour.setCost(tsp.getSolutionCost());
+        tour.setIntersections(completeTour);
 
-        return tour;
+
     }
 
     private Map<Intersection, Map<Intersection, Segment>> getAdj(MapIF myMap) {
