@@ -131,7 +131,7 @@ public class MainsScreenController implements Observer {
         /* creation of the mapPoint on which the camera will be centered
          *  We use the longitude and latitude of Lyon
          * */
-        MapPoint mapPointCamera = new MapPoint(45.764043, 4.835659);
+        MapPoint mapPointCamera = new MapPoint(45.760327, 4.876824);
 
         /* Centre la carte sur le point */
         mapView.flyTo(0, mapPointCamera, 0.1);
