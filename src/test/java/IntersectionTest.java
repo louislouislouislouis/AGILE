@@ -26,5 +26,6 @@ public class IntersectionTest {
         assertNotEquals("i1 vs i5", i1, i5);
         assertEquals("i1 vs i6", i1, i6);
         assertNotEquals("i1 vs i7", i1, i7);
+        assertNotEquals("i1 vs int", i1, 42);
     }
 }

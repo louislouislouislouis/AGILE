@@ -42,7 +42,7 @@ public class Intersection {
             double deltaLong = this.longitude - other.getLongitude();
             return deltaId == 0 && deltaLat > -delta && deltaLat < delta && deltaLong > -delta && deltaLong < delta;
         } else {
-            throw new IllegalArgumentException("Intersection expected");
+            return false;
         }
     }
 }
