@@ -1,12 +1,14 @@
 package org.hexanome.model;
 
+import javafx.scene.paint.Color;
+
 import java.time.LocalTime;
 
 public class Warehouse extends Point {
     private LocalTime departureTime;
 
-    public Warehouse(LocalTime departureTime, Intersection departureAddress) {
-        super(departureAddress, "warehouse");
+    public Warehouse(LocalTime departureTime, Intersection departureAddress, Color color) {
+        super(departureAddress, "warehouse", color);
         this.departureTime = departureTime;
     }
 

@@ -1,5 +1,7 @@
 package org.hexanome.model;
 
+import javafx.scene.paint.Color;
+
 import java.time.LocalTime;
 
 public class DeliveryPoint extends Point {
@@ -7,8 +9,8 @@ public class DeliveryPoint extends Point {
     private LocalTime arrivalTime;
     private LocalTime departureTime;
 
-    public DeliveryPoint(Intersection address, int duration) {
-        super(address, "delivery");
+    public DeliveryPoint(Intersection address, int duration, Color color) {
+        super(address, "delivery", color);
         this.duration = duration;
         departureTime = LocalTime.MIDNIGHT;
         arrivalTime = LocalTime.MIDNIGHT;

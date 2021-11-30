@@ -1,5 +1,7 @@
 package org.hexanome.model;
 
+import javafx.scene.paint.Color;
+
 import java.time.LocalTime;
 
 public class PickupPoint extends Point {
@@ -7,8 +9,8 @@ public class PickupPoint extends Point {
     private LocalTime departureTime;
     private LocalTime arrivalTime;
 
-    public PickupPoint(Intersection address, int duration) {
-        super(address, "pickup");
+    public PickupPoint(Intersection address, int duration, Color color) {
+        super(address, "pickup", color);
         this.duration = duration;
         departureTime = LocalTime.MIDNIGHT;
         arrivalTime = LocalTime.MIDNIGHT;
