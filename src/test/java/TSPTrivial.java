@@ -1,3 +1,4 @@
+import javafx.scene.paint.Color;
 import javafx.util.Pair;
 import org.hexanome.controller.tsp.GraphAPI;
 import org.hexanome.model.*;
@@ -32,10 +33,10 @@ public class TSPTrivial {
 
         map = new MapIF(intersections, segments);
 
-        PickupPoint pp = new PickupPoint(i1, 10);
-        DeliveryPoint dp = new DeliveryPoint(i2, 15);
+        PickupPoint pp = new PickupPoint(i1, 10, Color.RED);
+        DeliveryPoint dp = new DeliveryPoint(i2, 15, Color.RED);
         Request r = new Request(pp, dp);
-        Warehouse w = new Warehouse(LocalTime.NOON, i1);
+        Warehouse w = new Warehouse(LocalTime.NOON, i1, Color.BLACK);
 
         planning = new PlanningRequest();
         planning.setWarehouse(w);
