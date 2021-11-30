@@ -13,6 +13,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalTime;
 
 import static org.junit.Assert.*;
 
@@ -78,15 +79,18 @@ public class XMLTest {
     public void requestsParsing() {
         File xml = new File("src/test/xml/testReq.xml");
         RequestDeserializer rd = new RequestDeserializer();
-        MapIF mapIF = new MapIF();
         PlanningRequest planning = new PlanningRequest();
 
         try {
             planning.clearPlanning();
-            rd.load(planning, xml, mapIF);
+            rd.load(planning, xml, map);
 
             Warehouse w = planning.getWarehouse();
-            assertEquals("Warehouse", w.toString(), "Warehouse{departureTime=8:0:0Point=");
+            LocalTime lt = w.getDepartureTime();
+            assertEquals("Heure de départ", w.getDepartureTime(), LocalTime.of(8, 0, 0));
+            assertEquals("Longitude", w.getAddress().getLongitude(), 4.857418, 0.00001);
+            assertEquals("Latitude", w.getAddress().getLatitude(), 45.75406, 0.00001);
+            assertEquals("Intersection ID", w.getAddress().getIdIntersection(), 25175791, 0.00001);
         } catch (ParserConfigurationException | SAXException | ExceptionXML | IOException e) {
             e.printStackTrace();
             fail("[requestsParsing] An exception occured");
