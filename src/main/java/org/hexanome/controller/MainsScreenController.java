@@ -2,15 +2,16 @@ package org.hexanome.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import com.gluonhq.maps.MapLayer;
+import javafx.event.EventHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -42,7 +43,7 @@ import com.gluonhq.maps.MapView;
 
 import static org.hexanome.model.AlertBox.displayAlert;
 
-public class MainsScreenController {
+public class MainsScreenController implements Observer {
     @FXML
     HBox mapContainer;
     @FXML
@@ -58,8 +59,8 @@ public class MainsScreenController {
     private static final ObservableList<Point> data = FXCollections.observableArrayList();
 
     /* Création de la carte Gluon JavaFX */
-    private MapView mapView = new MapView();
-    private MapLayer requestLayer = new MapLayer();
+    private CustomMap mapView = new CustomMap();
+    private CustomMapLayer requestLayer = new CustomMapLayer();
     private MapLayer tourLayer = new MapLayer();
 
     //Declaration of the interactive buttons in the mainsScreen.fxml
@@ -138,6 +139,12 @@ public class MainsScreenController {
         //force la mise à jour de la carte en la supprimant et la rajoutant dans le conteneur
         mapContainer.getChildren().clear();
         mapContainer.getChildren().add(mapView);
+
+        //Force rerender (Bug fix - Gluon Maps Issue drag)
+        mapView.setOnMouseReleased(e -> {
+            mapView.layout();
+            System.out.println("eee");
+        });
     }
 
     public void loadRequest(ActionEvent actionEvent) {
@@ -201,12 +208,8 @@ public class MainsScreenController {
         });
 
         requestLayer = mapLayer;
-
         mapView.addLayer(requestLayer);
 
-        //force la mise à jour de la carte en la supprimant et la rajoutant dans le conteneur
-        mapContainer.getChildren().clear();
-        mapContainer.getChildren().add(mapView);
     }
 
     public void addRequest(ActionEvent actionEvent) {
@@ -218,11 +221,10 @@ public class MainsScreenController {
 
     public void computeTour(ActionEvent actionEvent) {
         //method that calculates the most optimal path of the tour
-
+        tour = new Tour(null, null, this);
         mapView.removeLayer(tourLayer);
-
-        tour = new GraphAPI().V1_TSP(planning, map);
-
+        new GraphAPI().V1_TSP(planning, map, tour);
+        tour.notifyChange("HIHI");
         //Add Segment to the layer
 
         CustomMapLayer mapLayer = new CustomMapLayer();
@@ -248,12 +250,6 @@ public class MainsScreenController {
         tourLayer = mapLayer;
 
         mapView.addLayer(tourLayer);
-
-        //force la mise à jour de la carte en la supprimant et la rajoutant dans le conteneur
-        mapContainer.getChildren().clear();
-        mapContainer.getChildren().add(mapView);
-
-        updateTableView();
     }
 
     public File fileChooser(ActionEvent actionEvent) {
@@ -279,6 +275,13 @@ public class MainsScreenController {
         boolean validationPlaningRequest = false;
         return validationPlaningRequest;
     }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        System.out.println(arg);
+        System.out.println("sddsdsd");
+    }
+
 
     private void updateTableView() {
         // columns initialization

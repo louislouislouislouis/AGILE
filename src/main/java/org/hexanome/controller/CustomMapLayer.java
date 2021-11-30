@@ -82,6 +82,10 @@ public class CustomMapLayer extends MapLayer {
         return pointList;
     }
 
+    public void forceReRender() {
+        layoutLayer();
+    }
+
     /* La fonction est appelée à chaque rafraichissement de la carte */
     @Override
     protected void layoutLayer() {
