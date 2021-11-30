@@ -83,6 +83,7 @@ public class CustomMapLayer extends MapLayer {
     }
 
     public void forceReRender() {
+        System.out.println("forceRender is calleds");
         layoutLayer();
     }
 
@@ -90,7 +91,7 @@ public class CustomMapLayer extends MapLayer {
     @Override
     protected void layoutLayer() {
         /* Conversion des MapPoint vers Point2D */
-
+        System.out.println("LayoutLayer is Called");
         pointList.forEach((key, value) -> {
             MapPoint mapPoint = value.getKey();
 

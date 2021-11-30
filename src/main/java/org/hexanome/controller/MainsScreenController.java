@@ -61,7 +61,7 @@ public class MainsScreenController implements Observer {
     /* Création de la carte Gluon JavaFX */
     private CustomMap mapView = new CustomMap();
     private CustomMapLayer requestLayer = new CustomMapLayer();
-    private MapLayer tourLayer = new MapLayer();
+    private CustomMapLayer tourLayer = new CustomMapLayer();
 
     //Declaration of the interactive buttons in the mainsScreen.fxml
     @FXML
@@ -125,6 +125,21 @@ public class MainsScreenController implements Observer {
             e.printStackTrace();
         }
 
+        //VBox root = new VBox();
+
+        /* Création et ajoute une couche à la carte */
+
+        //MapLayer mapLayer = new CustomPinLayer(mapPoint);
+        /*CustomMapLayer mapLayer = new CustomMapLayer();
+
+        //add points to the layer
+        map.getIntersections().forEach((id, intersection) -> {
+            MapPoint mapPoint = new MapPoint(intersection.getLatitude(), intersection.getLongitude());
+            mapLayer.addPoint(id, mapPoint);
+        });
+
+        mapView.addLayer(mapLayer);*/
+
         /* Zoom de 5 */
         mapView.setZoom(14);
 
@@ -141,9 +156,15 @@ public class MainsScreenController implements Observer {
         mapContainer.getChildren().add(mapView);
 
         //Force rerender (Bug fix - Gluon Maps Issue drag)
-        mapView.setOnMouseReleased(e -> {
+        mapView.setOnMouseDragged(e -> {
+            System.out.println("onMousedetect");
+            //Pour les layers de request
+            requestLayer.forceReRender();
+            tourLayer.forceReRender();
+
+            //Pour le fond de la map
             mapView.layout();
-            System.out.println("eee");
+
         });
     }
 
@@ -224,10 +245,10 @@ public class MainsScreenController implements Observer {
         tour = new Tour(null, null, this);
         mapView.removeLayer(tourLayer);
         new GraphAPI().V1_TSP(planning, map, tour);
-        tour.notifyChange("HIHI");
+
         //Add Segment to the layer
 
-        CustomMapLayer mapLayer = new CustomMapLayer();
+        tourLayer = new CustomMapLayer();
 
         List<Intersection> intersectionList = tour.getIntersections();
 
@@ -239,17 +260,15 @@ public class MainsScreenController implements Observer {
             start = intersectionList.get(i);
             end = intersectionList.get(i + 1);
             MapPoint mapPointStart = new MapPoint(start.getLatitude(), start.getLongitude());
-            mapLayer.addPoint(start.getIdIntersection(), mapPointStart);
-
+            tourLayer.addPoint(start.getIdIntersection(), mapPointStart);
             MapPoint mapPointEnd = new MapPoint(end.getLatitude(), end.getLongitude());
-            mapLayer.addPoint(end.getIdIntersection(), mapPointEnd);
-
-            mapLayer.addSegment(mapPointStart, mapPointEnd);
+            tourLayer.addPoint(end.getIdIntersection(), mapPointEnd);
+            tourLayer.addSegment(mapPointStart, mapPointEnd);
         }
 
-        tourLayer = mapLayer;
 
         mapView.addLayer(tourLayer);
+        tour.notifyChange("UPDATEMAP");
 
         updateTableView();
     }
@@ -280,8 +299,20 @@ public class MainsScreenController implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println(arg);
-        System.out.println("sddsdsd");
+        System.out.println("Une fonction d'actualisation à été appelé");
+        String action = (String) arg;
+        switch (action) {
+            case "UPDATEMAP":
+                System.out.println("Update map called");
+                requestLayer.forceReRender();
+                tourLayer.forceReRender();
+                mapView.layout();
+                break;
+            default:
+                System.out.println("Unknown method");
+
+        }
+
     }
 
 
