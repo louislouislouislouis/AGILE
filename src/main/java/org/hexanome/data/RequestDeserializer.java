@@ -96,6 +96,6 @@ public class RequestDeserializer {
 
         LocalTime departureTime = LocalTime.parse(elt.getAttribute("departureTime"), formatter);
 
-        return new Warehouse(departureTime, departureAddress, Color.GOLD);
+        return new Warehouse(departureTime, departureAddress, Color.BLACK);
     }
 }
