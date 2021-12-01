@@ -9,7 +9,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -103,13 +102,7 @@ public class MainsScreenController implements Observer {
         try {
             domMap.load(map, selectedFile);
             btnLoadRequest.setDisable(false);
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ExceptionXML e) {
+        } catch (ParserConfigurationException | SAXException | IOException | ExceptionXML e) {
             e.printStackTrace();
         }
 
@@ -166,13 +159,7 @@ public class MainsScreenController implements Observer {
 
         try {
             mydomrequest.load(planning, selectedFile, map);
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ExceptionXML e) {
+        } catch (ParserConfigurationException | SAXException | IOException | ExceptionXML e) {
             e.printStackTrace();
         }
 
@@ -351,7 +338,7 @@ public class MainsScreenController implements Observer {
             @Override
             protected void updateItem(Color item, boolean empty) {
                 super.updateItem(item, empty);
-                TableRow currentRow = getTableRow();
+                //TableRow<Point> currentRow = getTableRow();
                 if (item != null) {
                     double r = item.getRed() * 255;
                     double g = item.getGreen() * 255;

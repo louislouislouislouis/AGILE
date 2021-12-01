@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
@@ -43,7 +44,7 @@ public class RequestDeserializer {
         NodeList requests = noeudDOMRacine.getElementsByTagName("request");
 
         for (int i = 0; i < requests.getLength(); i++) {
-            planning.addRequest(createRequest((Element) requests.item(i), map));
+            planning.addRequest(createRequest((Element) requests.item(i), map, i));
         }
 
         if (warehouses.getLength() != 1)
@@ -52,15 +53,9 @@ public class RequestDeserializer {
         planning.setWarehouse(createWarehouse((Element) warehouses.item(0), map));
     }
 
-    private Request createRequest(Element elt, MapIF map) throws ExceptionXML {
-        // random color generation
+    private Request createRequest(Element elt, MapIF map, int i) throws ExceptionXML {
 
-        Random rand = new Random();
-
-        float r = rand.nextFloat();
-        float g = rand.nextFloat();
-        float b = rand.nextFloat();
-        Color randomColor = Color.color(r, g, b);
+        Color color = ColorEnum.values()[i].color;
 
         int pickupDuration = Integer.parseInt(elt.getAttribute("pickupDuration"));
         if (pickupDuration < 0)
@@ -74,13 +69,13 @@ public class RequestDeserializer {
         if (pickupAddress < 0)
             throw new ExceptionXML("Error when reading file: pickupAddress must be positive");
 
-        PickupPoint pickupPoint = new PickupPoint(map.getIntersections().get(pickupAddress), pickupDuration, randomColor);
+        PickupPoint pickupPoint = new PickupPoint(map.getIntersections().get(pickupAddress), pickupDuration, color);
 
         Long deliveryAddress = Long.parseLong(elt.getAttribute("deliveryAddress"));
         if (deliveryAddress < 0)
             throw new ExceptionXML("Error when reading file: deliveryAddress must be positive");
 
-        DeliveryPoint deliveryPoint = new DeliveryPoint(map.getIntersections().get(deliveryAddress), deliveryDuration, randomColor);
+        DeliveryPoint deliveryPoint = new DeliveryPoint(map.getIntersections().get(deliveryAddress), deliveryDuration, color);
 
         return new Request(pickupPoint, deliveryPoint);
     }
