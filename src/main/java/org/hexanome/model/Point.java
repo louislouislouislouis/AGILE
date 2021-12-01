@@ -8,6 +8,13 @@ public class Point {
     private String type;
     private Color color;
 
+    /**
+     * Clear a point
+     *
+     * @param address Intersection that represent the address of the point
+     * @param type    type of the point
+     * @param color   color of the point
+     */
     public Point(Intersection address, String type, Color color) {
         this.address = address;
         this.id = address.getIdIntersection();

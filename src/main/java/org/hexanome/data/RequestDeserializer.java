@@ -18,7 +18,7 @@ import java.util.Random;
 
 public class RequestDeserializer {
     /**
-     * Open an XML file and create plan from this file
+     * Open an XML file and create a map from this file
      *
      * @param planning the planning to create from the file
      * @param xml      file that contain the xml

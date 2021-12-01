@@ -8,7 +8,11 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.util.Pair;
+import org.hexanome.data.ExceptionXML;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -31,6 +35,12 @@ public class CustomMapLayer extends MapLayer {
         polylineList = new HashMap<>();
     }
 
+    /**
+     * add a Point to the layer
+     *
+     * @param id       id of the point
+     * @param mapPoint mapPoint that will be added
+     */
     public void addPoint(Long id, MapPoint mapPoint) {
         Circle circle = new Circle(1.5, Color.FIREBRICK);
 
@@ -41,12 +51,28 @@ public class CustomMapLayer extends MapLayer {
         this.getChildren().add(circle);
     }
 
+    /**
+     * add a special Point to the layer
+     * with a circle shape
+     *
+     * @param id       id of the point
+     * @param mapPoint mapPoint that will be added
+     * @param color    color of the circle
+     */
     public void addSpecialPointCircle(Long id, MapPoint mapPoint, Color color) {
         Circle circle = new Circle(10, color);
 
         addShape(circle, mapPoint, id);
     }
 
+    /**
+     * add a special Point to the layer
+     * with a rectangle shape
+     *
+     * @param id       id of the point
+     * @param mapPoint mapPoint that will be added
+     * @param color    color of the rectangle
+     */
     public void addSpecialPointRectangle(Long id, MapPoint mapPoint, Color color) {
         Rectangle rec = new Rectangle(20, 20, color);
 
@@ -69,6 +95,13 @@ public class CustomMapLayer extends MapLayer {
         this.getChildren().add(shape);
     }
 
+    /**
+     * add a red segment to the layer
+     *
+     * @param id            id of the point
+     * @param mapPointStart start mapPoint of the segment
+     * @param mapPointEnd   end mapPoint of the segment
+     */
     public void addSegment(MapPoint mapPointStart, MapPoint mapPointEnd, Long id) {
         Polyline polyline = new Polyline();
         polyline.setStroke(Color.RED);
