@@ -17,7 +17,7 @@ import java.util.HashMap;
 public class CustomMapLayer extends MapLayer {
 
     private final HashMap<Long, MapPoint> pointList;
-    private final HashMap<Long, Circle> circleList;
+    private final HashMap<Long, Shape> shapeList;
     private final HashMap<Long, Polyline> polylineList;
     private final HashMap<Long, Pair<MapPoint, MapPoint>> segmentList;
 
@@ -26,7 +26,7 @@ public class CustomMapLayer extends MapLayer {
      */
     public CustomMapLayer() {
         pointList = new HashMap<>();
-        circleList = new HashMap<>();
+        shapeList = new HashMap<>();
         segmentList = new HashMap<>();
         polylineList = new HashMap<>();
     }
@@ -35,27 +35,38 @@ public class CustomMapLayer extends MapLayer {
         Circle circle = new Circle(1.5, Color.FIREBRICK);
 
         pointList.put(id, mapPoint);
-        circleList.put(id, circle);
+        shapeList.put(id, circle);
 
         /* Ajoute le cercle au MapLayer */
         this.getChildren().add(circle);
     }
 
-    public void addSpecialPoint(Long id, MapPoint mapPoint, Color color) {
+    public void addSpecialPointCircle(Long id, MapPoint mapPoint, Color color) {
         Circle circle = new Circle(10, color);
 
-        circle.setId(id.toString());
+        addShape(circle, mapPoint, id);
+    }
+
+    public void addSpecialPointRectangle(Long id, MapPoint mapPoint, Color color) {
+        Rectangle rec = new Rectangle(20, 20, color);
+
+        addShape(rec, mapPoint, id);
+    }
+
+    private void addShape(Shape shape, MapPoint mapPoint, Long id) {
+        shape.setId(id.toString());
+
         DropShadow e = new DropShadow();
 
         e.setRadius(12);
 
-        circle.setEffect(e);
+        shape.setEffect(e);
 
         pointList.put(id, mapPoint);
-        circleList.put(id, circle);
+        shapeList.put(id, shape);
 
         /* Ajoute le cercle au MapLayer */
-        this.getChildren().add(circle);
+        this.getChildren().add(shape);
     }
 
     public void addSegment(MapPoint mapPointStart, MapPoint mapPointEnd, Long id) {
@@ -75,8 +86,8 @@ public class CustomMapLayer extends MapLayer {
         return pointList;
     }
 
-    public HashMap<Long, Circle> getCircleList() {
-        return circleList;
+    public HashMap<Long, Shape> getShapeList() {
+        return shapeList;
     }
 
     public HashMap<Long, Polyline> getPolylineList() {
@@ -99,12 +110,19 @@ public class CustomMapLayer extends MapLayer {
         System.out.println("LayoutLayer is Called");
         pointList.forEach((id, mapPoint) -> {
 
-            Shape shape = circleList.get(id);
+            Shape shape = shapeList.get(id);
 
             Point2D point2d = this.getMapPoint(mapPoint.getLatitude(), mapPoint.getLongitude());
-            /* Déplace le cercle selon les coordonnées du point */
-            shape.setTranslateX(point2d.getX());
-            shape.setTranslateY(point2d.getY());
+
+            if (shape instanceof Circle) {
+                /* Déplace le cercle selon les coordonnées du point */
+                shape.setTranslateX(point2d.getX());
+                shape.setTranslateY(point2d.getY());
+            } else {
+                /* Déplace le cercle selon les coordonnées du point */
+                shape.setTranslateX(point2d.getX() - shape.getLayoutBounds().getWidth() / 2);
+                shape.setTranslateY(point2d.getY() - shape.getLayoutBounds().getWidth() / 2);
+            }
         });
 
         segmentList.forEach((id, pair) -> {

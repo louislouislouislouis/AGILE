@@ -4,16 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import com.gluonhq.maps.MapLayer;
-import javafx.beans.value.ChangeListener;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Point2D;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseDragEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -21,26 +14,20 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import javafx.util.Pair;
-import org.hexanome.controller.tsp.Graph;
 import org.hexanome.controller.tsp.GraphAPI;
 import org.hexanome.data.ExceptionXML;
 import org.hexanome.data.MapDeserializer;
 import org.hexanome.data.RequestDeserializer;
 import org.hexanome.model.*;
-import org.hexanome.vue.App;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import com.gluonhq.maps.MapPoint;
-import com.gluonhq.maps.MapView;
 
 import static org.hexanome.model.AlertBox.displayAlert;
 
@@ -197,24 +184,26 @@ public class MainsScreenController implements Observer {
 
         //warehouse
         Intersection warehouse = planning.getWarehouse().getAddress();
-        requestLayer.addSpecialPoint(warehouse.getIdIntersection(),
+        requestLayer.addSpecialPointRectangle(warehouse.getIdIntersection(),
                 new MapPoint(warehouse.getLatitude(), warehouse.getLongitude()), planning.getWarehouse().getColor());
 
         //requests
         planning.getRequests().forEach((request) -> {
             Intersection deliveryInt = request.getDeliveryPoint().getAddress();
             MapPoint mapPointDelivery = new MapPoint(deliveryInt.getLatitude(), deliveryInt.getLongitude());
-            requestLayer.addSpecialPoint(deliveryInt.getIdIntersection(), mapPointDelivery, request.getDeliveryPoint().getColor());
+            requestLayer.addSpecialPointCircle(deliveryInt.getIdIntersection(), mapPointDelivery, request.getDeliveryPoint().getColor());
 
             Intersection pickupInt = request.getPickupPoint().getAddress();
             MapPoint mapPointPickup = new MapPoint(pickupInt.getLatitude(), pickupInt.getLongitude());
-            requestLayer.addSpecialPoint(pickupInt.getIdIntersection(), mapPointPickup, request.getPickupPoint().getColor());
+            requestLayer.addSpecialPointRectangle(pickupInt.getIdIntersection(), mapPointPickup, request.getPickupPoint().getColor());
         });
 
-        HashMap<Long, Circle> circleList = requestLayer.getCircleList();
+        HashMap<Long, Shape> shapeList = requestLayer.getShapeList();
 
-        circleList.forEach((id, circle) -> {
-            circle.setOnMouseClicked(mouseEvent -> {
+        // enable to scroll to selected point from the map
+
+        shapeList.forEach((id, shape) -> {
+            shape.setOnMouseClicked(mouseEvent -> {
 
                 for (int i = 0; i < tableView.getItems().size(); i++) {
                     Point point = (Point) tableView.getItems().get(i);
