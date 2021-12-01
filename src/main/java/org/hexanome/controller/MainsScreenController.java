@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -250,15 +251,20 @@ public class MainsScreenController implements Observer {
                     polylineList.forEach((id, poly) -> {
 
                         if (id <= aLong) {
-                            poly.setStrokeWidth(10);
-                            poly.setStroke(Color.OLIVE);
+                            poly.setStrokeWidth(7);
+                            poly.setStroke(Color.DODGERBLUE);
+                            DropShadow e = new DropShadow();
+                            e.setColor(Color.BLUE);
+                            e.setRadius(9);
+                            poly.setEffect(e);
                         }
                     });
                 } else {
                     polylineList.forEach((id, poly) -> {
                         if (id <= aLong) {
                             poly.setStrokeWidth(5);
-                            poly.setStroke(Color.RED);
+                            poly.setStroke(Color.DODGERBLUE);
+                            poly.setEffect(null);
                         }
                     });
                 }

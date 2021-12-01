@@ -104,7 +104,7 @@ public class CustomMapLayer extends MapLayer {
      */
     public void addSegment(MapPoint mapPointStart, MapPoint mapPointEnd, Long id) {
         Polyline polyline = new Polyline();
-        polyline.setStroke(Color.RED);
+        polyline.setStroke(Color.DODGERBLUE);
         polyline.setStrokeWidth(5);
         polyline.setOpacity(0.5);
         polyline.setId(id.toString());

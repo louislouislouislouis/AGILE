@@ -1,10 +1,5 @@
 package org.hexanome.model;
 
-import org.hexanome.data.ExceptionXML;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.util.LinkedList;
 
 public class PlanningRequest {
