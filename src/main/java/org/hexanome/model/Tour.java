@@ -11,15 +11,31 @@ public class Tour extends Observable {
     private List<Intersection> intersections = new ArrayList();
     private Double cost;
 
+    /**
+     * create an empty tour
+     */
     public Tour() {
 
     }
 
+    /**
+     * create a tour
+     *
+     * @param intersections list of all intersections of the tour
+     * @param cost          calculated cost of the tour
+     */
     public Tour(List<Intersection> intersections, Double cost) {
         this.intersections = intersections;
         this.cost = cost;
     }
 
+    /**
+     * create a tour
+     *
+     * @param o             Observer from the design pattern
+     * @param intersections list of all intersections of the tour
+     * @param cost          calculated cost of the tour
+     */
     public Tour(List<Intersection> intersections, Double cost, Observer o) {
         this.addObserver(o);
         this.intersections = intersections;
@@ -55,13 +71,13 @@ public class Tour extends Observable {
         if (intersections.size() == 0) {
             return null;
         }
-        return this.intersections.get(intersections.size()-1);
+        return this.intersections.get(intersections.size() - 1);
     }
 
     public void deleteIntersectionsAfter(Intersection lastIntersection) {
         int index = intersections.indexOf(lastIntersection);
         for (Intersection i : intersections) {
-            if( intersections.indexOf(i) > index) {
+            if (intersections.indexOf(i) > index) {
                 intersections.remove(i);
             }
         }

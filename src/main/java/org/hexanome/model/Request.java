@@ -4,6 +4,12 @@ public class Request {
     private PickupPoint pickupPoint;
     private DeliveryPoint deliveryPoint;
 
+    /**
+     * create a request, it is a couple of a pickup and a delivery point
+     *
+     * @param pickupPoint   pickup of the request
+     * @param deliveryPoint delivery of the request
+     */
     public Request(PickupPoint pickupPoint, DeliveryPoint deliveryPoint) {
         this.deliveryPoint = deliveryPoint;
         this.pickupPoint = pickupPoint;

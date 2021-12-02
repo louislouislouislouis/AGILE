@@ -5,6 +5,13 @@ public class Intersection {
     private double latitude;
     private long idIntersection;
 
+    /**
+     * create an intersection
+     *
+     * @param longitude      longitude of the intersection
+     * @param latitude       latitude of the intersection
+     * @param idIntersection unique id to recognize the intersection
+     */
     public Intersection(double longitude, double latitude, long idIntersection) {
         this.longitude = longitude;
         this.latitude = latitude;

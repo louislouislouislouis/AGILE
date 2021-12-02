@@ -9,6 +9,13 @@ public class DeliveryPoint extends Point {
     private LocalTime arrivalTime;
     private LocalTime departureTime;
 
+    /**
+     * create a special point of delivery type
+     *
+     * @param address  address of the delivery
+     * @param duration duration of the delivery
+     * @param color    color of the point
+     */
     public DeliveryPoint(Intersection address, int duration, Color color) {
         super(address, "delivery", color);
         this.duration = duration;

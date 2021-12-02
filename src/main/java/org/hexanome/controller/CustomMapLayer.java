@@ -8,11 +8,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.util.Pair;
-import org.hexanome.data.ExceptionXML;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.util.HashMap;
 
 /**

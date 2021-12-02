@@ -7,26 +7,50 @@ public class MapIF {
     private HashMap<Long, Intersection> intersections;
     private HashMap<UUID, Segment> segments;
 
+    /**
+     * create a map
+     *
+     * @param intersections list of all intersections of the map
+     * @param segments      list of all segments of the map
+     */
     public MapIF(HashMap<Long, Intersection> intersections, HashMap<UUID, Segment> segments) {
         this.intersections = intersections;
         this.segments = segments;
     }
 
+    /**
+     * create an empty map
+     */
     public MapIF() {
         this.intersections = new HashMap<>();
         this.segments = new HashMap<>();
     }
 
-    public void addSegment(UUID id, Segment segment){
+    /**
+     * add a segment to the map
+     *
+     * @param segment segment to be added
+     * @param id      id that will help recognize the segment
+     */
+    public void addSegment(UUID id, Segment segment) {
         this.segments.put(id, segment);
     }
 
-    public void addIntersection(Intersection intersection){
+    /**
+     * add an intersection to the map
+     *
+     * @param intersection intersection to be added
+     */
+    public void addIntersection(Intersection intersection) {
         this.intersections.put(intersection.getIdIntersection(), intersection);
     }
 
-    public void clearMap(){
-        this.intersections.clear();;
+    /**
+     * clear all the segments and the intersections of the map
+     */
+    public void clearMap() {
+        this.intersections.clear();
+        ;
         this.segments.clear();
     }
 
@@ -41,8 +65,8 @@ public class MapIF {
     @Override
     public String toString() {
         return "MapIF{" +
-                "\nintersections=\n"+intersections+
-                "\n,segments=\n"+segments+
+                "\nintersections=\n" + intersections +
+                "\n,segments=\n" + segments +
                 "\n}";
     }
 }

@@ -6,6 +6,14 @@ public class Segment {
     private String name;
     private double length;
 
+    /**
+     * create a segment
+     *
+     * @param originIntersection      origin intersection of the segment
+     * @param destinationIntersection destination intersection of the segment
+     * @param name                    represent the name of the segment, it is usually the name of a street
+     * @param length                  as the name imply it is the length of the segment
+     */
     public Segment(Intersection originIntersection, Intersection destinationIntersection, String name, double length) {
         this.originIntersection = originIntersection;
         this.destinationIntersection = destinationIntersection;

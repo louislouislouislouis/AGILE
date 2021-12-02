@@ -9,6 +9,13 @@ public class PickupPoint extends Point {
     private LocalTime departureTime;
     private LocalTime arrivalTime;
 
+    /**
+     * create a special point of pickup type
+     *
+     * @param address  address of the pickup
+     * @param duration duration of the pickup
+     * @param color    color of the point
+     */
     public PickupPoint(Intersection address, int duration, Color color) {
         super(address, "pickup", color);
         this.duration = duration;
