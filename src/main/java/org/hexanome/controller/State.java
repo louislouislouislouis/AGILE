@@ -35,6 +35,20 @@ public interface State {
     }
 
     ;
-    
 
+    default void loadMap() {
+    }
+
+    ;
+
+    default void loadPlanning() {
+    }
+
+    ;
+
+    default void computeTour() {
+    }
+
+    ;
+    
 }
