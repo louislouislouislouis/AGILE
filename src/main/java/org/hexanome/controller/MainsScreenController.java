@@ -199,70 +199,22 @@ public class MainsScreenController implements Observer {
      * @return void
      */
     public void computeTour(ActionEvent actionEvent) {
-        //method that calculates the most optimal path of the tour
-        tour = new Tour(new ArrayList<>(), null, this, planning.getWarehouse().getDepartureTime(), map.getMatAdj());
-
         // clear
         mapView.removeLayer(tourLayer);
 
-        new GraphAPI().V1_TSP(planning, map, tour);
+        tour = new Tour(new ArrayList<>(), null, this, planning.getWarehouse().getDepartureTime(), map.getMatAdj());
 
-        //Add Segment to the layer
+        // we compute the tour
 
-        tourLayer = new CustomMapLayer();
+        currentState.computeTour(this, map, planning, tour);
 
-        List<Intersection> intersectionList = tour.getIntersections();
+        // we update items from the gui
 
-        System.out.println(intersectionList.size());
-
-        for (int i = 0; i < intersectionList.size() - 1; i++) {
-            Intersection start;
-            Intersection end;
-            start = intersectionList.get(i);
-            end = intersectionList.get(i + 1);
-            MapPoint mapPointStart = new MapPoint(start.getLatitude(), start.getLongitude());
-            tourLayer.addPoint(start.getIdIntersection(), mapPointStart);
-            MapPoint mapPointEnd = new MapPoint(end.getLatitude(), end.getLongitude());
-            tourLayer.addPoint(end.getIdIntersection(), mapPointEnd);
-            tourLayer.addSegment(mapPointStart, mapPointEnd, (long) i);
-        }
-
-        HashMap<Long, Polyline> polylineList = tourLayer.getPolylineList();
-
-        polylineList.forEach((aLong, polyline) -> {
-            polyline.hoverProperty().addListener((observable, oldValue, newValue) -> {
-
-                if (newValue) {
-                    polylineList.forEach((id, poly) -> {
-
-                        if (id <= aLong) {
-                            poly.setStrokeWidth(7);
-                            poly.setStroke(Color.DODGERBLUE);
-                            DropShadow e = new DropShadow();
-                            e.setColor(Color.BLUE);
-                            e.setRadius(9);
-                            poly.setEffect(e);
-                        }
-                    });
-                } else {
-                    polylineList.forEach((id, poly) -> {
-                        if (id <= aLong) {
-                            poly.setStrokeWidth(5);
-                            poly.setStroke(Color.DODGERBLUE);
-                            poly.setEffect(null);
-                        }
-                    });
-                }
-            });
-        });
-
-        mapView.removeLayer(requestLayer);
-        mapView.addLayer(tourLayer);
-        mapView.addLayer(requestLayer);
-
-        tour.notifyChange("UPDATEMAP");
-
+        updateTourLayer();
         updateTableView();
+
+        // on met à jour les boutons utilisables
+        currentState.enableButton(this);
     }
 
 
@@ -392,6 +344,63 @@ public class MainsScreenController implements Observer {
             mapView.layout();
 
         });
+    }
+
+    private void updateTourLayer() {
+        //Add Segment to the layer
+
+        tourLayer = new CustomMapLayer();
+
+        List<Intersection> intersectionList = tour.getIntersections();
+
+        System.out.println(intersectionList.size());
+
+        for (int i = 0; i < intersectionList.size() - 1; i++) {
+            Intersection start;
+            Intersection end;
+            start = intersectionList.get(i);
+            end = intersectionList.get(i + 1);
+            MapPoint mapPointStart = new MapPoint(start.getLatitude(), start.getLongitude());
+            tourLayer.addPoint(start.getIdIntersection(), mapPointStart);
+            MapPoint mapPointEnd = new MapPoint(end.getLatitude(), end.getLongitude());
+            tourLayer.addPoint(end.getIdIntersection(), mapPointEnd);
+            tourLayer.addSegment(mapPointStart, mapPointEnd, (long) i);
+        }
+
+        HashMap<Long, Polyline> polylineList = tourLayer.getPolylineList();
+
+        polylineList.forEach((aLong, polyline) -> {
+            polyline.hoverProperty().addListener((observable, oldValue, newValue) -> {
+
+                if (newValue) {
+                    polylineList.forEach((id, poly) -> {
+
+                        if (id <= aLong) {
+                            poly.setStrokeWidth(7);
+                            poly.setStroke(Color.DODGERBLUE);
+                            DropShadow e = new DropShadow();
+                            e.setColor(Color.BLUE);
+                            e.setRadius(9);
+                            poly.setEffect(e);
+                        }
+                    });
+                } else {
+                    polylineList.forEach((id, poly) -> {
+                        if (id <= aLong) {
+                            poly.setStrokeWidth(5);
+                            poly.setStroke(Color.DODGERBLUE);
+                            poly.setEffect(null);
+                        }
+                    });
+                }
+            });
+        });
+
+        mapView.removeLayer(requestLayer);
+        mapView.addLayer(tourLayer);
+        mapView.addLayer(requestLayer);
+
+        tour.notifyChange("UPDATEMAP");
     }
 
     private void updateRequestLayer() {

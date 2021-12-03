@@ -1,20 +1,16 @@
 package org.hexanome.controller;
 
-import com.gluonhq.maps.MapPoint;
-import javafx.scene.shape.Shape;
+import org.hexanome.controller.tsp.GraphAPI;
 import org.hexanome.data.ExceptionXML;
 import org.hexanome.data.MapDeserializer;
 import org.hexanome.data.RequestDeserializer;
 import org.hexanome.model.*;
-import org.hexanome.vue.CustomMap;
-import org.hexanome.vue.CustomMapLayer;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.ArrayList;
 
 public class PlanningState implements State {
     // State after loading the planning
@@ -46,6 +42,16 @@ public class PlanningState implements State {
 
         // we change the state of the controller
         controller.setCurrentState(controller.mapState);
+    }
+
+    @Override
+    public void computeTour(MainsScreenController controller, MapIF map, PlanningRequest planning, Tour tour) {
+        //method that calculates the most optimal path of the tour
+
+        new GraphAPI().V1_TSP(planning, map, tour);
+
+        // we change the state of the controller
+        controller.setCurrentState(controller.tourState);
     }
 
     @Override

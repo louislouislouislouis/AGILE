@@ -3,6 +3,7 @@ package org.hexanome.controller;
 import org.hexanome.data.ExceptionXML;
 import org.hexanome.model.MapIF;
 import org.hexanome.model.PlanningRequest;
+import org.hexanome.model.Tour;
 import org.hexanome.vue.CustomMap;
 import org.hexanome.vue.CustomMapLayer;
 import org.xml.sax.SAXException;
@@ -14,7 +15,7 @@ import java.io.IOException;
 public interface State {
     default void undo(MainsScreenController controller) {
     }
-    
+
 
     default void redo(MainsScreenController controller) {
     }
@@ -50,7 +51,7 @@ public interface State {
     }
 
 
-    default void computeTour(MainsScreenController controller) {
+    default void computeTour(MainsScreenController controller, MapIF map, PlanningRequest planningRequest, Tour tour) {
     }
 
 

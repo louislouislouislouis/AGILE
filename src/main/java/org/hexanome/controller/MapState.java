@@ -1,24 +1,18 @@
 package org.hexanome.controller;
 
-import com.gluonhq.maps.MapPoint;
-import javafx.scene.shape.Shape;
 import org.hexanome.data.ExceptionXML;
 import org.hexanome.data.MapDeserializer;
 import org.hexanome.data.RequestDeserializer;
 import org.hexanome.model.*;
-import org.hexanome.vue.CustomMap;
-import org.hexanome.vue.CustomMapLayer;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Objects;
 
 public class MapState implements State {
     // State after loading the map
-    // -> Wait for the user to load a planning or
+    // -> Wait for the user to load a planning
     // -> Wait for the user to load another map
 
     @Override
