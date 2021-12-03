@@ -23,16 +23,14 @@ public class GraphAPI {
         // value: cost of complete shortest path between start and destination
         Map<Long, Map<Long, Double>> shortestPathsCost = new HashMap<>();
 
-        Map<Intersection, Map<Intersection, Segment>> adj = this.getAdj(map);
+        Map<Intersection, Map<Intersection, Segment>> adj = map.getMatAdj();
         Set<Intersection> destinations = this.getDestinations(planning);
 
         int nbVerticesDijkstra = map.getIntersections().size();
         int nbVerticesTSP = destinations.size();
 
-        Double[][] costTSP = new Double[nbVerticesTSP][nbVerticesTSP];
         Map<Long, Map<Long, Double>> adjTSP = new HashMap<>();
-        Long idZero = Long.valueOf(0);
-
+        long idZero = 0L;
         // calculate the shortest path from every destination to every other destination + update maps
         for (Intersection origin : destinations) {
             System.out.println("Calculating shortest paths for Origin: " + origin.getIdIntersection());
@@ -45,37 +43,17 @@ public class GraphAPI {
         }
 
         Map<Integer,Long> mapIdTSP = new HashMap<>();
-        for (Map.Entry<Long, Map<Long, Double>> i : adjTSP.entrySet()) {
-            System.out.println(i.getKey() + " " + i.getValue());
-            int jj = 0;
-            for (Map.Entry<Long, Double> j : i.getValue().entrySet()) {
-                if (j.getValue() == 0) {
-                    mapIdTSP.put(i.getKey().intValue(),j.getKey());
-                }
-                costTSP[i.getKey().intValue()][jj++] = j.getValue();
-            }
-        }
-        System.out.println("MapIdTSP: " + mapIdTSP);
+        Double[][] costTSP = new Double[nbVerticesTSP][nbVerticesTSP];
 
-        for (int i = 0; i < nbVerticesTSP; i++) {
-            for (int j = 0; j < nbVerticesTSP; j++) {
-                if (costTSP[i][j] == 0) {
-                    costTSP[i][j] = Double.valueOf(-1);
-                }
-                System.out.print(costTSP[i][j] + " ");
-            }
-            System.out.println();
-        }
-
+        this.calculateMapIdTSPAndCostTSP(adjTSP, mapIdTSP, costTSP, nbVerticesTSP);
 
         Graph g = new CompleteGraph(nbVerticesTSP, costTSP);
-
         long startTime = System.currentTimeMillis();
         TSP tsp = new TSP1(costTSP, mapIdTSP, planning.getRequests(), shortestPathsIntersections, shortestPathsCost, map);
+        tour.addIntersection(planning.getWarehouse().getAddress()); // add Warehouse to tour
         tsp.searchSolution(20000, g, tour);
         System.out.print("Solution of cost " + tsp.getSolutionCost() + " found in "
                 + (System.currentTimeMillis() - startTime) + "ms : ");
-
 
         // Converting LinkedHashMap to Array
         Intersection[] LHSArray = new Intersection[destinations.size()];
@@ -91,27 +69,57 @@ public class GraphAPI {
             System.out.println(i);
         }
 
-        List<Intersection> completeTour = new ArrayList<>();
+/*        List<Intersection> completeTour = new ArrayList<>();
         completeTour.add(pathTSP.get(0));
         for (int i = 0; i < pathTSP.size() - 1; i++) {
             Intersection startIntersection = pathTSP.get(i);
             Intersection destinationIntersection = pathTSP.get(i + 1);
-            List<Intersection> currentPath = new ArrayList<>();
             for (Long l : shortestPathsIntersections.get(startIntersection.getIdIntersection()).get(destinationIntersection.getIdIntersection())) {
                 Intersection intersection = map.getIntersections().get(l);
                 if (!intersection.equals(pathTSP.get(i))) {
-                    currentPath.add(intersection);
+                    completeTour.add(intersection);
                 }
             }
-            for (Intersection intersection : currentPath) {
-                completeTour.add(intersection);
+        }
+ */
+        System.out.println(tour.getIntersections().size());
+//        tour.setIntersections(completeTour);
+//        tour.setCost(tsp.getSolutionCost());
+        System.out.println(tour.getIntersections().size());
+
+    }
+
+    /**
+     *
+     * @param adjTSP contains cost between Intersections
+     * @param mapIdTSP maps idTSP to idIntersection
+     * @param costTSP array 2 dimensions index idTSP
+     */
+    private void calculateMapIdTSPAndCostTSP(Map<Long, Map<Long, Double>> adjTSP,
+                                             Map<Integer, Long> mapIdTSP,
+                                             Double[][] costTSP,
+                                             int nbVerticesTSP) {
+        for (Map.Entry<Long, Map<Long, Double>> i : adjTSP.entrySet()) {
+            System.out.println(i.getKey() + " " + i.getValue());
+            int jj = 0;
+            for (Map.Entry<Long, Double> j : i.getValue().entrySet()) {
+                if (j.getValue() == 0) {
+                    mapIdTSP.put(i.getKey().intValue(),j.getKey());
+                }
+                costTSP[i.getKey().intValue()][jj++] = j.getValue();
             }
         }
+        System.out.println("MapIdTSP: " + mapIdTSP);
 
-        tour.setIntersections(completeTour);
-        tour.setCost(tsp.getSolutionCost());
-                  
-
+        for (int i = 0; i < nbVerticesTSP; i++) {
+            for (int j = 0; j < nbVerticesTSP; j++) {
+                if (costTSP[i][j] == 0) {
+                    costTSP[i][j] = (double) -1;
+                }
+                System.out.print(costTSP[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 
     /**
@@ -143,7 +151,7 @@ public class GraphAPI {
             Map<Long, Double> emptyCosts = new HashMap<>();
             shortestPathsCost.put(origin.getIdIntersection(), emptyCosts);
         }
-        Map<Long, Double> currentCosts = new HashMap<>();
+        Map<Long, Double> currentCosts = dijkstra.getDist();
         for (Long l : currentCosts.keySet()) {
             shortestPathsCost.get(origin.getIdIntersection()).put(l, currentCosts.get(l));
         }
@@ -166,23 +174,7 @@ public class GraphAPI {
         }
     }
 
-    /**
-     * calculating adjacency matrix for all intersections in map
-     * @param myMap contains all Intersections and Segments
-     * @return map key: start Intersection,
-     * value: map key: neighbour Intersection, value: Segment between them
-     */
-    private Map<Intersection, Map<Intersection, Segment>> getAdj(MapIF myMap) {
-        Map<Intersection, Map<Intersection, Segment>> adj = new HashMap<>();
-        for (Intersection i : myMap.getIntersections().values()) {
-            Map<Intersection, Segment> emptyMap = new HashMap<>();
-            adj.put(i, emptyMap);
-        }
-        for (Segment s : myMap.getSegments().values()) {
-            adj.get(s.getOriginIntersection()).put(s.getDestinationIntersection(), s);
-        }
-        return adj;
-    }
+
 
     /**
      *

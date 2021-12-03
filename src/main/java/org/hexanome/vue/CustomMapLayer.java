@@ -71,17 +71,14 @@ public class CustomMapLayer extends MapLayer {
      */
     public void addSpecialPointRectangle(Long id, MapPoint mapPoint, Color color) {
         Rectangle rec = new Rectangle(20, 20, color);
-
         addShape(rec, mapPoint, id);
     }
 
     private void addShape(Shape shape, MapPoint mapPoint, Long id) {
         shape.setId(id.toString());
-
         DropShadow e = new DropShadow();
 
         e.setRadius(12);
-
         shape.setEffect(e);
 
         pointList.put(id, mapPoint);

@@ -1,4 +1,4 @@
-package org.hexanome.model;
+package org.hexanome.vue;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
