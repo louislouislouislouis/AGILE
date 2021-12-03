@@ -65,8 +65,18 @@ public class MainsScreenController implements Observer {
     HBox mapContainer;
     @FXML
     private TableView<Point> tableView;
-
-
+    @FXML
+    private TableColumn<?, ?> columnArrivalTime;
+    @FXML
+    private TableColumn<?, ?> columnColor;
+    @FXML
+    private TableColumn<?, ?> columnID;
+    @FXML
+    private TableColumn<?, ?> columnDepartureTime;
+    @FXML
+    private TableColumn<?, ?> columnEdit;
+    @FXML
+    private TableColumn<?, ?> columnType;
     /*-------------------------GETTERS AND SETTERS-----------------------------------------------------*/
     public Button getBtnLoadMap() {
         return btnLoadMap;
