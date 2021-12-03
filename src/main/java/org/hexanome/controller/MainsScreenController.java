@@ -384,4 +384,9 @@ public class MainsScreenController implements Observer {
         });
     }
 
+    public void undoAction(ActionEvent actionEvent) {
+    }
+
+    public void redoAction(ActionEvent actionEvent) {
+    }
 }
