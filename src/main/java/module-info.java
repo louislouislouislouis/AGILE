@@ -9,4 +9,5 @@ module org.hexanome {
     exports org.hexanome.model;
     exports org.hexanome.controller;
     exports org.hexanome.controller.tsp;
+    opens org.hexanome.vue to javafx.fxml;
 }

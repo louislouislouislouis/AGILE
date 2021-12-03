@@ -23,6 +23,8 @@ import org.hexanome.data.ExceptionXML;
 import org.hexanome.data.MapDeserializer;
 import org.hexanome.data.RequestDeserializer;
 import org.hexanome.model.*;
+import org.hexanome.vue.CustomMap;
+import org.hexanome.vue.CustomMapLayer;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;

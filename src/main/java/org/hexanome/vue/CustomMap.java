@@ -1,4 +1,4 @@
-package org.hexanome.controller;
+package org.hexanome.vue;
 
 import com.gluonhq.maps.MapView;
 
