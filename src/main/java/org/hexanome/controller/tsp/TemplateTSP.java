@@ -85,21 +85,16 @@ public abstract class TemplateTSP implements TSP {
 			Collection<Integer> visited, Double currentCost, Tour tour){
 		if (System.currentTimeMillis() - startTime > timeLimit) return;
 	    if (unvisited.size() == 0){
-			System.out.println("IF1 : HAAAAAAAAAAAALLOOOOOOOOOOOOOOOOOOOOOOOO ADDVERTEXINTOOOOOOOOOOOOOOOOOOOOOOUUUUUUUUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
 	    	if (g.isArc(currentVertex,0)){
-				System.out.println("IF1.2 : HAAAAAAAAAAAALLOOOOOOOOOOOOOOOOOOOOOOOO ADDVERTEXINTOOOOOOOOOOOOOOOOOOOOOOUUUUUUUUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
 	    		if (currentCost+g.getCost(currentVertex,0) < bestSolCost){
-					System.out.println("IF 1.3 : HAAAAAAAAAAAALLOOOOOOOOOOOOOOOOOOOOOOOO ADDVERTEXINTOOOOOOOOOOOOOOOOOOOOOOUUUUUUUUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
 	    			visited.toArray(bestSol);
 	    			bestSolCost = currentCost+g.getCost(currentVertex,0);
 					addVertexInTour(currentVertex, tour);
 	    		}
 	    	}
 	    } else if (currentCost+bound(currentVertex,unvisited) < bestSolCost){
-			System.out.println("IF2 : HAAAAAAAAAAAALLOOOOOOOOOOOOOOOOOOOOOOOO ADDVERTEXINTOOOOOOOOOOOOOOOOOOOOOOUUUUUUUUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
 	        Iterator<Integer> it = iterator(currentVertex, unvisited, g);
 	        while (it.hasNext()){
-				System.out.println("IF2 WHILE : HAAAAAAAAAAAALLOOOOOOOOOOOOOOOOOOOOOOOO ADDVERTEXINTOOOOOOOOOOOOOOOOOOOOOOUUUUUUUUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
 				Integer nextVertex = it.next();
 	        	visited.add(nextVertex);
 	            unvisited.remove(nextVertex);
@@ -112,37 +107,26 @@ public abstract class TemplateTSP implements TSP {
 	            visited.remove(nextVertex);
 	            unvisited.add(nextVertex);
 				removeVertexInTour(tour, lastIntersection);
-				System.out.println("branchAndBound 1x bis zum Ende durchlaufen");
-	        }	    
+	        }
 	    }
 	}
 
 	public void addVertexInTour(Integer vertex, Tour tour) {
-		System.out.println("ADD VERTEX IN TOUR : HAAAAAAAAAAAALLOOOOOOOOOOOOOOOOOOOOOOOO ADDVERTEXINTOOOOOOOOOOOOOOOOOOOOOOUUUUUUUUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
 		Intersection newIntersection = map.getIntersections().get(mapIdTSP.get(vertex));
 		Intersection lastIntersection = tour.getLastIntersection();
-		System.out.println("Tour vorher: " + tour.getIntersections());
-		System.out.println("LastIntersection: " + tour.getLastIntersection());
 		if (lastIntersection != null) {
-			System.out.println("Check if");
 			for (Long l : shortestPathsIntersections.get(lastIntersection.getIdIntersection()).get(newIntersection.getIdIntersection())) {
 				Intersection i = map.getIntersections().get(l);
-				System.out.println("Check for " + !(i.equals(lastIntersection)));
 				if (!i.equals(lastIntersection)) {
-					System.out.println("Check if2");
 					tour.addIntersection(i);
-					System.out.println("Ergänzte Tour: " + tour.getIntersections());
 					}
 			}
 			tour.notifyChange("UPDATEMAP");
 		}
-		System.out.println("Tour nachher: " + tour.getIntersections());
 	}
 
 	public void removeVertexInTour(Tour tour, Intersection lastIntersection) {
-		System.out.println("REMOVE VERTEX IN TOUR : HAAAAAAAAAAAALLOOOOOOOOOOOOOOOOOOOOOOOO ADDVERTEXINTOOOOOOOOOOOOOOOOOOOOOOUUUUUUUUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
 		tour.deleteIntersectionsAfter(lastIntersection);
-		System.out.println("OKKKK");
 		tour.notifyChange("UPDATEMAP");
 	}
 

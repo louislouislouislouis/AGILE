@@ -13,6 +13,16 @@ public class Tour extends Observable {
     private LocalTime departureTime;
     private Map<Intersection, Map<Intersection, Segment>> MatAdj;
 
+    @Override
+    public String toString() {
+        return "Tour{" +
+                "intersections=" + intersections +
+                ", cost=" + cost +
+                ", departureTime=" + departureTime +
+                ", MatAdj=" + MatAdj +
+                '}';
+    }
+
     /**
      * create an empty tour
      */
@@ -80,19 +90,15 @@ public class Tour extends Observable {
     }
 
     public void deleteIntersectionsAfter(Intersection lastIntersection) {
-        System.out.println("HERE IN DELETE INTERSECTIONS AFTER");
-        System.out.println("Aktuelle Tour: ");
-        for (Intersection i : intersections) {
-            System.out.print(" " + i.getIdIntersection());
-        }
+
+
         int index = intersections.lastIndexOf(lastIntersection);
-        System.out.println("Index last intersection: " + index);
-        System.out.println("Anzahl Intersections: " + intersections.size());
+
         int size = intersections.size();
         for (int i = index + 1; i < size; i++) {
             intersections.remove(index + 1);
-            System.out.println("Index gelöscht: " + i);
+
         }
-        System.out.println("delete ist fertig");
+
     }
 }

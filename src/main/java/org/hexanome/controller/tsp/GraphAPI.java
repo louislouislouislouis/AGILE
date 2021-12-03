@@ -33,7 +33,7 @@ public class GraphAPI {
         long idZero = 0L;
         // calculate the shortest path from every destination to every other destination + update maps
         for (Intersection origin : destinations) {
-            System.out.println("Calculating shortest paths for Origin: " + origin.getIdIntersection());
+            //System.out.println("Calculating shortest paths for Origin: " + origin.getIdIntersection());
             Dijkstra dijkstra = new Dijkstra(nbVerticesDijkstra);
             dijkstra.dijkstra(map.getIntersections(), adj, origin, destinations);
 
@@ -52,8 +52,8 @@ public class GraphAPI {
         TSP tsp = new TSP1(costTSP, mapIdTSP, planning.getRequests(), shortestPathsIntersections, shortestPathsCost, map);
         tour.addIntersection(planning.getWarehouse().getAddress()); // add Warehouse to tour
         tsp.searchSolution(20000, g, tour);
-        System.out.print("Solution of cost " + tsp.getSolutionCost() + " found in "
-                + (System.currentTimeMillis() - startTime) + "ms : ");
+        // System.out.print("Solution of cost " + tsp.getSolutionCost() + " found in "
+        //       + (System.currentTimeMillis() - startTime) + "ms : ");
 
         // Converting LinkedHashMap to Array
         Intersection[] LHSArray = new Intersection[destinations.size()];
@@ -66,7 +66,7 @@ public class GraphAPI {
         pathTSP.add(planning.getWarehouse().getAddress());
 
         for (Intersection i : pathTSP) {
-            System.out.println(i);
+            //System.out.println(i);
         }
 
 /*        List<Intersection> completeTour = new ArrayList<>();
@@ -82,7 +82,7 @@ public class GraphAPI {
             }
         }
  */
-        System.out.println(tour.getIntersections().size());
+        //System.out.println(tour.getIntersections().size());
 //        tour.setIntersections(completeTour);
 //        tour.setCost(tsp.getSolutionCost());
         System.out.println(tour.getIntersections().size());

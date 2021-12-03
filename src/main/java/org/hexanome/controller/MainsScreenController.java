@@ -3,6 +3,7 @@ package org.hexanome.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -91,7 +92,6 @@ public class MainsScreenController implements Observer {
     public void selectionMap(ActionEvent actionEvent) {
         //method that uploads an XML file (carte)
         File selectedFile = fileChooser(actionEvent);
-        System.out.println(selectedFile);
 
         // We initialize the deserializer
         MapDeserializer domMap = new MapDeserializer();
@@ -126,7 +126,6 @@ public class MainsScreenController implements Observer {
 
         //Force rerender (Bug fix - Gluon Maps Issue drag)
         mapView.setOnMouseReleased(e -> {
-            System.out.println("onMousedetect");
             //Pour les layers de request
             requestLayer.forceReRender();
             tourLayer.forceReRender();
@@ -244,8 +243,6 @@ public class MainsScreenController implements Observer {
 
         List<Intersection> intersectionList = tour.getIntersections();
 
-        System.out.println(intersectionList.size());
-
         for (int i = 0; i < intersectionList.size() - 1; i++) {
             Intersection start;
             Intersection end;
@@ -330,14 +327,68 @@ public class MainsScreenController implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println("Une fonction d'actualisation à été appelé");
         String action = (String) arg;
         switch (action) {
             case "UPDATEMAP":
-                System.out.println("Update map called");
+                tourLayer = new CustomMapLayer();
+
+                List<Intersection> intersectionList = tour.getIntersections();
+
+
+                for (int i = 0; i < intersectionList.size() - 1; i++) {
+                    Intersection start;
+                    Intersection end;
+                    start = intersectionList.get(i);
+                    end = intersectionList.get(i + 1);
+                    MapPoint mapPointStart = new MapPoint(start.getLatitude(), start.getLongitude());
+                    tourLayer.addPoint(start.getIdIntersection(), mapPointStart);
+                    MapPoint mapPointEnd = new MapPoint(end.getLatitude(), end.getLongitude());
+                    tourLayer.addPoint(end.getIdIntersection(), mapPointEnd);
+                    tourLayer.addSegment(mapPointStart, mapPointEnd, (long) i);
+                }
+
+                HashMap<Long, Polyline> polylineList = tourLayer.getPolylineList();
+
+                polylineList.forEach((aLong, polyline) -> {
+                    polyline.hoverProperty().addListener((observable, oldValue, newValue) -> {
+
+                        if (newValue) {
+                            polylineList.forEach((id, poly) -> {
+
+                                if (id <= aLong) {
+                                    poly.setStrokeWidth(7);
+                                    poly.setStroke(Color.DODGERBLUE);
+                                    DropShadow e = new DropShadow();
+                                    e.setColor(Color.BLUE);
+                                    e.setRadius(9);
+                                    poly.setEffect(e);
+                                }
+                            });
+                        } else {
+                            polylineList.forEach((id, poly) -> {
+                                if (id <= aLong) {
+                                    poly.setStrokeWidth(5);
+                                    poly.setStroke(Color.DODGERBLUE);
+                                    poly.setEffect(null);
+                                }
+                            });
+                        }
+                    });
+                });
+
+                mapView.removeLayer(tourLayer);
+                mapView.addLayer(tourLayer);
+
+
                 requestLayer.forceReRender();
                 tourLayer.forceReRender();
                 mapView.layout();
+                try {
+                    TimeUnit.SECONDS.sleep(3);
+                }catch ( InterruptedException e) {
+
+                }
+
                 break;
             default:
                 System.out.println("Unknown method");
@@ -393,6 +444,6 @@ public class MainsScreenController implements Observer {
     public void undoAction(ActionEvent actionEvent) {
     }
 
-    public   redoAction(ActionEvent actionEvent) {
+    public void redoAction(ActionEvent actionEvent) {
     }
 }
