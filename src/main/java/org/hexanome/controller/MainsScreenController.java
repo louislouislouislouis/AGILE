@@ -143,7 +143,6 @@ public class MainsScreenController implements Observer {
      *
      * @param actionEvent
      * @return void
-     *
      */
     public void loadRequest(ActionEvent actionEvent) {
         //method that uploads an XML file (carte)
@@ -232,7 +231,7 @@ public class MainsScreenController implements Observer {
      */
     public void computeTour(ActionEvent actionEvent) {
         //method that calculates the most optimal path of the tour
-        tour = new Tour(new ArrayList<>(), null, this,planning.getWarehouse().getDepartureTime(),map.getMatAdj());
+        tour = new Tour(new ArrayList<>(), null, this, planning.getWarehouse().getDepartureTime(), map.getMatAdj());
 
         // clear
         mapView.removeLayer(tourLayer);
@@ -394,6 +393,6 @@ public class MainsScreenController implements Observer {
     public void undoAction(ActionEvent actionEvent) {
     }
 
-    public   redoAction(ActionEvent actionEvent) {
+    public void redoAction(ActionEvent actionEvent) {
     }
 }
