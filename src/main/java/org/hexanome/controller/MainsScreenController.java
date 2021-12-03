@@ -66,17 +66,19 @@ public class MainsScreenController implements Observer {
     @FXML
     private TableView<Point> tableView;
     @FXML
-    private TableColumn<?, ?> columnArrivalTime;
+    private TableColumn<Point, String> columnArrivalTime;
     @FXML
-    private TableColumn<?, ?> columnColor;
+    private TableColumn<Point, Color> columnColor;
     @FXML
-    private TableColumn<?, ?> columnID;
+    private TableColumn<Point, Button> columnDelete;
     @FXML
-    private TableColumn<?, ?> columnDepartureTime;
+    private TableColumn<Point, String> columnDepartureTime;
     @FXML
-    private TableColumn<?, ?> columnEdit;
+    private TableColumn<Point, String> columnID;
     @FXML
-    private TableColumn<?, ?> columnType;
+    private TableColumn<Point, Button> columnModify;
+    @FXML
+    private TableColumn<Point, String> columnType;
     /*-------------------------GETTERS AND SETTERS-----------------------------------------------------*/
     public Button getBtnLoadMap() {
         return btnLoadMap;
@@ -407,22 +409,31 @@ public class MainsScreenController implements Observer {
 
     private void updateTableView() {
         // columns initialization
-        TableColumn<Point, String> idCol = (TableColumn) tableView.getColumns().get(0);
+        /*TableColumn<Point, String> idCol = (TableColumn) tableView.getColumns().get(0);
         TableColumn<Point, String> typeCol = (TableColumn) tableView.getColumns().get(1);
         TableColumn<Point, String> arrivalCol = (TableColumn) tableView.getColumns().get(2);
         TableColumn<Point, String> waitingCol = (TableColumn) tableView.getColumns().get(3);
         TableColumn<Point, String> departureCol = (TableColumn) tableView.getColumns().get(4);
-        TableColumn<Point, Color> colorCol = (TableColumn) tableView.getColumns().get(6);
+        TableColumn<Point, Color> colorCol = (TableColumn) tableView.getColumns().get(6);*/
 
         // cell factory
-        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        /*idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         arrivalCol.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
         waitingCol.setCellValueFactory(new PropertyValueFactory<>("duration"));
         departureCol.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
-        colorCol.setCellValueFactory(new PropertyValueFactory<>("color"));
+        colorCol.setCellValueFactory(new PropertyValueFactory<>("color"));*/
 
-        colorCol.setCellFactory(tv -> new TableCell<Point, Color>() {
+        columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        columnType.setCellValueFactory(new PropertyValueFactory<>("type"));
+        columnArrivalTime.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
+        columnDepartureTime.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
+        columnColor.setCellValueFactory(new PropertyValueFactory<>("color"));
+        columnModify.setCellValueFactory(new PropertyValueFactory<>("modify"));
+        columnDelete.setCellValueFactory(new PropertyValueFactory<>("delete"));
+
+        //colorCol.setCellFactory(tv -> new TableCell<Point, Color>() {
+        columnColor.setCellFactory(tv -> new TableCell<Point, Color>() {
             @Override
             protected void updateItem(Color item, boolean empty) {
                 super.updateItem(item, empty);
