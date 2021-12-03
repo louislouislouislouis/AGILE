@@ -1,6 +1,8 @@
 package org.hexanome.controller;
 
 import org.hexanome.model.MapIF;
+import org.hexanome.vue.CustomMap;
+import org.hexanome.vue.CustomMapLayer;
 
 import java.io.File;
 
@@ -40,7 +42,8 @@ public interface State {
 
     ;
 
-    default void loadMap(MainsScreenController controller, MapIF map, File selectedFile) {
+    default void loadMap(MainsScreenController controller, MapIF map, File selectedFile,
+                         CustomMap mapView, CustomMapLayer requestLayer, CustomMapLayer tourLayer) {
     }
 
     ;

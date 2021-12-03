@@ -51,7 +51,6 @@ public class MainsScreenController implements Observer {
 
     /* state variable */
 
-    private State currentState;
     // Instances associated with each possible state of the controller
     protected final InitialState initialState = new InitialState();
     protected final MapState mapState = new MapState();
@@ -61,6 +60,9 @@ public class MainsScreenController implements Observer {
     protected final AddRequestState2 addRequestState2 = new AddRequestState2();
     protected final ModifyRequestState modifyRequestState = new ModifyRequestState();
     protected final DeleteRequestState deleteRequestState = new DeleteRequestState();
+
+    // current state
+    private State currentState = initialState;
 
     /* Création de la carte Gluon JavaFX */
     private CustomMap mapView = new CustomMap();
@@ -111,43 +113,19 @@ public class MainsScreenController implements Observer {
         currentState = state;
     }
 
+    /**
+     * Method be called everytime button load Map is Handled
+     *
+     * @param actionEvent
+     * @return void
+     */
     public void selectionMap(ActionEvent actionEvent) {
         //method that uploads an XML file (carte)
         File selectedFile = fileChooser(actionEvent);
         System.out.println(selectedFile);
 
-        // We delete the map's content before loading the xml
-
-        map.clearMap();
-        mapView.removeLayer(requestLayer);
-        mapView.removeLayer(tourLayer);
-
-        /* Zoom de 5 */
-        mapView.setZoom(14);
-
-        /* creation of the mapPoint on which the camera will be centered
-         *  We use the longitude and latitude of Lyon
-         * */
-        MapPoint mapPointCamera = new MapPoint(45.760327, 4.876824);
-
-        /* Centre la carte sur le point */
-        mapView.flyTo(0, mapPointCamera, 0.1);
-
-        //force la mise à jour de la carte en la supprimant et la rajoutant dans le conteneur
-        mapContainer.getChildren().clear();
-        mapContainer.getChildren().add(mapView);
-
-        //Force rerender (Bug fix - Gluon Maps Issue drag)
-        mapView.setOnMouseReleased(e -> {
-            System.out.println("onMousedetect");
-            //Pour les layers de request
-            requestLayer.forceReRender();
-            tourLayer.forceReRender();
-
-            //Pour le fond de la map
-            mapView.layout();
-
-        });
+        currentState.loadMap(this, map, selectedFile, mapView, requestLayer, tourLayer);
+        currentState.enableButton(this);
     }
 
     /**
@@ -305,7 +283,7 @@ public class MainsScreenController implements Observer {
 
         tour.notifyChange("UPDATEMAP");
 
-        //updateTableView();
+        updateTableView();
     }
 
 
