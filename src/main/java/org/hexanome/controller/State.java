@@ -1,6 +1,7 @@
 package org.hexanome.controller;
 
 import org.hexanome.model.MapIF;
+import org.hexanome.model.PlanningRequest;
 import org.hexanome.vue.CustomMap;
 import org.hexanome.vue.CustomMapLayer;
 
@@ -48,7 +49,8 @@ public interface State {
 
     ;
 
-    default void loadPlanning(MainsScreenController controller) {
+    default void loadPlanning(MainsScreenController controller, MapIF map, PlanningRequest planningRequest, File selectedFile,
+                              CustomMap mapView, CustomMapLayer requestLayer, CustomMapLayer tourLayer) {
     }
 
     ;

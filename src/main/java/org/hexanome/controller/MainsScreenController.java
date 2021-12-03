@@ -137,69 +137,10 @@ public class MainsScreenController implements Observer {
     public void loadRequest(ActionEvent actionEvent) {
         //method that uploads an XML file (carte)
         File selectedFile = fileChooser(actionEvent);
+        System.out.println(selectedFile);
 
-        //Remove the old layer
-        mapView.removeLayer(requestLayer);
-        mapView.removeLayer(tourLayer);
-
-        //Handle other button
-        if (selectedFile.exists()) {
-            btnAddRequest.setDisable(false);
-            btnValidateRoute.setDisable(false);
-        } else {
-            btnAddRequest.setDisable(true);
-            btnValidateRoute.setDisable(true);
-        }
-
-        // We clear the requestLayer before loading an XML file with requests
-        planning.clearPlanning();
-
-        //Parse the xml file
-        RequestDeserializer mydomrequest = new RequestDeserializer();
-        try {
-            mydomrequest.load(planning, selectedFile, map);
-        } catch (ParserConfigurationException | SAXException | IOException | ExceptionXML e) {
-            e.printStackTrace();
-        }
-
-        //Create the Request Layer
-        requestLayer = new CustomMapLayer();
-
-        //Add the warehouse
-        Intersection warehouse = planning.getWarehouse().getAddress();
-        requestLayer.addSpecialPointRectangle(warehouse.getIdIntersection(),
-                new MapPoint(warehouse.getLatitude(), warehouse.getLongitude()), planning.getWarehouse().getColor());
-
-        //Add the requests
-        planning.getRequests().forEach((request) -> {
-            Intersection deliveryInt = request.getDeliveryPoint().getAddress();
-            MapPoint mapPointDelivery = new MapPoint(deliveryInt.getLatitude(), deliveryInt.getLongitude());
-            requestLayer.addSpecialPointCircle(deliveryInt.getIdIntersection(), mapPointDelivery, request.getDeliveryPoint().getColor());
-
-            Intersection pickupInt = request.getPickupPoint().getAddress();
-            MapPoint mapPointPickup = new MapPoint(pickupInt.getLatitude(), pickupInt.getLongitude());
-            requestLayer.addSpecialPointRectangle(pickupInt.getIdIntersection(), mapPointPickup, request.getPickupPoint().getColor());
-        });
-
-        HashMap<Long, Shape> shapeList = requestLayer.getShapeList();
-
-        // enable to scroll to selected point from the map
-
-        shapeList.forEach((id, shape) -> {
-            shape.setOnMouseClicked(mouseEvent -> {
-
-                for (int i = 0; i < tableView.getItems().size(); i++) {
-                    Point point = (Point) tableView.getItems().get(i);
-                    if (Objects.equals(point.getId(), id)) {
-                        tableView.scrollTo(i);
-                        tableView.getSelectionModel().select(i);
-                        break;
-                    }
-                }
-            });
-        });
-        mapView.addLayer(requestLayer);
-
+        currentState.loadPlanning(this, map, planning, selectedFile, mapView, requestLayer, tourLayer);
+        currentState.enableButton(this);
     }
 
 
