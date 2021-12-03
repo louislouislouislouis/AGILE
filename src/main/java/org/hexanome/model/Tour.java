@@ -75,11 +75,19 @@ public class Tour extends Observable {
     }
 
     public void deleteIntersectionsAfter(Intersection lastIntersection) {
-        int index = intersections.indexOf(lastIntersection);
+        System.out.println("HERE IN DELETE INTERSECTIONS AFTER");
+        System.out.println("Aktuelle Tour: ");
         for (Intersection i : intersections) {
-            if (intersections.indexOf(i) > index) {
-                intersections.remove(i);
-            }
+            System.out.print(" " + i.getIdIntersection());
         }
+        int index = intersections.lastIndexOf(lastIntersection);
+        System.out.println("Index last intersection: " + index);
+        System.out.println("Anzahl Intersections: " + intersections.size());
+        int size = intersections.size();
+        for (int i = index + 1; i < size; i++) {
+            intersections.remove(index + 1);
+            System.out.println("Index gelöscht: " + i);
+        }
+        System.out.println("delete ist fertig");
     }
 }
