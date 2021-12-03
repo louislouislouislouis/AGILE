@@ -49,6 +49,19 @@ public class MainsScreenController implements Observer {
 
     private static final ObservableList<Point> data = FXCollections.observableArrayList();
 
+    /* state variable */
+
+    private State currentState;
+    // Instances associated with each possible state of the controller
+    protected final InitialState initialState = new InitialState();
+    protected final MapState mapState = new MapState();
+    protected final PlanningState planningState = new PlanningState();
+    protected final TourState tourState = new TourState();
+    protected final AddRequestState1 addRequestState1 = new AddRequestState1();
+    protected final AddRequestState2 addRequestState2 = new AddRequestState2();
+    protected final ModifyRequestState modifyRequestState = new ModifyRequestState();
+    protected final DeleteRequestState deleteRequestState = new DeleteRequestState();
+
     /* Création de la carte Gluon JavaFX */
     private CustomMap mapView = new CustomMap();
     private CustomMapLayer requestLayer = new CustomMapLayer();
@@ -89,26 +102,25 @@ public class MainsScreenController implements Observer {
 
     /*--------------------------------Methods----------------------------------------------------------*/
 
+    /**
+     * Change the current state of the controller
+     *
+     * @param state the new current state
+     */
+    protected void setCurrentState(State state) {
+        currentState = state;
+    }
+
     public void selectionMap(ActionEvent actionEvent) {
         //method that uploads an XML file (carte)
         File selectedFile = fileChooser(actionEvent);
         System.out.println(selectedFile);
-
-        // We initialize the deserializer
-        MapDeserializer domMap = new MapDeserializer();
 
         // We delete the map's content before loading the xml
 
         map.clearMap();
         mapView.removeLayer(requestLayer);
         mapView.removeLayer(tourLayer);
-
-        try {
-            domMap.load(map, selectedFile);
-            btnLoadRequest.setDisable(false);
-        } catch (ParserConfigurationException | SAXException | IOException | ExceptionXML e) {
-            e.printStackTrace();
-        }
 
         /* Zoom de 5 */
         mapView.setZoom(14);

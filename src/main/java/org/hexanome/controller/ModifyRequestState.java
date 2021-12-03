@@ -1,4 +1,4 @@
 package org.hexanome.controller;
 
-public class ModifyRequest {
+public class ModifyRequestState {
 }
