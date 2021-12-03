@@ -231,7 +231,7 @@ public class MainsScreenController implements Observer {
      */
     public void computeTour(ActionEvent actionEvent) {
         //method that calculates the most optimal path of the tour
-        tour = new Tour(new ArrayList<>(), null, this,planning.getWarehouse().getDepartureTime());
+        tour = new Tour(new ArrayList<>(), null, this,planning.getWarehouse().getDepartureTime(),map.getMatAdj());
 
         // clear
         mapView.removeLayer(tourLayer);
@@ -293,7 +293,7 @@ public class MainsScreenController implements Observer {
 
         tour.notifyChange("UPDATEMAP");
 
-        updateTableView();
+        //updateTableView();
     }
 
 

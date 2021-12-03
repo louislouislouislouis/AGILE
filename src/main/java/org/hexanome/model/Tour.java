@@ -3,10 +3,7 @@ package org.hexanome.model;
 import org.hexanome.controller.MainsScreenController;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 public class Tour extends Observable {
 
@@ -14,6 +11,7 @@ public class Tour extends Observable {
     private List<Intersection> intersections = new ArrayList();
     private Double cost;
     private LocalTime departureTime;
+    private Map<Intersection, Map<Intersection, Segment>> MatAdj;
 
     /**
      * create an empty tour
@@ -39,10 +37,11 @@ public class Tour extends Observable {
      * @param intersections list of all intersections of the tour
      * @param cost          calculated cost of the tour
      */
-    public Tour(List<Intersection> intersections, Double cost, Observer o, LocalTime departureTime ) {
+    public Tour(List<Intersection> intersections, Double cost, Observer o, LocalTime departureTime,Map<Intersection, Map<Intersection, Segment>> MatAdj  ) {
         this.addObserver(o);
         this.intersections = intersections;
         this.cost = cost;
+        this.MatAdj = MatAdj;
         this.departureTime= departureTime;
     }
 
