@@ -3,6 +3,7 @@ package org.hexanome.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -190,7 +191,6 @@ public class MainsScreenController implements Observer {
      *
      * @param actionEvent
      * @return void
-     *
      */
     public void loadRequest(ActionEvent actionEvent) {
         //method that uploads an XML file (carte)
@@ -279,7 +279,7 @@ public class MainsScreenController implements Observer {
      */
     public void computeTour(ActionEvent actionEvent) {
         //method that calculates the most optimal path of the tour
-        tour = new Tour(new ArrayList<>(), null, this,planning.getWarehouse().getDepartureTime(),map.getMatAdj());
+        tour = new Tour(new ArrayList<>(), null, this, planning.getWarehouse().getDepartureTime(), map.getMatAdj());
 
         // clear
         mapView.removeLayer(tourLayer);
@@ -394,23 +394,23 @@ public class MainsScreenController implements Observer {
 
     }
 
+
     private void updateTableView() {
         // columns initialization
         TableColumn<Point, String> idCol = (TableColumn) tableView.getColumns().get(0);
         TableColumn<Point, String> typeCol = (TableColumn) tableView.getColumns().get(1);
         TableColumn<Point, String> arrivalCol = (TableColumn) tableView.getColumns().get(2);
-        TableColumn<Point, String> departureCol = (TableColumn) tableView.getColumns().get(3);
-        TableColumn<Point, Color> colorCol = (TableColumn) tableView.getColumns().get(4);
-        TableColumn<Point, Color> editCol = (TableColumn) tableView.getColumns().get(5);
-
+        TableColumn<Point, String> waitingCol = (TableColumn) tableView.getColumns().get(3);
+        TableColumn<Point, String> departureCol = (TableColumn) tableView.getColumns().get(4);
+        TableColumn<Point, Color> colorCol = (TableColumn) tableView.getColumns().get(6);
 
         // cell factory
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         arrivalCol.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
+        waitingCol.setCellValueFactory(new PropertyValueFactory<>("duration"));
         departureCol.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
         colorCol.setCellValueFactory(new PropertyValueFactory<>("color"));
-        editCol.setCellValueFactory(new PropertyValueFactory<>("edit"));
 
         colorCol.setCellFactory(tv -> new TableCell<Point, Color>() {
             @Override
@@ -441,6 +441,6 @@ public class MainsScreenController implements Observer {
     public void undoAction(ActionEvent actionEvent) {
     }
 
-    public void  redoAction(ActionEvent actionEvent) {
+    public void redoAction(ActionEvent actionEvent) {
     }
 }
