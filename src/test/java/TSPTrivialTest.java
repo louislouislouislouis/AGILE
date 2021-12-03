@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.time.LocalTime;
 import java.util.UUID;
 
-public class TSPTrivial {
+public class TSPTrivialTest {
     private static MapIF map;
     private static PlanningRequest planning;
     private static Intersection i1;
