@@ -23,7 +23,7 @@ public class GraphAPI {
         // value: cost of complete shortest path between start and destination
         Map<Long, Map<Long, Double>> shortestPathsCost = new HashMap<>();
 
-        Map<Intersection, Map<Intersection, Segment>> adj = this.getAdj(map);
+        Map<Intersection, Map<Intersection, Segment>> adj = map.getMatAdj();
         Set<Intersection> destinations = this.getDestinations(planning);
 
         int nbVerticesDijkstra = map.getIntersections().size();
@@ -166,23 +166,7 @@ public class GraphAPI {
         }
     }
 
-    /**
-     * calculating adjacency matrix for all intersections in map
-     * @param myMap contains all Intersections and Segments
-     * @return map key: start Intersection,
-     * value: map key: neighbour Intersection, value: Segment between them
-     */
-    private Map<Intersection, Map<Intersection, Segment>> getAdj(MapIF myMap) {
-        Map<Intersection, Map<Intersection, Segment>> adj = new HashMap<>();
-        for (Intersection i : myMap.getIntersections().values()) {
-            Map<Intersection, Segment> emptyMap = new HashMap<>();
-            adj.put(i, emptyMap);
-        }
-        for (Segment s : myMap.getSegments().values()) {
-            adj.get(s.getOriginIntersection()).put(s.getDestinationIntersection(), s);
-        }
-        return adj;
-    }
+
 
     /**
      *
