@@ -31,7 +31,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import com.gluonhq.maps.MapPoint;
 
-import static org.hexanome.model.AlertBox.displayAlert;
+import static org.hexanome.vue.AlertBox.displayAlert;
 
 public class MainsScreenController implements Observer {
     @FXML
@@ -208,6 +208,8 @@ public class MainsScreenController implements Observer {
 
     }
 
+
+
     public void addRequest(ActionEvent actionEvent) {
         //method that uploads an XML file with the command
         //File selectedFile = fileChooser(actionEvent);
@@ -215,6 +217,12 @@ public class MainsScreenController implements Observer {
         displayAlert("ALERT!", "For the moment this functionality is not available");
     }
 
+    /** Method to be called every time button compute tour is handled
+     *
+     *
+     * @param actionEvent
+     * @return void
+     */
     public void computeTour(ActionEvent actionEvent) {
         //method that calculates the most optimal path of the tour
         tour = new Tour(new ArrayList<>(), null, this);
@@ -282,6 +290,14 @@ public class MainsScreenController implements Observer {
         updateTableView();
     }
 
+
+    /**
+     * Method called to open a Nevigation File
+     * Return the file
+     *
+     * @param actionEvent
+     * @return File
+     */
     public File fileChooser(ActionEvent actionEvent) {
         //method that opens the File Explorer to allow the user to get their XML files
         Node node = (Node) actionEvent.getSource();
