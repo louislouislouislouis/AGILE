@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.time.LocalTime;
 import java.util.UUID;
 
-public class TSPTrivial {
+public class TSPTrivialTest {
     private static MapIF map;
     private static PlanningRequest planning;
     private static Intersection i1;
@@ -49,7 +49,7 @@ public class TSPTrivial {
         GraphAPI ga = new GraphAPI();
         Tour t = new Tour();
         ga.V1_TSP(planning, map, t);
-        assertEquals("cout", t.getCost(), 42.0, delta);
+        assertEquals("Erreur de calcul du coût", t.getCost(), 42.0, delta);
         assertEquals(t.getIntersections().get(0), i1);
         assertEquals(t.getIntersections().get(1), i2);
     }
