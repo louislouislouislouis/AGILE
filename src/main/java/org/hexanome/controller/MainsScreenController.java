@@ -34,12 +34,6 @@ import com.gluonhq.maps.MapPoint;
 import static org.hexanome.vue.AlertBox.displayAlert;
 
 public class MainsScreenController implements Observer {
-    @FXML
-    HBox mapContainer;
-    @FXML
-    Button btnLoadRequest;
-    @FXML
-    TableView tableView;
 
     /*---------------------------VARIABLES------------------------------------------------------------*/
     private MapIF map = new MapIF();
@@ -55,11 +49,22 @@ public class MainsScreenController implements Observer {
 
     //Declaration of the interactive buttons in the mainsScreen.fxml
     @FXML
-    private Button btnLoadMap;
-    @FXML
     private Button btnAddRequest;
     @FXML
+    private Button btnLoadMap;
+    @FXML
+    Button btnLoadRequest;
+    @FXML
+    private Button btnRedo;
+    @FXML
+    private Button btnUndo;
+    @FXML
     private Button btnValidateRoute;
+    @FXML
+    HBox mapContainer;
+    @FXML
+    private TableView<Point> tableView;
+
 
     /*-------------------------GETTERS AND SETTERS-----------------------------------------------------*/
     public Button getBtnLoadMap() {
@@ -86,6 +91,49 @@ public class MainsScreenController implements Observer {
         this.btnValidateRoute = btnValidateRoute;
     }
 
+    public MapIF getMap() {return map;}
+
+    public void setMap(MapIF map) {this.map = map;}
+
+    public PlanningRequest getPlanning() {return planning;}
+
+    public void setPlanning(PlanningRequest planning) {this.planning = planning;}
+
+    public Tour getTour() {return tour;}
+
+    public void setTour(Tour tour) {this.tour = tour;}
+
+    public CustomMap getMapView() {return mapView;}
+
+    public void setMapView(CustomMap mapView) {this.mapView = mapView;}
+
+    public CustomMapLayer getRequestLayer() {return requestLayer;}
+
+    public void setRequestLayer(CustomMapLayer requestLayer) {this.requestLayer = requestLayer;}
+
+    public CustomMapLayer getTourLayer() {return tourLayer;}
+
+    public void setTourLayer(CustomMapLayer tourLayer) {this.tourLayer = tourLayer;}
+
+    public Button getBtnLoadRequest() {return btnLoadRequest;}
+
+    public void setBtnLoadRequest(Button btnLoadRequest) {this.btnLoadRequest = btnLoadRequest;}
+
+    public Button getBtnRedo() {return btnRedo;}
+
+    public void setBtnRedo(Button btnRedo) {this.btnRedo = btnRedo;}
+
+    public Button getBtnUndo() {return btnUndo;}
+
+    public void setBtnUndo(Button btnUndo) {this.btnUndo = btnUndo;}
+
+    public HBox getMapContainer() {return mapContainer;}
+
+    public void setMapContainer(HBox mapContainer) {this.mapContainer = mapContainer;}
+
+    public TableView<Point> getTableView() {return tableView;}
+
+    public void setTableView(TableView<Point> tableView) {this.tableView = tableView;}
     /*--------------------------------Methods----------------------------------------------------------*/
 
     public void selectionMap(ActionEvent actionEvent) {
@@ -293,7 +341,7 @@ public class MainsScreenController implements Observer {
 
         tour.notifyChange("UPDATEMAP");
 
-        //updateTableView();
+        updateTableView();
     }
 
 

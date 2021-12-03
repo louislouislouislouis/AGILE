@@ -69,7 +69,6 @@
                                               <TableColumn id="columnTypOfPoint" prefWidth="75.0" text="Type" />
                                               <TableColumn id="columnArrivalTime" prefWidth="75.0" text="Arrival Time" />
                                               <TableColumn id="columnDepartureTime" prefWidth="75.0" text="Departure Time" />
-                                              <TableColumn id="columnDistanceToNextPoint" prefWidth="75.0" text="Distance To Next Point" />
                                               <TableColumn id="columnColor" prefWidth="10.0" text="Color" />
                                     <TableColumn id="columnColor" prefWidth="10.0" text="Edit" />
                                           </columns>
