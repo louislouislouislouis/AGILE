@@ -1,4 +1,5 @@
 import javafx.scene.paint.Color;
+import org.hexanome.controller.tsp.GraphAPI;
 import org.hexanome.model.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -18,6 +19,15 @@ public class TSPTest {
     protected static MapIF map;
     protected static PlanningRequest planning;
     protected static Long[] solution;
+
+    public static double distanceEuclidienne(Intersection i1, Intersection i2) {
+        double lat1 = i1.getLatitude();
+        double lat2 = i2.getLatitude();
+        double long1 = i1.getLongitude();
+        double long2 = i2.getLongitude();
+
+        return Math.sqrt((lat1 - lat2) * (lat1 - lat2) + (long1 - long2) * (long1 - long2));
+    }
 
     @BeforeClass
     public static void setUp() {
@@ -41,7 +51,14 @@ public class TSPTest {
             segments = new HashMap<>();
             intersections.forEach((id1, intersection1) -> intersections.forEach((id2, intersection2) -> {
                 if (!Objects.equals(id1, id2)) {
-                    segments.put(UUID.randomUUID(), new Segment(intersection1, intersection2, "Rue de Clignancourt", 42.0));
+                    double distance = distanceEuclidienne(intersection1, intersection2);
+                    Segment s = new Segment(intersection1, intersection2, "", distance);
+                    segments.put(UUID.randomUUID(), s);
+                    if ((id1 == 1 && id2 == 2) || (id1 == 2 && id2 == 1)) {
+                        assertEquals(distance, 20.0, 0.0001);
+                    } else if ((id1 == 1 && id2 == 4) || (id1 == 4 && id2 == 1)) {
+                        assertEquals(distance, 32.984845004941285, 0.01);
+                    }
                 }
             }));
 
@@ -84,7 +101,14 @@ public class TSPTest {
 
     @Test
     public void testTSP() {
-        System.out.println("[TSPTest] RAS");
+        GraphAPI ga = new GraphAPI();
+        Tour t = new Tour();
+        ga.V1_TSP(planning, map, t);
+        assertEquals(t.getIntersections().size(), 281);
+
+        for (int i = 0; i < solution.length; ++i) {
+            assertEquals((long) solution[i], t.getIntersections().get(i).getIdIntersection());
+        }
     }
 
 }
