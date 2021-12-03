@@ -137,15 +137,22 @@ public class MainsScreenController implements Observer {
         });
     }
 
+    /**
+     * Method be called everytime button load Request is Handled
+     *
+     * @param actionEvent
+     * @return void
+     *
+     */
     public void loadRequest(ActionEvent actionEvent) {
         //method that uploads an XML file (carte)
         File selectedFile = fileChooser(actionEvent);
 
-        // on enleve les laers actuels
-
+        //Remove the old layer
         mapView.removeLayer(requestLayer);
         mapView.removeLayer(tourLayer);
 
+        //Handle other button
         if (selectedFile.exists()) {
             btnAddRequest.setDisable(false);
             btnValidateRoute.setDisable(false);
@@ -154,30 +161,26 @@ public class MainsScreenController implements Observer {
             btnValidateRoute.setDisable(true);
         }
 
-        RequestDeserializer mydomrequest = new RequestDeserializer();
-
         // We clear the requestLayer before loading an XML file with requests
-
         planning.clearPlanning();
 
+        //Parse the xml file
+        RequestDeserializer mydomrequest = new RequestDeserializer();
         try {
             mydomrequest.load(planning, selectedFile, map);
         } catch (ParserConfigurationException | SAXException | IOException | ExceptionXML e) {
             e.printStackTrace();
         }
 
-        /* Création et ajoute une couche à la carte */
-
+        //Create the Request Layer
         requestLayer = new CustomMapLayer();
 
-        //add points to the layer
-
-        //warehouse
+        //Add the warehouse
         Intersection warehouse = planning.getWarehouse().getAddress();
         requestLayer.addSpecialPointRectangle(warehouse.getIdIntersection(),
                 new MapPoint(warehouse.getLatitude(), warehouse.getLongitude()), planning.getWarehouse().getColor());
 
-        //requests
+        //Add the requests
         planning.getRequests().forEach((request) -> {
             Intersection deliveryInt = request.getDeliveryPoint().getAddress();
             MapPoint mapPointDelivery = new MapPoint(deliveryInt.getLatitude(), deliveryInt.getLongitude());
@@ -199,6 +202,7 @@ public class MainsScreenController implements Observer {
                     Point point = (Point) tableView.getItems().get(i);
                     if (Objects.equals(point.getId(), id)) {
                         tableView.scrollTo(i);
+                        tableView.getSelectionModel().select(i);
                         break;
                     }
                 }
@@ -209,23 +213,25 @@ public class MainsScreenController implements Observer {
     }
 
 
-
+    /**
+     * Method be called every time button "add request" is handled
+     *
+     * @param actionEvent
+     * @return void
+     */
     public void addRequest(ActionEvent actionEvent) {
-        //method that uploads an XML file with the command
-        //File selectedFile = fileChooser(actionEvent);
-        //System.out.println(selectedFile);
         displayAlert("ALERT!", "For the moment this functionality is not available");
     }
 
-    /** Method to be called every time button compute tour is handled
-     *
+    /**
+     * Method to be called every time button compute tour is handled
      *
      * @param actionEvent
      * @return void
      */
     public void computeTour(ActionEvent actionEvent) {
         //method that calculates the most optimal path of the tour
-        tour = new Tour(new ArrayList<>(), null, this);
+        tour = new Tour(new ArrayList<>(), null, this,planning.getWarehouse().getDepartureTime());
 
         // clear
         mapView.removeLayer(tourLayer);

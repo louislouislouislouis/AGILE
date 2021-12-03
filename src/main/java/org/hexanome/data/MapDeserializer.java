@@ -48,6 +48,8 @@ public class MapDeserializer {
             UUID uuid = UUID.randomUUID();
             map.addSegment(uuid, createSegment((Element) segments.item(i), map.getIntersections()));
         }
+
+        map.setAdj();
     }
 
     private Intersection createIntersection(Element elt) throws ExceptionXML {
@@ -95,78 +97,5 @@ public class MapDeserializer {
      * value: map with key: neighbourIntersection,
      * value: segment between startIntersection and neighbourIntersection
      */
-    private Map<Intersection, Map<Intersection, Segment>> getAdj(Map<Long, Intersection> intersections, Map<UUID, Segment> segments) {
-        Map<Intersection, Map<Intersection, Segment>> adj = new HashMap<>();
-        for (Intersection i : intersections.values()) {
-            Map<Intersection, Segment> emptyMap = new HashMap<>();
-            adj.put(i, emptyMap);
-        }
-        for (Segment s : segments.values()) {
-            adj.get(s.getOriginIntersection()).put(s.getDestinationIntersection(), s);
-        }
-        return adj;
-    }
-
-    public static void main(String args[]) {
-        MapDeserializer mydom = new MapDeserializer();
-        RequestDeserializer mydomrequest = new RequestDeserializer();
-        PlanningRequest planning = new PlanningRequest();
-        MapIF map = new MapIF();
-
-        try {
-            File fileXml = new File("src/main/resources/org/hexanome/model/testMap.xml");
-            mydom.load(map, fileXml);
-
-            File requestFile = new File("src/main/resources/org/hexanome/model/testRequest.xml");
-            mydomrequest.load(planning, requestFile, map);
-
-            Map<Intersection, Map<Intersection, Segment>> adj = mydom.getAdj(map.getIntersections(), map.getSegments());
-
-            Set<Intersection> destinations = new HashSet<>();
-            destinations.add(planning.getWarehouse().getAddress());
-            for (Request r : planning.getRequests()) {
-                destinations.add(r.getPickupPoint().getAddress());
-                destinations.add(r.getDeliveryPoint().getAddress());
-            }
-
-            int nbVerticesDijkstra = map.getIntersections().size();
-            int nbVerticesTSP = destinations.size();
-
-            Double[][] costTSP = new Double[nbVerticesTSP][nbVerticesTSP];
-            int iOrigin = 0;
-            for (Intersection origin : destinations) {
-                System.out.println("Calculating shortest paths for Origin: " + origin.getIdIntersection());
-                Dijkstra dijkstra = new Dijkstra(nbVerticesDijkstra);
-                dijkstra.dijkstra(map.getIntersections(), adj, origin, destinations);
-                System.out.println(dijkstra.getPath());
-                System.out.println(dijkstra.getDist());
-
-                Map<Long, Double> distTSP = dijkstra.getResultDistForTSP(destinations);
-                int j = 0;
-                for (Double c : distTSP.values()) {
-                    costTSP[iOrigin][j++] = c;
-                }
-                iOrigin++;
-            }
-
-            for (int i = 0; i < nbVerticesTSP; i++) {
-                for (int j = 0; j < nbVerticesTSP; j++) {
-                    System.out.print(costTSP[i][j] + " ");
-                }
-                System.out.println();
-            }
-
-
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (ExceptionXML exceptionXML) {
-            exceptionXML.printStackTrace();
-        }
-    }
-
 
 }
