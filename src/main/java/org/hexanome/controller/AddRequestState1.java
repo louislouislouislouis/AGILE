@@ -5,7 +5,7 @@ public class AddRequestState1 implements State {
     // -> Wait for the user to enter a first point (corresponding to the pickup point)
 
     @Override
-    public void leftClick() {
-        
+    public void leftClick(MainsScreenController controller) {
+
     }
 }
