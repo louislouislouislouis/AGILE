@@ -26,7 +26,6 @@ public class App extends Application {
 
         System.setProperty("http.agent", "Gluon Mobile/1.0.3");
 
-        loadFXML("primary");
         scene = new Scene(loadFXML("mainsScreen"), 1450, 768);
         stage.setScene(scene);
         stage.show();

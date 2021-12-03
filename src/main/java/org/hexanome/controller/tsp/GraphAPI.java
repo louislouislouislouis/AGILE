@@ -1,6 +1,5 @@
 package org.hexanome.controller.tsp;
 
-import org.hexanome.controller.Dijkstra;
 import org.hexanome.model.*;
 
 import java.util.*;

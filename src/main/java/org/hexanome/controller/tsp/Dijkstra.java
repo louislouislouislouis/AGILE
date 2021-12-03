@@ -1,4 +1,4 @@
-package org.hexanome.controller;
+package org.hexanome.controller.tsp;
 
 import org.hexanome.model.Intersection;
 import org.hexanome.model.Node;

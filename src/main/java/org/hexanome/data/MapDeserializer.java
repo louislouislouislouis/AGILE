@@ -1,12 +1,9 @@
 package org.hexanome.data;
 
-import org.hexanome.controller.tsp.CompleteGraph;
-import org.hexanome.controller.tsp.Graph;
 import org.hexanome.model.*;
-import org.hexanome.controller.Dijkstra;
+import org.hexanome.controller.tsp.Dijkstra;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
