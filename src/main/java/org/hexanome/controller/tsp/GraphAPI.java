@@ -63,16 +63,6 @@ public class GraphAPI {
             pathTSP.add(LHSArray[tsp.getSolution(i)]);
         }
         pathTSP.add(planning.getWarehouse().getAddress());
-        System.out.println("Reihenfolge markante Punkte: ");
-        for (Intersection i : pathTSP) {
-            System.out.println(i.getIdIntersection());
-        }
-/*
-        for (Intersection i : pathTSP) {
-            //System.out.println(i);
-        }
-
- */
 
         List<Intersection> completeTour = new ArrayList<>();
         completeTour.add(pathTSP.get(0));
@@ -86,14 +76,8 @@ public class GraphAPI {
                 }
             }
         }
- tour.setIntersections(completeTour);
-        //System.out.println(tour.getIntersections().size());
-//        tour.setIntersections(completeTour);
-//        tour.setCost(tsp.getSolutionCost());
-        System.out.println("Anzahl Intersections am Ende: " + tour.getIntersections().size());
-        System.out.println("So sieht die Tour aus: " + tour.getIntersections());
-        System.out.println("Das ist das Warehouse: " + planning.getWarehouse().getAddress());
-
+        tour.setIntersections(completeTour);
+        tour.setCost(tsp.getSolutionCost());
     }
 
     /**
