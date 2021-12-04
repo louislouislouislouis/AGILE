@@ -56,6 +56,7 @@ public class Tour extends Observable {
     }
 
     public void setIntersections(List<Intersection> intersections) {
+        System.out.println("Overwrite Intersections");
         this.intersections = intersections;
     }
 
@@ -91,7 +92,10 @@ public class Tour extends Observable {
 
     public void deleteIntersectionsAfter(Intersection lastIntersection) {
 
-
+        System.out.println("Remove Intersections nach: " +lastIntersection.getIdIntersection());
+        if (intersections.contains(lastIntersection)) {
+            System.out.println("Zu entfernendes Element wurde gefunden");
+        }
         int index = intersections.lastIndexOf(lastIntersection);
 
         int size = intersections.size();

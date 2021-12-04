@@ -83,7 +83,8 @@ public abstract class TemplateTSP implements TSP {
 	 */	
 	private void branchAndBound(int currentVertex, Collection<Integer> unvisited, 
 			Collection<Integer> visited, Double currentCost, Tour tour){
-		if (System.currentTimeMillis() - startTime > timeLimit) return;
+		System.out.println("Tour am Anfang jeder Iteration searchSolution: " + tour.getIntersections().size() + " - " + tour.getIntersections());
+	//	if (System.currentTimeMillis() - startTime > timeLimit) return;
 	    if (unvisited.size() == 0){
 	    	if (g.isArc(currentVertex,0)){
 	    		if (currentCost+g.getCost(currentVertex,0) < bestSolCost){
@@ -107,6 +108,8 @@ public abstract class TemplateTSP implements TSP {
 	            visited.remove(nextVertex);
 	            unvisited.add(nextVertex);
 				removeVertexInTour(tour, lastIntersection);
+				System.out.println("Wird nochmal gemacht");
+				System.out.println("Tour nach remove: " + tour.getIntersections());
 	        }
 	    }
 	}
