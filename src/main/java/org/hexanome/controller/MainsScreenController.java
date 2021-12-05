@@ -219,6 +219,11 @@ public class MainsScreenController implements Observer {
     public void setTableView(TableView<Point> tableView) {
         this.tableView = tableView;
     }
+
+    public CustomMapLayer getIntersectionLayer() {
+        return intersectionLayer;
+    }
+
     /*--------------------------------Methods----------------------------------------------------------*/
 
     /**
@@ -423,7 +428,7 @@ public class MainsScreenController implements Observer {
         mapView.addLayer(intersectionLayer);
     }
 
-    private void updateTableView() {
+    public void updateTableView() {
         // columns initialization
         /*TableColumn<Point, String> idCol = (TableColumn) tableView.getColumns().get(0);
         TableColumn<Point, String> typeCol = (TableColumn) tableView.getColumns().get(1);
@@ -476,7 +481,7 @@ public class MainsScreenController implements Observer {
     }
 
 
-    private void updateMap() {
+    public void updateMap() {
         /* Zoom de 5 */
         mapView.setZoom(14);
 
@@ -511,7 +516,7 @@ public class MainsScreenController implements Observer {
         });
     }
 
-    private void updateTourLayer() {
+    public void updateTourLayer() {
         //Add Segment to the layer
 
         tourLayer = new CustomMapLayer();
@@ -541,7 +546,7 @@ public class MainsScreenController implements Observer {
         tour.notifyChange("UPDATEMAP");
     }
 
-    private void updateRequestLayer() {
+    public void updateRequestLayer() {
         //Create the Request Layer
         requestLayer = new CustomMapLayer();
 

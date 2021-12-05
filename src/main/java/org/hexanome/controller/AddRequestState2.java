@@ -26,7 +26,13 @@ public class AddRequestState2 implements State {
             Request request = new Request(pickupPoint, deliveryPoint);
 
             controller.getPlanning().addRequest(request);
-            
+
+            controller.updateRequestLayer();
+            controller.updateTourLayer();
+            controller.updateTableView();
+
+            controller.getMapView().removeLayer(controller.getIntersectionLayer());
+
             // we change the state of the controller
             controller.setCurrentState(controller.tourState);
         } else {
