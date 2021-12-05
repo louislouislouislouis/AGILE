@@ -24,6 +24,7 @@ import org.hexanome.data.ExceptionXML;
 import org.hexanome.data.MapDeserializer;
 import org.hexanome.data.RequestDeserializer;
 import org.hexanome.model.*;
+import org.hexanome.vue.AlertBox;
 import org.hexanome.vue.CustomMap;
 import org.hexanome.vue.CustomMapLayer;
 import org.xml.sax.SAXException;
@@ -186,7 +187,8 @@ public class MainsScreenController implements Observer {
         System.out.println(selectedFile);
 
         if (selectedFile == null) {
-            System.out.println("pas de fichier selectionné");
+            AlertBox.displayAlert("Message d'erreur", "Veuillez sélectionner un fichier");
+
         } else {
 
             // We clear the map before loading an XML file with requests
@@ -202,7 +204,9 @@ public class MainsScreenController implements Observer {
 
                 this.updateMap();
             } catch (ExceptionXML | ParserConfigurationException | IOException | SAXException e) {
+                if(e.getMessage() == "Wrong format")
                 e.printStackTrace();
+                AlertBox.displayAlert("Message d'erreur", "Le fichier n'est pas valide pour cette action");
             }
             currentState.enableButton(this);
         }
