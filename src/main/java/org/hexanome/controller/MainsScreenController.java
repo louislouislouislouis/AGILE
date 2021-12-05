@@ -472,6 +472,9 @@ public class MainsScreenController implements Observer {
 
         tableView.setItems(data);
 
+        // we delete the previous data to avoid duplicate
+        data.clear();
+
         data.add(planning.getWarehouse());
 
         planning.getRequests().forEach(request -> {
