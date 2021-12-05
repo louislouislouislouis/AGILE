@@ -259,8 +259,8 @@ public class MainsScreenController implements Observer {
 
                 this.updateMap();
             } catch (ExceptionXML | ParserConfigurationException | IOException | SAXException e) {
-                if(e.getMessage() == "Wrong format")
-                e.printStackTrace();
+                if (e.getMessage() == "Wrong format")
+                    e.printStackTrace();
                 AlertBox.displayAlert("Message d'erreur", "Le fichier n'est pas valide pour cette action");
             }
             currentState.enableButton(this);
@@ -309,7 +309,9 @@ public class MainsScreenController implements Observer {
      * @return void
      */
     public void addRequest(ActionEvent actionEvent) {
-        displayAlert("ALERT!", "For the moment this functionality is not available");
+        currentState.addRequest(this);
+
+        currentState.enableButton(this);
     }
 
     /**
@@ -399,6 +401,27 @@ public class MainsScreenController implements Observer {
 
     }
 
+    public void undoAction(ActionEvent actionEvent) {
+    }
+
+    public void redoAction(ActionEvent actionEvent) {
+    }
+
+    public void updateMapIntersection() {
+        // Add all the intersection to the layer
+        intersectionLayer = new CustomMapLayer();
+
+        HashMap<Long, Intersection> intersectionMap = map.getIntersections();
+
+        intersectionMap.forEach((id, intersection) -> {
+            MapPoint mapPoint = new MapPoint(intersection.getLatitude(), intersection.getLongitude());
+            intersectionLayer.addPoint(id, mapPoint);
+        });
+
+        intersectionLayer.intersectionEvent(this, map);
+
+        mapView.addLayer(intersectionLayer);
+    }
 
     private void updateTableView() {
         // columns initialization
@@ -452,11 +475,6 @@ public class MainsScreenController implements Observer {
         });
     }
 
-    public void undoAction(ActionEvent actionEvent) {
-    }
-
-    public void redoAction(ActionEvent actionEvent) {
-    }
 
     private void updateMap() {
         /* Zoom de 5 */
@@ -490,18 +508,6 @@ public class MainsScreenController implements Observer {
             //Pour le fond de la map
             mapView.layout();
 
-        });
-    }
-
-    private void updateMapIntersection() {
-        // Add all the intersection to the layer
-        intersectionLayer = new CustomMapLayer();
-
-        HashMap<Long, Intersection> intersectionMap = map.getIntersections();
-
-        intersectionMap.forEach((id, intersection) -> {
-            MapPoint mapPoint = new MapPoint(intersection.getLatitude(), intersection.getLongitude());
-            intersectionLayer.addPoint(id, mapPoint);
         });
     }
 
