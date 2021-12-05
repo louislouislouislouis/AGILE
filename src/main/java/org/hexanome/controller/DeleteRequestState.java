@@ -1,4 +1,4 @@
 package org.hexanome.controller;
 
-public class DeleteRequest {
+public class DeleteRequestState {
 }
