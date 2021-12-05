@@ -41,7 +41,6 @@ public abstract class TemplateTSP implements TSP {
 		visited.add(0); // The first visited vertex is 0
 		bestSolCost = Double.MAX_VALUE;
 		branchAndBound(0, unvisited, visited, Double.valueOf(0), tour);
-		System.out.println("BranchAndBound OK");
 	}
 	
 	public Integer getSolution(int i){
@@ -83,7 +82,7 @@ public abstract class TemplateTSP implements TSP {
 	 */	
 	private void branchAndBound(int currentVertex, Collection<Integer> unvisited, 
 			Collection<Integer> visited, Double currentCost, Tour tour){
-		if (System.currentTimeMillis() - startTime > timeLimit) return;
+		//	if (System.currentTimeMillis() - startTime > timeLimit) return;
 	    if (unvisited.size() == 0){
 	    	if (g.isArc(currentVertex,0)){
 	    		if (currentCost+g.getCost(currentVertex,0) < bestSolCost){

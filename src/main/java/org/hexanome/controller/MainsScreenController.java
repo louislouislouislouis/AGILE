@@ -35,12 +35,6 @@ import com.gluonhq.maps.MapPoint;
 import static org.hexanome.vue.AlertBox.displayAlert;
 
 public class MainsScreenController implements Observer {
-    @FXML
-    HBox mapContainer;
-    @FXML
-    Button btnLoadRequest;
-    @FXML
-    TableView tableView;
 
     /*---------------------------VARIABLES------------------------------------------------------------*/
     private MapIF map = new MapIF();
@@ -72,12 +66,35 @@ public class MainsScreenController implements Observer {
 
     //Declaration of the interactive buttons in the mainsScreen.fxml
     @FXML
-    private Button btnLoadMap;
-    @FXML
     private Button btnAddRequest;
     @FXML
+    private Button btnLoadMap;
+    @FXML
+    Button btnLoadRequest;
+    @FXML
+    private Button btnRedo;
+    @FXML
+    private Button btnUndo;
+    @FXML
     private Button btnValidateRoute;
-
+    @FXML
+    HBox mapContainer;
+    @FXML
+    private TableView<Point> tableView;
+    @FXML
+    private TableColumn<Point, String> columnArrivalTime;
+    @FXML
+    private TableColumn<Point, Color> columnColor;
+    @FXML
+    private TableColumn<Point, Button> columnDelete;
+    @FXML
+    private TableColumn<Point, String> columnDepartureTime;
+    @FXML
+    private TableColumn<Point, String> columnID;
+    @FXML
+    private TableColumn<Point, Button> columnModify;
+    @FXML
+    private TableColumn<Point, String> columnType;
     /*-------------------------GETTERS AND SETTERS-----------------------------------------------------*/
     public Button getBtnLoadMap() {
         return btnLoadMap;
@@ -103,6 +120,49 @@ public class MainsScreenController implements Observer {
         this.btnValidateRoute = btnValidateRoute;
     }
 
+    public MapIF getMap() {return map;}
+
+    public void setMap(MapIF map) {this.map = map;}
+
+    public PlanningRequest getPlanning() {return planning;}
+
+    public void setPlanning(PlanningRequest planning) {this.planning = planning;}
+
+    public Tour getTour() {return tour;}
+
+    public void setTour(Tour tour) {this.tour = tour;}
+
+    public CustomMap getMapView() {return mapView;}
+
+    public void setMapView(CustomMap mapView) {this.mapView = mapView;}
+
+    public CustomMapLayer getRequestLayer() {return requestLayer;}
+
+    public void setRequestLayer(CustomMapLayer requestLayer) {this.requestLayer = requestLayer;}
+
+    public CustomMapLayer getTourLayer() {return tourLayer;}
+
+    public void setTourLayer(CustomMapLayer tourLayer) {this.tourLayer = tourLayer;}
+
+    public Button getBtnLoadRequest() {return btnLoadRequest;}
+
+    public void setBtnLoadRequest(Button btnLoadRequest) {this.btnLoadRequest = btnLoadRequest;}
+
+    public Button getBtnRedo() {return btnRedo;}
+
+    public void setBtnRedo(Button btnRedo) {this.btnRedo = btnRedo;}
+
+    public Button getBtnUndo() {return btnUndo;}
+
+    public void setBtnUndo(Button btnUndo) {this.btnUndo = btnUndo;}
+
+    public HBox getMapContainer() {return mapContainer;}
+
+    public void setMapContainer(HBox mapContainer) {this.mapContainer = mapContainer;}
+
+    public TableView<Point> getTableView() {return tableView;}
+
+    public void setTableView(TableView<Point> tableView) {this.tableView = tableView;}
     /*--------------------------------Methods----------------------------------------------------------*/
 
     /**
@@ -214,7 +274,6 @@ public class MainsScreenController implements Observer {
         updateTourLayer();
         updateTableView();
 
-        // on met à jour les boutons utilisables
         currentState.enableButton(this);
     }
 
@@ -271,22 +330,31 @@ public class MainsScreenController implements Observer {
 
     private void updateTableView() {
         // columns initialization
-        TableColumn<Point, String> idCol = (TableColumn) tableView.getColumns().get(0);
+        /*TableColumn<Point, String> idCol = (TableColumn) tableView.getColumns().get(0);
         TableColumn<Point, String> typeCol = (TableColumn) tableView.getColumns().get(1);
         TableColumn<Point, String> arrivalCol = (TableColumn) tableView.getColumns().get(2);
         TableColumn<Point, String> waitingCol = (TableColumn) tableView.getColumns().get(3);
         TableColumn<Point, String> departureCol = (TableColumn) tableView.getColumns().get(4);
-        TableColumn<Point, Color> colorCol = (TableColumn) tableView.getColumns().get(6);
+        TableColumn<Point, Color> colorCol = (TableColumn) tableView.getColumns().get(6);*/
 
         // cell factory
-        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        /*idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         arrivalCol.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
         waitingCol.setCellValueFactory(new PropertyValueFactory<>("duration"));
         departureCol.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
-        colorCol.setCellValueFactory(new PropertyValueFactory<>("color"));
+        colorCol.setCellValueFactory(new PropertyValueFactory<>("color"));*/
 
-        colorCol.setCellFactory(tv -> new TableCell<Point, Color>() {
+        columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        columnType.setCellValueFactory(new PropertyValueFactory<>("type"));
+        columnArrivalTime.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
+        columnDepartureTime.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
+        columnColor.setCellValueFactory(new PropertyValueFactory<>("color"));
+        columnModify.setCellValueFactory(new PropertyValueFactory<>("modify"));
+        columnDelete.setCellValueFactory(new PropertyValueFactory<>("delete"));
+
+        //colorCol.setCellFactory(tv -> new TableCell<Point, Color>() {
+        columnColor.setCellFactory(tv -> new TableCell<Point, Color>() {
             @Override
             protected void updateItem(Color item, boolean empty) {
                 super.updateItem(item, empty);

@@ -65,13 +65,12 @@
                                   <children>
                                       <TableView fx:id="tableView" prefHeight="775.0" prefWidth="338.0">
                                           <columns>
-                                              <TableColumn id="columnIDofIntersection" prefWidth="75.0" text="ID" />
-                                              <TableColumn id="columnTypOfPoint" prefWidth="75.0" text="Type" />
-                                              <TableColumn id="columnArrivalTime" prefWidth="75.0" text="Arrival Time" />
-                                              <TableColumn id="columnDepartureTime" prefWidth="75.0" text="Departure Time" />
-                                              <TableColumn id="columnDistanceToNextPoint" prefWidth="75.0" text="Distance To Next Point" />
-                                              <TableColumn id="columnColor" prefWidth="10.0" text="Color" />
-                                    <TableColumn id="columnColor" prefWidth="10.0" text="Edit" />
+                                              <TableColumn id="columnIDofIntersection" fx:id="columnID" prefWidth="75.0" text="ID" />
+                                              <TableColumn id="columnTypOfPoint" fx:id="columnType" prefWidth="75.0" text="Type" />
+                                              <TableColumn id="columnArrivalTime" fx:id="columnArrivalTime" prefWidth="75.0" text="Arrival Time" />
+                                              <TableColumn id="columnDepartureTime" fx:id="columnDepartureTime" prefWidth="75.0" text="Departure Time" />
+                                              <TableColumn id="columnColor" fx:id="columnColor" prefWidth="10.0" text="Color" />
+                                    <TableColumn id="columnColor" fx:id="columnEdit" prefWidth="10.0" text="Edit" />
                                           </columns>
                                           <columnResizePolicy>
                                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

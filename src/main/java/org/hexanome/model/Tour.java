@@ -90,8 +90,6 @@ public class Tour extends Observable {
     }
 
     public void deleteIntersectionsAfter(Intersection lastIntersection) {
-
-
         int index = intersections.lastIndexOf(lastIntersection);
 
         int size = intersections.size();

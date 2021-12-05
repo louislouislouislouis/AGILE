@@ -33,7 +33,6 @@ public class GraphAPI {
         long idZero = 0L;
         // calculate the shortest path from every destination to every other destination + update maps
         for (Intersection origin : destinations) {
-            //System.out.println("Calculating shortest paths for Origin: " + origin.getIdIntersection());
             Dijkstra dijkstra = new Dijkstra(nbVerticesDijkstra);
             dijkstra.dijkstra(map.getIntersections(), adj, origin, destinations);
 
@@ -65,11 +64,7 @@ public class GraphAPI {
         }
         pathTSP.add(planning.getWarehouse().getAddress());
 
-        for (Intersection i : pathTSP) {
-            //System.out.println(i);
-        }
-
-/*        List<Intersection> completeTour = new ArrayList<>();
+        List<Intersection> completeTour = new ArrayList<>();
         completeTour.add(pathTSP.get(0));
         for (int i = 0; i < pathTSP.size() - 1; i++) {
             Intersection startIntersection = pathTSP.get(i);
@@ -81,12 +76,8 @@ public class GraphAPI {
                 }
             }
         }
- */
-        //System.out.println(tour.getIntersections().size());
-//        tour.setIntersections(completeTour);
-//        tour.setCost(tsp.getSolutionCost());
-        System.out.println(tour.getIntersections().size());
-
+        tour.setIntersections(completeTour);
+        tour.setCost(tsp.getSolutionCost());
     }
 
     /**
