@@ -42,6 +42,9 @@ public class AddRequestState2 implements State {
 
     @Override
     public void rightClick(MainsScreenController controller) {
+        // we clear the view
+        controller.getMapView().removeLayer(controller.getIntersectionLayer());
+
         // we change the state of the controller
         controller.setCurrentState(controller.tourState);
     }

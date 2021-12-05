@@ -419,6 +419,8 @@ public class MainsScreenController implements Observer {
         intersectionLayer.intersectionEvent(this, map);
 
         mapView.addLayer(intersectionLayer);
+
+        intersectionLayer.forceReRender();
     }
 
     public void updateTableView() {
@@ -578,5 +580,7 @@ public class MainsScreenController implements Observer {
         requestLayer.scrollToPointEvent(tableView);
 
         mapView.addLayer(requestLayer);
+
+        requestLayer.forceReRender();
     }
 }

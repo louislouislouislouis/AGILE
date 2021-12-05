@@ -13,7 +13,7 @@ public class AddRequestState1 implements State {
         if (i != null) {
             // we change the selected intersection in the next state
             controller.addRequestState2.setSelectedIntersection(i);
-            
+
             // we change the state of the controller
             controller.setCurrentState(controller.addRequestState2);
         } else {
@@ -23,6 +23,9 @@ public class AddRequestState1 implements State {
 
     @Override
     public void rightClick(MainsScreenController controller) {
+        // we clear the view
+        controller.getMapView().removeLayer(controller.getIntersectionLayer());
+        
         // we change the state of the controller
         controller.setCurrentState(controller.tourState);
     }
