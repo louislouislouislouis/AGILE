@@ -29,6 +29,10 @@ public class PlanningRequest {
         requests.add(request);
     }
 
+    public void removeRequest(Request request) {
+        requests.remove(request);
+    }
+
     /**
      * Clear the planning
      */
