@@ -46,6 +46,14 @@ public class TourState implements State {
     }
 
     @Override
+    public void addRequest(MainsScreenController controller) {
+        // on affiche les points des intersections sur la carte
+
+        // we change the state of the controller
+        controller.setCurrentState(controller.addRequestState1);
+    }
+
+    @Override
     public void enableButton(MainsScreenController controller) {
         controller.btnLoadRequest.setDisable(false);
         controller.getBtnLoadMap().setDisable(false);

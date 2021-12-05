@@ -68,6 +68,7 @@ public class MainsScreenController implements Observer {
     private CustomMap mapView = new CustomMap();
     private CustomMapLayer requestLayer = new CustomMapLayer();
     private CustomMapLayer tourLayer = new CustomMapLayer();
+    private CustomMapLayer intersectionLayer = new CustomMapLayer();
 
     //Declaration of the interactive buttons in the mainsScreen.fxml
     @FXML
@@ -343,6 +344,18 @@ public class MainsScreenController implements Observer {
             //Pour le fond de la map
             mapView.layout();
 
+        });
+    }
+
+    private void updateMapIntersection() {
+        // Add all the intersection to the layer
+        intersectionLayer = new CustomMapLayer();
+
+        HashMap<Long, Intersection> intersectionMap = map.getIntersections();
+
+        intersectionMap.forEach((id, intersection) -> {
+            MapPoint mapPoint = new MapPoint(intersection.getLatitude(), intersection.getLongitude());
+            intersectionLayer.addPoint(id, mapPoint);
         });
     }
 
