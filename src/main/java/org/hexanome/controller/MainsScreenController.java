@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,6 +25,7 @@ import org.hexanome.data.ExceptionXML;
 import org.hexanome.data.MapDeserializer;
 import org.hexanome.data.RequestDeserializer;
 import org.hexanome.model.*;
+import org.hexanome.vue.App;
 import org.hexanome.vue.CustomMap;
 import org.hexanome.vue.CustomMapLayer;
 import org.xml.sax.SAXException;
@@ -37,8 +39,8 @@ import static org.hexanome.vue.AlertBox.displayAlert;
 public class MainsScreenController implements Observer {
 
     /*---------------------------VARIABLES------------------------------------------------------------*/
-    private MapIF map = new MapIF();
-    private PlanningRequest planning = new PlanningRequest();
+    private MapIF map;
+    private PlanningRequest planning;
     private Tour tour;
 
     private static final ObservableList<Point> data = FXCollections.observableArrayList();
@@ -70,7 +72,7 @@ public class MainsScreenController implements Observer {
     @FXML
     private Button btnLoadMap;
     @FXML
-    Button btnLoadRequest;
+    private Button btnLoadRequest;
     @FXML
     private Button btnRedo;
     @FXML
@@ -95,6 +97,15 @@ public class MainsScreenController implements Observer {
     private TableColumn<Point, Button> columnModify;
     @FXML
     private TableColumn<Point, String> columnType;
+
+    /*----------------------Constructor---------------------------------------*/
+
+    public MainsScreenController() {
+        map = new MapIF();
+        planning = new PlanningRequest();
+        tour = new Tour();
+    }
+
     /*-------------------------GETTERS AND SETTERS-----------------------------------------------------*/
     public Button getBtnLoadMap() {
         return btnLoadMap;
@@ -120,49 +131,93 @@ public class MainsScreenController implements Observer {
         this.btnValidateRoute = btnValidateRoute;
     }
 
-    public MapIF getMap() {return map;}
+    public MapIF getMap() {
+        return map;
+    }
 
-    public void setMap(MapIF map) {this.map = map;}
+    public void setMap(MapIF map) {
+        this.map = map;
+    }
 
-    public PlanningRequest getPlanning() {return planning;}
+    public PlanningRequest getPlanning() {
+        return planning;
+    }
 
-    public void setPlanning(PlanningRequest planning) {this.planning = planning;}
+    public void setPlanning(PlanningRequest planning) {
+        this.planning = planning;
+    }
 
-    public Tour getTour() {return tour;}
+    public Tour getTour() {
+        return tour;
+    }
 
-    public void setTour(Tour tour) {this.tour = tour;}
+    public void setTour(Tour tour) {
+        this.tour = tour;
+    }
 
-    public CustomMap getMapView() {return mapView;}
+    public CustomMap getMapView() {
+        return mapView;
+    }
 
-    public void setMapView(CustomMap mapView) {this.mapView = mapView;}
+    public void setMapView(CustomMap mapView) {
+        this.mapView = mapView;
+    }
 
-    public CustomMapLayer getRequestLayer() {return requestLayer;}
+    public CustomMapLayer getRequestLayer() {
+        return requestLayer;
+    }
 
-    public void setRequestLayer(CustomMapLayer requestLayer) {this.requestLayer = requestLayer;}
+    public void setRequestLayer(CustomMapLayer requestLayer) {
+        this.requestLayer = requestLayer;
+    }
 
-    public CustomMapLayer getTourLayer() {return tourLayer;}
+    public CustomMapLayer getTourLayer() {
+        return tourLayer;
+    }
 
-    public void setTourLayer(CustomMapLayer tourLayer) {this.tourLayer = tourLayer;}
+    public void setTourLayer(CustomMapLayer tourLayer) {
+        this.tourLayer = tourLayer;
+    }
 
-    public Button getBtnLoadRequest() {return btnLoadRequest;}
+    public Button getBtnLoadRequest() {
+        return btnLoadRequest;
+    }
 
-    public void setBtnLoadRequest(Button btnLoadRequest) {this.btnLoadRequest = btnLoadRequest;}
+    public void setBtnLoadRequest(Button btnLoadRequest) {
+        this.btnLoadRequest = btnLoadRequest;
+    }
 
-    public Button getBtnRedo() {return btnRedo;}
+    public Button getBtnRedo() {
+        return btnRedo;
+    }
 
-    public void setBtnRedo(Button btnRedo) {this.btnRedo = btnRedo;}
+    public void setBtnRedo(Button btnRedo) {
+        this.btnRedo = btnRedo;
+    }
 
-    public Button getBtnUndo() {return btnUndo;}
+    public Button getBtnUndo() {
+        return btnUndo;
+    }
 
-    public void setBtnUndo(Button btnUndo) {this.btnUndo = btnUndo;}
+    public void setBtnUndo(Button btnUndo) {
+        this.btnUndo = btnUndo;
+    }
 
-    public HBox getMapContainer() {return mapContainer;}
+    public HBox getMapContainer() {
+        return mapContainer;
+    }
 
-    public void setMapContainer(HBox mapContainer) {this.mapContainer = mapContainer;}
+    public void setMapContainer(HBox mapContainer) {
+        this.mapContainer = mapContainer;
+    }
 
-    public TableView<Point> getTableView() {return tableView;}
+    public TableView<Point> getTableView() {
+        return tableView;
+    }
 
-    public void setTableView(TableView<Point> tableView) {this.tableView = tableView;}
+    public void setTableView(TableView<Point> tableView) {
+        this.tableView = tableView;
+    }
     /*--------------------------------Methods----------------------------------------------------------*/
 
     /**
@@ -277,6 +332,19 @@ public class MainsScreenController implements Observer {
         currentState.enableButton(this);
     }
 
+    public void rightClick() {
+        this.currentState.rightClick(this);
+        System.out.println("rightclick");
+        System.out.println(this.currentState);
+        currentState.enableButton(this);
+    }
+
+    public void leftClick(Intersection i) {
+        this.currentState.leftClick(this, i);
+        System.out.println("leftClick");
+        System.out.println(this.currentState);
+        currentState.enableButton(this);
+    }
 
     /**
      * Method called to open a Nevigation File
@@ -350,8 +418,8 @@ public class MainsScreenController implements Observer {
         columnArrivalTime.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
         columnDepartureTime.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
         columnColor.setCellValueFactory(new PropertyValueFactory<>("color"));
-        columnModify.setCellValueFactory(new PropertyValueFactory<>("modify"));
-        columnDelete.setCellValueFactory(new PropertyValueFactory<>("delete"));
+        //columnModify.setCellValueFactory(new PropertyValueFactory<>("modify"));
+        //columnDelete.setCellValueFactory(new PropertyValueFactory<>("delete"));
 
         //colorCol.setCellFactory(tv -> new TableCell<Point, Color>() {
         columnColor.setCellFactory(tv -> new TableCell<Point, Color>() {
@@ -404,6 +472,12 @@ public class MainsScreenController implements Observer {
 
         //Force rerender (Bug fix - Gluon Maps Issue drag)
         mapView.setOnMouseReleased(e -> {
+
+            if (e.getButton() == MouseButton.SECONDARY) {
+                this.rightClick();
+            } else if (e.getButton() == MouseButton.PRIMARY) {
+                this.leftClick(null);
+            }
             System.out.println("onMousedetect");
             //Pour les layers de request
             requestLayer.forceReRender();
@@ -448,34 +522,7 @@ public class MainsScreenController implements Observer {
             tourLayer.addSegment(mapPointStart, mapPointEnd, (long) i);
         }
 
-        HashMap<Long, Polyline> polylineList = tourLayer.getPolylineList();
-
-        polylineList.forEach((aLong, polyline) -> {
-            polyline.hoverProperty().addListener((observable, oldValue, newValue) -> {
-
-                if (newValue) {
-                    polylineList.forEach((id, poly) -> {
-
-                        if (id <= aLong) {
-                            poly.setStrokeWidth(7);
-                            poly.setStroke(Color.DODGERBLUE);
-                            DropShadow e = new DropShadow();
-                            e.setColor(Color.BLUE);
-                            e.setRadius(9);
-                            poly.setEffect(e);
-                        }
-                    });
-                } else {
-                    polylineList.forEach((id, poly) -> {
-                        if (id <= aLong) {
-                            poly.setStrokeWidth(5);
-                            poly.setStroke(Color.DODGERBLUE);
-                            poly.setEffect(null);
-                        }
-                    });
-                }
-            });
-        });
+        tourLayer.tourLineHover();
 
         mapView.removeLayer(requestLayer);
         mapView.addLayer(tourLayer);
@@ -504,23 +551,10 @@ public class MainsScreenController implements Observer {
             requestLayer.addSpecialPointRectangle(pickupInt.getIdIntersection(), mapPointPickup, request.getPickupPoint().getColor());
         }
 
-        HashMap<Long, Shape> shapeList = requestLayer.getShapeList();
-
         // enable to scroll to selected point from the map
 
-        shapeList.forEach((id, shape) -> {
-            shape.setOnMouseClicked(mouseEvent -> {
+        requestLayer.scrollToPointEvent(tableView);
 
-                for (int i = 0; i < tableView.getItems().size(); i++) {
-                    Point point = (Point) tableView.getItems().get(i);
-                    if (Objects.equals(point.getId(), id)) {
-                        tableView.scrollTo(i);
-                        tableView.getSelectionModel().select(i);
-                        break;
-                    }
-                }
-            });
-        });
         mapView.addLayer(requestLayer);
     }
 }

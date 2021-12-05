@@ -30,7 +30,7 @@ public class InitialState implements State {
 
     @Override
     public void enableButton(MainsScreenController controller) {
-        controller.btnLoadRequest.setDisable(true);
+        controller.getBtnLoadRequest().setDisable(true);
         controller.getBtnLoadMap().setDisable(false);
         controller.getBtnValidateRoute().setDisable(true);
         controller.getBtnAddRequest().setDisable(true);

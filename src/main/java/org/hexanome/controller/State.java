@@ -1,6 +1,7 @@
 package org.hexanome.controller;
 
 import org.hexanome.data.ExceptionXML;
+import org.hexanome.model.Intersection;
 import org.hexanome.model.MapIF;
 import org.hexanome.model.PlanningRequest;
 import org.hexanome.model.Tour;
@@ -25,7 +26,7 @@ public interface State {
     }
 
 
-    default void leftClick(MainsScreenController controller) {
+    default void leftClick(MainsScreenController controller, Intersection i) {
     }
 
 

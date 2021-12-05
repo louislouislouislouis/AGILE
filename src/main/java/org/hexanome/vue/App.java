@@ -4,7 +4,9 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
+import org.hexanome.controller.MainsScreenController;
 
 import java.io.IOException;
 
@@ -14,6 +16,8 @@ import java.io.IOException;
 public class App extends Application {
 
     private static Scene scene;
+
+    private MainsScreenController controller;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -26,7 +30,21 @@ public class App extends Application {
 
         System.setProperty("http.agent", "Gluon Mobile/1.0.3");
 
-        scene = new Scene(loadFXML("mainsScreen"), 1450, 768);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("mainsScreen.fxml"));
+
+        Parent root = loader.load();
+        scene = new Scene(root, 1450, 768);
+
+        controller = loader.getController();
+
+        scene.setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.getButton() == MouseButton.SECONDARY) {
+                controller.rightClick();
+            } else if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                controller.leftClick(null);
+            }
+        });
+
         stage.setScene(scene);
         stage.show();
     }

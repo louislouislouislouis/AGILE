@@ -4,12 +4,15 @@ import com.gluonhq.maps.MapLayer;
 import com.gluonhq.maps.MapPoint;
 
 import javafx.geometry.Point2D;
+import javafx.scene.control.TableView;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.util.Pair;
+import org.hexanome.model.Point;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Affiche un point rouge sur la carte
@@ -106,6 +109,51 @@ public class CustomMapLayer extends MapLayer {
         polylineList.put(id, polyline);
 
         this.getChildren().add(polyline);
+    }
+
+    public void scrollToPointEvent(TableView<Point> tableView) {
+        shapeList.forEach((id, shape) -> {
+            shape.setOnMouseClicked(mouseEvent -> {
+
+                for (int i = 0; i < tableView.getItems().size(); i++) {
+                    Point point = (Point) tableView.getItems().get(i);
+                    if (Objects.equals(point.getId(), id)) {
+                        tableView.scrollTo(i);
+                        tableView.getSelectionModel().select(i);
+                        break;
+                    }
+                }
+            });
+        });
+    }
+
+    public void tourLineHover() {
+        polylineList.forEach((aLong, polyline) -> {
+            polyline.hoverProperty().addListener((observable, oldValue, newValue) -> {
+
+                if (newValue) {
+                    polylineList.forEach((id, poly) -> {
+
+                        if (id <= aLong) {
+                            poly.setStrokeWidth(7);
+                            poly.setStroke(Color.DODGERBLUE);
+                            DropShadow e = new DropShadow();
+                            e.setColor(Color.BLUE);
+                            e.setRadius(9);
+                            poly.setEffect(e);
+                        }
+                    });
+                } else {
+                    polylineList.forEach((id, poly) -> {
+                        if (id <= aLong) {
+                            poly.setStrokeWidth(5);
+                            poly.setStroke(Color.DODGERBLUE);
+                            poly.setEffect(null);
+                        }
+                    });
+                }
+            });
+        });
     }
 
     public HashMap<Long, MapPoint> getPointList() {
