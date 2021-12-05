@@ -254,8 +254,6 @@ public class MainsScreenController implements Observer {
             // We clear the map before loading an XML file with requests
 
             map.clearMap();
-            mapView.removeLayer(requestLayer);
-            mapView.removeLayer(tourLayer);
 
             try {
                 currentState.loadMap(this, map, selectedFile);
@@ -289,8 +287,6 @@ public class MainsScreenController implements Observer {
 
             // We clear the requestLayer before loading an XML file with requests
             planning.clearPlanning();
-            mapView.removeLayer(requestLayer);
-            mapView.removeLayer(tourLayer);
 
             try {
                 currentState.loadPlanning(this, map, planning, selectedFile);
@@ -326,9 +322,6 @@ public class MainsScreenController implements Observer {
      * @return void
      */
     public void computeTour(ActionEvent actionEvent) {
-        // clear
-        mapView.removeLayer(tourLayer);
-
         tour = new Tour(new ArrayList<>(), null, this, planning.getWarehouse().getDepartureTime(), map.getMatAdj());
 
         // we compute the tour
@@ -485,6 +478,10 @@ public class MainsScreenController implements Observer {
 
 
     public void updateMap() {
+        // clear possible layer
+        mapView.removeLayer(requestLayer);
+        mapView.removeLayer(tourLayer);
+
         /* Zoom de 5 */
         mapView.setZoom(14);
 
@@ -520,6 +517,9 @@ public class MainsScreenController implements Observer {
     }
 
     public void updateTourLayer() {
+        // clear
+        mapView.removeLayer(tourLayer);
+
         //Add Segment to the layer
 
         tourLayer = new CustomMapLayer();
@@ -550,7 +550,11 @@ public class MainsScreenController implements Observer {
     }
 
     public void updateRequestLayer() {
+        mapView.removeLayer(requestLayer);
+        mapView.removeLayer(tourLayer);
+
         //Create the Request Layer
+
         requestLayer = new CustomMapLayer();
 
         //Add the warehouse
