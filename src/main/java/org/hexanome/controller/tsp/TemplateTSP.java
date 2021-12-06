@@ -117,7 +117,8 @@ public abstract class TemplateTSP implements TSP {
 		// Converting LinkedHashMap to Array
 		LHSArray = destinations.toArray(LHSArray);
 
-		tour.setDestinations(LHSArray);
+		//tour.setDestinations(LHSArray);
+		//tour.computeCompleteTour(shortestPathsIntersections,map);
 
 		List<Intersection> pathTSP = new ArrayList<>();
 		for (int i = 0; i < bestSol.length; i++) {
@@ -126,19 +127,9 @@ public abstract class TemplateTSP implements TSP {
 		Intersection warehouse = pathTSP.get(0);
 		pathTSP.add(warehouse);
 
-		List<Intersection> completeTour = new ArrayList<>();
-		completeTour.add(pathTSP.get(0));
-		for (int i = 0; i < pathTSP.size() - 1; i++) {
-			Intersection startIntersection = pathTSP.get(i);
-			Intersection destinationIntersection = pathTSP.get(i + 1);
-			for (Long l : shortestPathsIntersections.get(startIntersection.getIdIntersection()).get(destinationIntersection.getIdIntersection())) {
-				Intersection intersection = map.getIntersections().get(l);
-				if (!intersection.equals(pathTSP.get(i))) {
-					completeTour.add(intersection);
-				}
-			}
-		}
-		tour.setIntersections(completeTour);
+		tour.setDestinations(pathTSP);
+		tour.computeCompleteTour(shortestPathsIntersections,map);
+
 		tour.setCost(this.getSolutionCost());
 
 		tour.notifyChange("UPDATEMAP");

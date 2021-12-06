@@ -99,16 +99,59 @@ public class Tour extends Observable {
         this.destinations.add(destination);
     }
 
-    public void setDestinations(Intersection[] LHSArray) {
+    public void setDestinations(List<Intersection> path) {
         List<Intersection> newDestinations = new ArrayList<>();
-        for (int i = 0; i < LHSArray.length; i++) {
-            newDestinations.add(LHSArray[i]);
+        for (Intersection i : path) {
+            newDestinations.add(i);
         }
-        //newDestinations.add(this.warehouse);
         this.destinations = newDestinations;
     }
 
     public List<Intersection> getDestinations() {
         return this.destinations;
+    }
+
+    /**
+     * completes list of all intersections to visit during the tour
+     * @param shortestPathsIntersections map with the shortest paths between all Intersections
+     * @param map contains all Intersections and Segments
+     */
+    public void computeCompleteTour(Map<Long, Map<Long, List<Long>>> shortestPathsIntersections, MapIF map) {
+        List<Intersection> completeTour = new ArrayList<>();
+        completeTour.add(warehouse);
+        for (int i = 0; i < destinations.size() - 1; i++) {
+            Intersection startIntersection = destinations.get(i);
+            Intersection destinationIntersection = destinations.get(i + 1);
+            for (Long l : shortestPathsIntersections.get(startIntersection.getIdIntersection()).get(destinationIntersection.getIdIntersection())) {
+                Intersection intersection = map.getIntersections().get(l);
+                if (!intersection.equals(destinations.get(i))) {
+                    completeTour.add(intersection);
+                }
+            }
+        }
+        this.setIntersections(completeTour);
+    }
+
+    /**
+     * sum of cost of all visited Segments
+     * @param map contains all Intersections and Segments
+     * @param shortestPathsCost map with the cost of the shortest paths between all Intersections
+     */
+    public void calculateCost(MapIF map, Map<Long, Map<Long, Double>> shortestPathsCost) {
+        double cost = 0;
+        for (int i = 0; i < intersections.size()-1; i++) {
+            Intersection startIntersection = intersections.get(i);
+            Intersection destinationIntersection = intersections.get(i+1);
+            cost += shortestPathsCost.get(startIntersection.getIdIntersection()).get(destinationIntersection.getIdIntersection());
+        }
+        this.cost = cost;
+    }
+
+    public Intersection getWarehouse() {
+        return this.warehouse;
+    }
+
+    public void removeLastDestination() {
+        this.destinations.remove(this.destinations.size()-1);
     }
 }

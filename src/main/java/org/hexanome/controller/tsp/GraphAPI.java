@@ -6,23 +6,22 @@ import java.util.*;
 
 public class GraphAPI {
 
+    // shortestPathsIntersections Map with
+    // key: idStartIntersection
+    // value: List of Maps with key: idDestinationIntersection
+    // value: List idIntersections to pass from start to destination
+    Map<Long, Map<Long, List<Long>>> shortestPathsIntersections = new HashMap<>();
+
+    // shortestPathsIntersections Map with
+    // key: idStartIntersection
+    // value: List of Maps with key: idDestinationIntersection
+    // value: cost of complete shortest path between start and destination
+    Map<Long, Map<Long, Double>> shortestPathsCost = new HashMap<>();
+
     public GraphAPI() {
     }
 
     public void V1_TSP(PlanningRequest planning, MapIF map, Tour tour) {
-
-        // shortestPathsIntersections Map with
-        // key: idStartIntersection
-        // value: List of Maps with key: idDestinationIntersection
-        // value: List idIntersections to pass from start to destination
-        Map<Long, Map<Long, List<Long>>> shortestPathsIntersections = new HashMap<>();
-
-        // shortestPathsIntersections Map with
-        // key: idStartIntersection
-        // value: List of Maps with key: idDestinationIntersection
-        // value: cost of complete shortest path between start and destination
-        Map<Long, Map<Long, Double>> shortestPathsCost = new HashMap<>();
-
         Map<Intersection, Map<Intersection, Segment>> adj = map.getMatAdj();
         Set<Intersection> destinations = this.getDestinations(planning);
 
@@ -58,6 +57,35 @@ public class GraphAPI {
         tsp.searchSolution(20000, g, tour);
         // System.out.print("Solution of cost " + tsp.getSolutionCost() + " found in "
         //       + (System.currentTimeMillis() - startTime) + "ms : ");
+    }
+
+    public void ADD_REQUEST(PlanningRequest planning, MapIF map, Tour tour) {
+        Map<Intersection, Map<Intersection, Segment>> adj = map.getMatAdj();
+        Set<Intersection> destinations = this.getDestinations(planning);
+
+        int nbVerticesDijkstra = map.getIntersections().size();
+
+        Request newRequest = planning.getRequests().getLast();
+        Intersection newPickUpPoint = newRequest.getPickupPoint().getAddress();
+        Intersection newDeliveryPoint = newRequest.getDeliveryPoint().getAddress();
+
+        Dijkstra dijkstra1 = new Dijkstra(nbVerticesDijkstra);
+        dijkstra1.dijkstra(map.getIntersections(), adj, newPickUpPoint, destinations);
+        this.updateShortestPathIntersections(shortestPathsIntersections, dijkstra1, newPickUpPoint);
+        this.updateShortestPathsCost(shortestPathsCost, dijkstra1, newPickUpPoint);
+
+        Dijkstra dijkstra2 = new Dijkstra(nbVerticesDijkstra);
+        dijkstra2.dijkstra(map.getIntersections(), adj, newDeliveryPoint, destinations);
+        this.updateShortestPathIntersections(shortestPathsIntersections, dijkstra2, newDeliveryPoint);
+        this.updateShortestPathsCost(shortestPathsCost, dijkstra2, newDeliveryPoint);
+
+        tour.removeLastDestination(); // remove Warehouse in the end of the tour
+        tour.addDestination(newPickUpPoint); // add new PickupPoint
+        tour.addDestination(newDeliveryPoint); // add new DeliveryPoint
+        tour.addDestination(planning.getWarehouse().getAddress()); // add Warehouse in the end of the tour
+        tour.computeCompleteTour(shortestPathsIntersections,map);
+        tour.calculateCost(map, shortestPathsCost);
+        tour.notifyChange("UPDATEMAP");
     }
 
     /**
