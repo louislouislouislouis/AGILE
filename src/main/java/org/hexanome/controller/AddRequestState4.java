@@ -45,12 +45,13 @@ public class AddRequestState4 implements State {
 
             Request request = new Request(pickupPoint, deliveryPoint);
 
-            controller.getPlanning().addRequest(request);
+            // update planning
+            //controller.getPlanning().addRequest(request);
 
-            controller.updateRequestLayer();
-            controller.updateTourLayer();
-            controller.updateTableView();
+            // add command to listOfCommand
+            listOfCommands.add(new AddRequestCommand(controller, request));
 
+            
             controller.getMapView().removeLayer(controller.getIntersectionLayer());
 
             // we change the state of the controller

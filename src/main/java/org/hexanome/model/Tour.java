@@ -12,6 +12,8 @@ public class Tour extends Observable {
     private Double cost;
     private LocalTime departureTime;
     private Map<Intersection, Map<Intersection, Segment>> MatAdj;
+    private Intersection warehouse;
+    private List<Intersection> destinations = new ArrayList<>();
 
     @Override
     public String toString() {
@@ -89,14 +91,77 @@ public class Tour extends Observable {
         return this.intersections.get(intersections.size() - 1);
     }
 
-    public void deleteIntersectionsAfter(Intersection lastIntersection) {
-        int index = intersections.lastIndexOf(lastIntersection);
+    public void setWarehouse(Intersection warehouse) {
+        this.warehouse = warehouse;
+    }
 
-        int size = intersections.size();
-        for (int i = index + 1; i < size; i++) {
-            intersections.remove(index + 1);
+    public void addDestination(Intersection destination) {
+        this.destinations.add(destination);
+    }
 
+    public void setDestinations(List<Intersection> path) {
+        List<Intersection> newDestinations = new ArrayList<>();
+        for (Intersection i : path) {
+            newDestinations.add(i);
         }
+        this.destinations = newDestinations;
+    }
 
+    public List<Intersection> getDestinations() {
+        return this.destinations;
+    }
+
+    /**
+     * completes list of all intersections to visit during the tour
+     * @param map contains all Intersections and Segments and shortestPathsIntersections
+     */
+    public void computeCompleteTour(MapIF map) {
+        Map<Long, Map<Long, List<Long>>> shortestPathsIntersections = map.getShortestPathsIntersections();
+        List<Intersection> completeTour = new ArrayList<>();
+        completeTour.add(warehouse);
+        for (int i = 0; i < destinations.size() - 1; i++) {
+            Intersection startIntersection = destinations.get(i);
+            Intersection destinationIntersection = destinations.get(i + 1);
+            for (Long l : shortestPathsIntersections.get(startIntersection.getIdIntersection()).get(destinationIntersection.getIdIntersection())) {
+                Intersection intersection = map.getIntersections().get(l);
+                if (!intersection.equals(destinations.get(i))) {
+                    completeTour.add(intersection);
+                }
+            }
+        }
+        this.setIntersections(completeTour);
+    }
+
+    /**
+     * sum of cost of all visited Segments
+     * @param map contains all Intersections and Segments and shortestPathsCost
+     */
+    public void calculateCost(MapIF map) {
+        Map<Long, Map<Long, Double>> shortestPathsCost = map.getShortestPathsCost();
+        double cost = 0;
+        for (int i = 0; i < intersections.size()-1; i++) {
+            Intersection startIntersection = intersections.get(i);
+            Intersection destinationIntersection = intersections.get(i+1);
+            cost += shortestPathsCost.get(startIntersection.getIdIntersection()).get(destinationIntersection.getIdIntersection());
+        }
+        this.cost = cost;
+    }
+
+    public Intersection getWarehouse() {
+        return this.warehouse;
+    }
+
+    public void removeLastDestination() {
+        this.destinations.remove(this.destinations.size()-1);
+    }
+
+    public void removeRequest(Request request, MapIF map) {
+        Intersection pickUpPoint = request.getPickupPoint().getAddress();
+        destinations.remove(pickUpPoint);
+        Intersection deliveryPoint = request.getDeliveryPoint().getAddress();
+        destinations.remove(deliveryPoint);
+
+        this.computeCompleteTour(map);
+        this.calculateCost(map);
     }
 }
