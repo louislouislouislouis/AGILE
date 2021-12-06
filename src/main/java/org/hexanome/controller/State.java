@@ -62,7 +62,7 @@ public interface State {
     default void cancel(MainsScreenController controller) {
     }
 
-    default void validate(MainsScreenController controller, int duration) {
+    default void validate(MainsScreenController controller, int duration, ListOfCommands listOfCommands) {
     }
 
     default void showDialogBox(MainsScreenController controller) {

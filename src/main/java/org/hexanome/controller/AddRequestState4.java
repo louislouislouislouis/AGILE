@@ -34,7 +34,7 @@ public class AddRequestState4 implements State {
     }
 
     @Override
-    public void validate(MainsScreenController controller, int duration) {
+    public void validate(MainsScreenController controller, int duration, ListOfCommands listOfCommands) {
         if (duration > 0) {
             Color color = ColorEnum.values()[controller.getPlanning().getRequests().size()].color;
 
@@ -67,6 +67,8 @@ public class AddRequestState4 implements State {
         controller.getBtnLoadMap().setDisable(true);
         controller.getBtnValidateRoute().setDisable(true);
         controller.getBtnAddRequest().setDisable(true);
+        controller.getBtnRedo().setDisable(true);
+        controller.getBtnUndo().setDisable(true);
     }
 
     @Override

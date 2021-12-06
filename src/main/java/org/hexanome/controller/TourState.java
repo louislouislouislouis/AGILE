@@ -60,5 +60,18 @@ public class TourState implements State {
         controller.getBtnLoadMap().setDisable(false);
         controller.getBtnValidateRoute().setDisable(true);
         controller.getBtnAddRequest().setDisable(false);
+        controller.getBtnRedo().setDisable(false);
+        controller.getBtnUndo().setDisable(false);
     }
+
+    @Override
+    public void undo(ListOfCommands listOfCommands) {
+        listOfCommands.undo();
+    }
+
+    @Override
+    public void redo(ListOfCommands listOfCommands) {
+        listOfCommands.redo();
+    }
+
 }

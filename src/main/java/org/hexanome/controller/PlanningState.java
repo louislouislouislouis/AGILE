@@ -60,5 +60,7 @@ public class PlanningState implements State {
         controller.getBtnLoadMap().setDisable(false);
         controller.getBtnValidateRoute().setDisable(false);
         controller.getBtnAddRequest().setDisable(true);
+        controller.getBtnRedo().setDisable(true);
+        controller.getBtnUndo().setDisable(true);
     }
 }
