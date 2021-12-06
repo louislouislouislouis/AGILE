@@ -34,7 +34,7 @@ public class AddRequestState4 implements State {
     }
 
     @Override
-    public void validate(MainsScreenController controller, int duration) {
+    public void validate(MainsScreenController controller, int duration, ListOfCommands listOfCommands) {
         if (duration > 0) {
             Color color = ColorEnum.values()[controller.getPlanning().getRequests().size()].color;
 
@@ -45,12 +45,13 @@ public class AddRequestState4 implements State {
 
             Request request = new Request(pickupPoint, deliveryPoint);
 
-            controller.getPlanning().addRequest(request);
+            // update planning
+            //controller.getPlanning().addRequest(request);
 
-            controller.updateRequestLayer();
-            controller.updateTourLayer();
-            controller.updateTableView();
+            // add command to listOfCommand
+            listOfCommands.add(new AddRequestCommand(controller, request));
 
+            
             controller.getMapView().removeLayer(controller.getIntersectionLayer());
 
             // we change the state of the controller
@@ -67,6 +68,8 @@ public class AddRequestState4 implements State {
         controller.getBtnLoadMap().setDisable(true);
         controller.getBtnValidateRoute().setDisable(true);
         controller.getBtnAddRequest().setDisable(true);
+        controller.getBtnRedo().setDisable(true);
+        controller.getBtnUndo().setDisable(true);
     }
 
     @Override

@@ -26,7 +26,7 @@ public class AddRequestState2 implements State {
     }
 
     @Override
-    public void validate(MainsScreenController controller, int duration) {
+    public void validate(MainsScreenController controller, int duration, ListOfCommands listOfCommands) {
         if (duration > 0) {
             // we change the selected intersection in the next state
             controller.addRequestState3.setPickUp(pickUp);
@@ -47,6 +47,8 @@ public class AddRequestState2 implements State {
         controller.getBtnLoadMap().setDisable(true);
         controller.getBtnValidateRoute().setDisable(true);
         controller.getBtnAddRequest().setDisable(true);
+        controller.getBtnRedo().setDisable(true);
+        controller.getBtnUndo().setDisable(true);
     }
 
     @Override

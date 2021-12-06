@@ -8,8 +8,6 @@ public class AddRequestState1 implements State {
 
     @Override
     public void leftClick(MainsScreenController controller, Intersection i) {
-        System.out.println(i);
-
         if (i != null) {
             // we change the selected intersection in the next state
             controller.addRequestState2.setPickUp(i);
@@ -36,5 +34,7 @@ public class AddRequestState1 implements State {
         controller.getBtnLoadMap().setDisable(true);
         controller.getBtnValidateRoute().setDisable(true);
         controller.getBtnAddRequest().setDisable(true);
+        controller.getBtnRedo().setDisable(true);
+        controller.getBtnUndo().setDisable(true);
     }
 }

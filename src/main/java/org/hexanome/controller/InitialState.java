@@ -34,5 +34,7 @@ public class InitialState implements State {
         controller.getBtnLoadMap().setDisable(false);
         controller.getBtnValidateRoute().setDisable(true);
         controller.getBtnAddRequest().setDisable(true);
+        controller.getBtnRedo().setDisable(true);
+        controller.getBtnUndo().setDisable(true);
     }
 }

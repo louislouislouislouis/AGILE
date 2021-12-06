@@ -5,19 +5,25 @@ import org.hexanome.model.PlanningRequest;
 import org.hexanome.model.Request;
 
 public class AddRequestCommand implements Command {
-    private PlanningRequest planning;
+    private MainsScreenController controller;
     private Request request;
 
-    public AddRequestCommand(PlanningRequest planning, Request request) {
-        this.planning = planning;
+    public AddRequestCommand(MainsScreenController controller, Request request) {
+        this.controller = controller;
         this.request = request;
     }
 
     public void doCommand() {
-        planning.addRequest(request);
+        controller.getPlanning().addRequest(request);
+        controller.updateRequestLayer();
+        controller.updateTourLayer();
+        controller.updateTableView();
     }
 
     public void undoCommand() {
-        planning.removeRequest(request);
+        controller.getPlanning().removeRequest(request);
+        controller.updateRequestLayer();
+        controller.updateTourLayer();
+        controller.updateTableView();
     }
 }

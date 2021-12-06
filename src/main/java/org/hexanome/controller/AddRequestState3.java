@@ -48,6 +48,8 @@ public class AddRequestState3 implements State {
         controller.getBtnLoadMap().setDisable(true);
         controller.getBtnValidateRoute().setDisable(true);
         controller.getBtnAddRequest().setDisable(true);
+        controller.getBtnRedo().setDisable(true);
+        controller.getBtnUndo().setDisable(true);
     }
 
 }
