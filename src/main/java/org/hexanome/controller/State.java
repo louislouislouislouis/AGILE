@@ -59,5 +59,12 @@ public interface State {
     default void enableButton(MainsScreenController controller) {
     }
 
+    default void cancel(MainsScreenController controller) {
+    }
 
+    default void validate(MainsScreenController controller, int duration) {
+    }
+
+    default void showDialogBox(MainsScreenController controller) {
+    }
 }
