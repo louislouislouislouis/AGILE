@@ -6,6 +6,7 @@ import java.time.LocalTime;
 
 public class Warehouse extends Point {
     private LocalTime departureTime;
+    private LocalTime arrivalTime;
 
     /**
      * create a warehouse
@@ -17,10 +18,15 @@ public class Warehouse extends Point {
     public Warehouse(LocalTime departureTime, Intersection departureAddress, Color color) {
         super(departureAddress, "warehouse", color);
         this.departureTime = departureTime;
+        this.arrivalTime = LocalTime.MIDNIGHT;
     }
 
     public LocalTime getDepartureTime() {
         return departureTime;
+    }
+
+    public LocalTime getArrivalTime() {
+        return arrivalTime;
     }
 
     @Override

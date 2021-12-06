@@ -3,30 +3,22 @@ package org.hexanome.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
-import javafx.scene.shape.Polyline;
-import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.hexanome.controller.tsp.GraphAPI;
 import org.hexanome.data.ExceptionXML;
-import org.hexanome.data.MapDeserializer;
-import org.hexanome.data.RequestDeserializer;
 import org.hexanome.model.*;
 import org.hexanome.vue.AlertBox;
-import org.hexanome.vue.App;
 import org.hexanome.vue.CustomMap;
 import org.hexanome.vue.CustomMapLayer;
 import org.xml.sax.SAXException;
@@ -34,8 +26,6 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import com.gluonhq.maps.MapPoint;
-
-import static org.hexanome.vue.AlertBox.displayAlert;
 
 public class MainsScreenController implements Observer {
 
@@ -55,6 +45,8 @@ public class MainsScreenController implements Observer {
     protected final TourState tourState = new TourState();
     protected final AddRequestState1 addRequestState1 = new AddRequestState1();
     protected final AddRequestState2 addRequestState2 = new AddRequestState2();
+    protected final AddRequestState3 addRequestState3 = new AddRequestState3();
+    protected final AddRequestState4 addRequestState4 = new AddRequestState4();
     protected final ModifyRequestState modifyRequestState = new ModifyRequestState();
     protected final DeleteRequestState deleteRequestState = new DeleteRequestState();
 
@@ -348,6 +340,19 @@ public class MainsScreenController implements Observer {
         System.out.println("leftClick");
         System.out.println(this.currentState);
         currentState.enableButton(this);
+        currentState.showDialogBox(this);
+    }
+
+    public void cancel() {
+        this.currentState.cancel(this);
+        currentState.enableButton(this);
+        currentState.showDialogBox(this);
+    }
+
+    public void validate(int duration) {
+        this.currentState.validate(this, duration);
+        currentState.enableButton(this);
+        currentState.showDialogBox(this);
     }
 
     /**
