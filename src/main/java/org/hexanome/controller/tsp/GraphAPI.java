@@ -49,7 +49,12 @@ public class GraphAPI {
         Graph g = new CompleteGraph(nbVerticesTSP, costTSP);
         long startTime = System.currentTimeMillis();
         TSP tsp = new TSP1(costTSP, mapIdTSP, planning.getRequests(), shortestPathsIntersections, shortestPathsCost, map, destinations);
-        tour.addIntersection(planning.getWarehouse().getAddress()); // add Warehouse to tour
+
+        // add Warehouse to tour
+        tour.addIntersection(planning.getWarehouse().getAddress());
+        tour.setWarehouse(planning.getWarehouse().getAddress());
+        tour.addDestination(planning.getWarehouse().getAddress());
+
         tsp.searchSolution(20000, g, tour);
         // System.out.print("Solution of cost " + tsp.getSolutionCost() + " found in "
         //       + (System.currentTimeMillis() - startTime) + "ms : ");

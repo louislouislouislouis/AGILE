@@ -113,10 +113,12 @@ public abstract class TemplateTSP implements TSP {
 	 * @param tour displayed on map
 	 */
 	public void updateTour(Tour tour) {
-		System.out.println("Update Tour");
 		Intersection[] LHSArray = new Intersection[destinations.size()];
 		// Converting LinkedHashMap to Array
 		LHSArray = destinations.toArray(LHSArray);
+
+		tour.setDestinations(LHSArray);
+
 		List<Intersection> pathTSP = new ArrayList<>();
 		for (int i = 0; i < bestSol.length; i++) {
 			pathTSP.add(LHSArray[this.getSolution(i)]);

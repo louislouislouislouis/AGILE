@@ -12,6 +12,8 @@ public class Tour extends Observable {
     private Double cost;
     private LocalTime departureTime;
     private Map<Intersection, Map<Intersection, Segment>> MatAdj;
+    private Intersection warehouse;
+    private List<Intersection> destinations = new ArrayList<>();
 
     @Override
     public String toString() {
@@ -89,14 +91,24 @@ public class Tour extends Observable {
         return this.intersections.get(intersections.size() - 1);
     }
 
-    public void deleteIntersectionsAfter(Intersection lastIntersection) {
-        int index = intersections.lastIndexOf(lastIntersection);
+    public void setWarehouse(Intersection warehouse) {
+        this.warehouse = warehouse;
+    }
 
-        int size = intersections.size();
-        for (int i = index + 1; i < size; i++) {
-            intersections.remove(index + 1);
+    public void addDestination(Intersection destination) {
+        this.destinations.add(destination);
+    }
 
+    public void setDestinations(Intersection[] LHSArray) {
+        List<Intersection> newDestinations = new ArrayList<>();
+        for (int i = 0; i < LHSArray.length; i++) {
+            newDestinations.add(LHSArray[i]);
         }
+        //newDestinations.add(this.warehouse);
+        this.destinations = newDestinations;
+    }
 
+    public List<Intersection> getDestinations() {
+        return this.destinations;
     }
 }
