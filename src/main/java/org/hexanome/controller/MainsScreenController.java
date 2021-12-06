@@ -359,7 +359,7 @@ public class MainsScreenController implements Observer {
         currentState.showDialogBox(this);
     }
 
-    /**
+    /**x
      * Method called to open a Nevigation File
      * Return the file
      *
@@ -462,8 +462,8 @@ public class MainsScreenController implements Observer {
         columnArrivalTime.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
         columnDepartureTime.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
         columnColor.setCellValueFactory(new PropertyValueFactory<>("color"));
-        //columnModify.setCellValueFactory(new PropertyValueFactory<>("modify"));
-        //columnDelete.setCellValueFactory(new PropertyValueFactory<>("delete"));
+        columnModify.setCellValueFactory(new PropertyValueFactory<>("modify"));
+        columnDelete.setCellValueFactory(new PropertyValueFactory<>("delete"));
 
         //colorCol.setCellFactory(tv -> new TableCell<Point, Color>() {
         columnColor.setCellFactory(tv -> new TableCell<Point, Color>() {
