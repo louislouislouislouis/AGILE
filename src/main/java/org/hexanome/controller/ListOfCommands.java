@@ -17,14 +17,14 @@ public class ListOfCommands {
         c.doCommand();
     }
 
-    public void undo(Command c) {
+    public void undo() {
         if (i >= 0) {
             commands.get(i).undoCommand();
             i--;
         }
     }
 
-    public void redo(Command c) {
+    public void redo() {
         i++;
         commands.get(i).doCommand();
     }
