@@ -154,4 +154,14 @@ public class Tour extends Observable {
     public void removeLastDestination() {
         this.destinations.remove(this.destinations.size()-1);
     }
+
+    public void removeRequest(Request request, MapIF map) {
+        Intersection pickUpPoint = request.getPickupPoint().getAddress();
+        destinations.remove(pickUpPoint);
+        Intersection deliveryPoint = request.getDeliveryPoint().getAddress();
+        destinations.remove(deliveryPoint);
+
+        this.computeCompleteTour(map);
+        this.calculateCost(map);
+    }
 }

@@ -76,6 +76,11 @@ public class GraphAPI {
         tour.notifyChange("UPDATEMAP");
     }
 
+    public void DELETE_REQUEST(Request request, MapIF map, Tour tour) {
+        tour.removeRequest(request, map);
+        tour.notifyChange("UPDATEMAP");
+    }
+
     /**
      *
      * @param adjTSP contains cost between Intersections
