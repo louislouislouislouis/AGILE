@@ -13,13 +13,13 @@ public class MapIF {
     // key: idStartIntersection
     // value: List of Maps with key: idDestinationIntersection
     // value: List idIntersections to pass from start to destination
-    Map<Long, Map<Long, List<Long>>> shortestPathsIntersections = new HashMap<>();
+    private Map<Long, Map<Long, List<Long>>> shortestPathsIntersections = new HashMap<>();
 
     // shortestPathsIntersections Map with
     // key: idStartIntersection
     // value: List of Maps with key: idDestinationIntersection
     // value: cost of complete shortest path between start and destination
-    Map<Long, Map<Long, Double>> shortestPathsCost = new HashMap<>();
+    private Map<Long, Map<Long, Double>> shortestPathsCost = new HashMap<>();
 
 
     public Map<Intersection, Map<Intersection, Segment>> getMatAdj() {
