@@ -2,6 +2,7 @@ package org.hexanome.controller.tsp;
 
 import org.hexanome.model.Intersection;
 import org.hexanome.model.MapIF;
+import org.hexanome.model.PlanningRequest;
 import org.hexanome.model.Request;
 
 import java.util.*;
@@ -17,8 +18,9 @@ public class TSP1 extends TemplateTSP {
 			Map<Integer,Long> mapIdTSP, LinkedList<Request> requests,
 			Map<Long, Map<Long, List<Long>>> shortestPathsIntersection,
 			Map<Long, Map<Long, Double>> shortestPathsCost,
-			MapIF map) {
-		super(mapIdTSP, shortestPathsIntersection, shortestPathsCost, map);
+			MapIF map,
+			Set<Intersection> destinations) {
+		super(mapIdTSP, shortestPathsIntersection, shortestPathsCost, map, destinations);
 		this.costTSP = costTSP;
 		this.requests = requests;
 	}

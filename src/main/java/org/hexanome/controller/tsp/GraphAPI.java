@@ -48,36 +48,11 @@ public class GraphAPI {
 
         Graph g = new CompleteGraph(nbVerticesTSP, costTSP);
         long startTime = System.currentTimeMillis();
-        TSP tsp = new TSP1(costTSP, mapIdTSP, planning.getRequests(), shortestPathsIntersections, shortestPathsCost, map);
+        TSP tsp = new TSP1(costTSP, mapIdTSP, planning.getRequests(), shortestPathsIntersections, shortestPathsCost, map, destinations);
         tour.addIntersection(planning.getWarehouse().getAddress()); // add Warehouse to tour
         tsp.searchSolution(20000, g, tour);
         // System.out.print("Solution of cost " + tsp.getSolutionCost() + " found in "
         //       + (System.currentTimeMillis() - startTime) + "ms : ");
-
-        // Converting LinkedHashMap to Array
-        Intersection[] LHSArray = new Intersection[destinations.size()];
-        LHSArray = destinations.toArray(LHSArray);
-
-        List<Intersection> pathTSP = new ArrayList<>();
-        for (int i = 0; i < nbVerticesTSP; i++) {
-            pathTSP.add(LHSArray[tsp.getSolution(i)]);
-        }
-        pathTSP.add(planning.getWarehouse().getAddress());
-
-        List<Intersection> completeTour = new ArrayList<>();
-        completeTour.add(pathTSP.get(0));
-        for (int i = 0; i < pathTSP.size() - 1; i++) {
-            Intersection startIntersection = pathTSP.get(i);
-            Intersection destinationIntersection = pathTSP.get(i + 1);
-            for (Long l : shortestPathsIntersections.get(startIntersection.getIdIntersection()).get(destinationIntersection.getIdIntersection())) {
-                Intersection intersection = map.getIntersections().get(l);
-                if (!intersection.equals(pathTSP.get(i))) {
-                    completeTour.add(intersection);
-                }
-            }
-        }
-        tour.setIntersections(completeTour);
-        tour.setCost(tsp.getSolutionCost());
     }
 
     /**
