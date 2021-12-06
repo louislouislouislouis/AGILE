@@ -341,22 +341,34 @@ public class MainsScreenController implements Observer {
 
     public void leftClick(Intersection i) {
         this.currentState.leftClick(this, i);
-        System.out.println("leftClick");
-        System.out.println(this.currentState);
-        currentState.enableButton(this);
-        currentState.showDialogBox(this);
+        this.currentState.enableButton(this);
+        this.currentState.showDialogBox(this);
     }
 
     public void cancel() {
         this.currentState.cancel(this);
-        currentState.enableButton(this);
-        currentState.showDialogBox(this);
+        this.currentState.enableButton(this);
+        this.currentState.showDialogBox(this);
     }
 
     public void validate(int duration) {
-        this.currentState.validate(this, duration);
-        currentState.enableButton(this);
-        currentState.showDialogBox(this);
+        this.currentState.validate(this, duration, listOfCommands);
+        this.currentState.enableButton(this);
+        this.currentState.showDialogBox(this);
+    }
+
+    /**
+     * Method called by window after a click on the button "Undo"
+     */
+    public void undo(ActionEvent actionEvent) {
+        currentState.undo(listOfCommands);
+    }
+
+    /**
+     * Method called by window after a click on the button "Redo"
+     */
+    public void redo(ActionEvent actionEvent) {
+        currentState.redo(listOfCommands);
     }
 
     /**
@@ -406,20 +418,6 @@ public class MainsScreenController implements Observer {
 
         }
 
-    }
-
-    /**
-     * Method called by window after a click on the button "Undo"
-     */
-    public void undo(ActionEvent actionEvent) {
-        currentState.undo(listOfCommands);
-    }
-
-    /**
-     * Method called by window after a click on the button "Redo"
-     */
-    public void redo(ActionEvent actionEvent) {
-        currentState.redo(listOfCommands);
     }
 
     public void updateMapIntersection() {
