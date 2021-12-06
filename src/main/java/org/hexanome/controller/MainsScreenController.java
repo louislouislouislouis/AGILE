@@ -36,6 +36,9 @@ public class MainsScreenController implements Observer {
 
     private static final ObservableList<Point> data = FXCollections.observableArrayList();
 
+    /* command variable */
+    private ListOfCommands listOfCommands;
+
     /* state variable */
 
     // Instances associated with each possible state of the controller
@@ -94,6 +97,7 @@ public class MainsScreenController implements Observer {
     /*----------------------Constructor---------------------------------------*/
 
     public MainsScreenController() {
+        listOfCommands = new ListOfCommands();
         map = new MapIF();
         planning = new PlanningRequest();
         tour = new Tour();
@@ -404,10 +408,18 @@ public class MainsScreenController implements Observer {
 
     }
 
-    public void undoAction(ActionEvent actionEvent) {
+    /**
+     * Method called by window after a click on the button "Undo"
+     */
+    public void undo(ActionEvent actionEvent) {
+        currentState.undo(listOfCommands);
     }
 
-    public void redoAction(ActionEvent actionEvent) {
+    /**
+     * Method called by window after a click on the button "Redo"
+     */
+    public void redo(ActionEvent actionEvent) {
+        currentState.redo(listOfCommands);
     }
 
     public void updateMapIntersection() {

@@ -14,11 +14,11 @@ import java.io.File;
 import java.io.IOException;
 
 public interface State {
-    default void undo(MainsScreenController controller) {
+    default void undo(ListOfCommands listOfCommands) {
     }
 
 
-    default void redo(MainsScreenController controller) {
+    default void redo(ListOfCommands listOfCommands) {
     }
 
 
