@@ -113,10 +113,10 @@ public class Tour extends Observable {
 
     /**
      * completes list of all intersections to visit during the tour
-     * @param shortestPathsIntersections map with the shortest paths between all Intersections
-     * @param map contains all Intersections and Segments
+     * @param map contains all Intersections and Segments and shortestPathsIntersections
      */
-    public void computeCompleteTour(Map<Long, Map<Long, List<Long>>> shortestPathsIntersections, MapIF map) {
+    public void computeCompleteTour(MapIF map) {
+        Map<Long, Map<Long, List<Long>>> shortestPathsIntersections = map.getShortestPathsIntersections();
         List<Intersection> completeTour = new ArrayList<>();
         completeTour.add(warehouse);
         for (int i = 0; i < destinations.size() - 1; i++) {
@@ -134,10 +134,10 @@ public class Tour extends Observable {
 
     /**
      * sum of cost of all visited Segments
-     * @param map contains all Intersections and Segments
-     * @param shortestPathsCost map with the cost of the shortest paths between all Intersections
+     * @param map contains all Intersections and Segments and shortestPathsCost
      */
-    public void calculateCost(MapIF map, Map<Long, Map<Long, Double>> shortestPathsCost) {
+    public void calculateCost(MapIF map) {
+        Map<Long, Map<Long, Double>> shortestPathsCost = map.getShortestPathsCost();
         double cost = 0;
         for (int i = 0; i < intersections.size()-1; i++) {
             Intersection startIntersection = intersections.get(i);

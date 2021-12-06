@@ -18,13 +18,11 @@ public abstract class TemplateTSP implements TSP {
 
 	public TemplateTSP(
 			Map<Integer,Long> mapIdTSP,
-			Map<Long, Map<Long, List<Long>>> shortestPathsIntersection,
-			Map<Long, Map<Long, Double>> shortestPathsCost,
 			MapIF map,
 			Set<Intersection> destinations) {
 		this.mapIdTSP = mapIdTSP;
-		this.shortestPathsIntersections = shortestPathsIntersection;
-		this.shortestPathsCost = shortestPathsCost;
+		this.shortestPathsIntersections = map.getShortestPathsIntersections();
+		this.shortestPathsCost = map.getShortestPathsCost();
 		this.map = map;
 		this.destinations = destinations;
 	}
@@ -128,7 +126,7 @@ public abstract class TemplateTSP implements TSP {
 		pathTSP.add(warehouse);
 
 		tour.setDestinations(pathTSP);
-		tour.computeCompleteTour(shortestPathsIntersections,map);
+		tour.computeCompleteTour(map);
 
 		tour.setCost(this.getSolutionCost());
 

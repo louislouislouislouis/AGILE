@@ -6,18 +6,6 @@ import java.util.*;
 
 public class GraphAPI {
 
-    // shortestPathsIntersections Map with
-    // key: idStartIntersection
-    // value: List of Maps with key: idDestinationIntersection
-    // value: List idIntersections to pass from start to destination
-    Map<Long, Map<Long, List<Long>>> shortestPathsIntersections = new HashMap<>();
-
-    // shortestPathsIntersections Map with
-    // key: idStartIntersection
-    // value: List of Maps with key: idDestinationIntersection
-    // value: cost of complete shortest path between start and destination
-    Map<Long, Map<Long, Double>> shortestPathsCost = new HashMap<>();
-
     public GraphAPI() {
     }
 
@@ -35,8 +23,8 @@ public class GraphAPI {
             Dijkstra dijkstra = new Dijkstra(nbVerticesDijkstra);
             dijkstra.dijkstra(map.getIntersections(), adj, origin, destinations);
 
-            this.updateShortestPathIntersections(shortestPathsIntersections, dijkstra, origin);
-            this.updateShortestPathsCost(shortestPathsCost, dijkstra, origin);
+            this.updateShortestPathIntersections(map, dijkstra, origin);
+            this.updateShortestPathsCost(map, dijkstra, origin);
             this.updateAdjTSP(adjTSP, dijkstra, destinations, idZero++);
         }
 
@@ -47,7 +35,7 @@ public class GraphAPI {
 
         Graph g = new CompleteGraph(nbVerticesTSP, costTSP);
         long startTime = System.currentTimeMillis();
-        TSP tsp = new TSP1(costTSP, mapIdTSP, planning.getRequests(), shortestPathsIntersections, shortestPathsCost, map, destinations);
+        TSP tsp = new TSP1(costTSP, mapIdTSP, planning.getRequests(), map, destinations);
 
         // add Warehouse to tour
         tour.addIntersection(planning.getWarehouse().getAddress());
@@ -71,20 +59,20 @@ public class GraphAPI {
 
         Dijkstra dijkstra1 = new Dijkstra(nbVerticesDijkstra);
         dijkstra1.dijkstra(map.getIntersections(), adj, newPickUpPoint, destinations);
-        this.updateShortestPathIntersections(shortestPathsIntersections, dijkstra1, newPickUpPoint);
-        this.updateShortestPathsCost(shortestPathsCost, dijkstra1, newPickUpPoint);
+        this.updateShortestPathIntersections(map, dijkstra1, newPickUpPoint);
+        this.updateShortestPathsCost(map, dijkstra1, newPickUpPoint);
 
         Dijkstra dijkstra2 = new Dijkstra(nbVerticesDijkstra);
         dijkstra2.dijkstra(map.getIntersections(), adj, newDeliveryPoint, destinations);
-        this.updateShortestPathIntersections(shortestPathsIntersections, dijkstra2, newDeliveryPoint);
-        this.updateShortestPathsCost(shortestPathsCost, dijkstra2, newDeliveryPoint);
+        this.updateShortestPathIntersections(map, dijkstra2, newDeliveryPoint);
+        this.updateShortestPathsCost(map, dijkstra2, newDeliveryPoint);
 
         tour.removeLastDestination(); // remove Warehouse in the end of the tour
         tour.addDestination(newPickUpPoint); // add new PickupPoint
         tour.addDestination(newDeliveryPoint); // add new DeliveryPoint
         tour.addDestination(planning.getWarehouse().getAddress()); // add Warehouse in the end of the tour
-        tour.computeCompleteTour(shortestPathsIntersections,map);
-        tour.calculateCost(map, shortestPathsCost);
+        tour.computeCompleteTour(map);
+        tour.calculateCost(map);
         tour.notifyChange("UPDATEMAP");
     }
 
@@ -141,11 +129,12 @@ public class GraphAPI {
 
     /**
      * add the cost of the shortest paths from origin to every other destination to shortestPathsCost
-     * @param shortestPathsCost map startIntersection - destinationIntersection - cost
+     * @param map contains shortestPathsCost
      * @param dijkstra instance for calculating the shortest paths
      * @param origin startIntersection
      */
-    private void  updateShortestPathsCost(Map<Long, Map<Long, Double>> shortestPathsCost, Dijkstra dijkstra, Intersection origin) {
+    private void  updateShortestPathsCost(MapIF map, Dijkstra dijkstra, Intersection origin) {
+        Map<Long, Map<Long, Double>> shortestPathsCost = map.getShortestPathsCost();
         if (!shortestPathsCost.containsKey(origin.getIdIntersection())) {
             Map<Long, Double> emptyCosts = new HashMap<>();
             shortestPathsCost.put(origin.getIdIntersection(), emptyCosts);
@@ -154,15 +143,17 @@ public class GraphAPI {
         for (Long l : currentCosts.keySet()) {
             shortestPathsCost.get(origin.getIdIntersection()).put(l, currentCosts.get(l));
         }
+        map.setShortestPathsCost(shortestPathsCost);
     }
 
     /**
      * add the sequence of intersections for the shortest paths from origin to every other destination to shortestPathsIntersections
-     * @param shortestPathsIntersections map startIntersection - destinationIntersection - sequenceIntersectionsBetween
+     * @param map contains shortestPathIntersections
      * @param dijkstra instance for calculating the shortest paths
      * @param origin startIntersection
      */
-    private void updateShortestPathIntersections(Map<Long, Map<Long, List<Long>>> shortestPathsIntersections, Dijkstra dijkstra, Intersection origin) {
+    private void updateShortestPathIntersections(MapIF map, Dijkstra dijkstra, Intersection origin) {
+        Map<Long, Map<Long, List<Long>>> shortestPathsIntersections = map.getShortestPathsIntersections();
         if (!shortestPathsIntersections.containsKey(origin.getIdIntersection())) {
             Map<Long, List<Long>> emptyMap = new HashMap<>();
             shortestPathsIntersections.put(origin.getIdIntersection(), emptyMap);
@@ -171,6 +162,7 @@ public class GraphAPI {
         for (Long l : currentPaths.keySet()) {
             shortestPathsIntersections.get(origin.getIdIntersection()).put(l, currentPaths.get(l));
         }
+        map.setShortestPathsIntersections(shortestPathsIntersections);
     }
 
 

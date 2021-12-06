@@ -16,11 +16,9 @@ public class TSP1 extends TemplateTSP {
 	public  TSP1(
 			Double[][] costTSP,
 			Map<Integer,Long> mapIdTSP, LinkedList<Request> requests,
-			Map<Long, Map<Long, List<Long>>> shortestPathsIntersection,
-			Map<Long, Map<Long, Double>> shortestPathsCost,
 			MapIF map,
 			Set<Intersection> destinations) {
-		super(mapIdTSP, shortestPathsIntersection, shortestPathsCost, map, destinations);
+		super(mapIdTSP, map, destinations);
 		this.costTSP = costTSP;
 		this.requests = requests;
 	}

@@ -1,6 +1,7 @@
 package org.hexanome.model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -8,6 +9,17 @@ public class MapIF {
     private HashMap<Long, Intersection> intersections;
     private HashMap<UUID, Segment> segments;
     private Map<Intersection, Map<Intersection, Segment>> MatAdj;
+    // shortestPathsIntersections Map with
+    // key: idStartIntersection
+    // value: List of Maps with key: idDestinationIntersection
+    // value: List idIntersections to pass from start to destination
+    Map<Long, Map<Long, List<Long>>> shortestPathsIntersections = new HashMap<>();
+
+    // shortestPathsIntersections Map with
+    // key: idStartIntersection
+    // value: List of Maps with key: idDestinationIntersection
+    // value: cost of complete shortest path between start and destination
+    Map<Long, Map<Long, Double>> shortestPathsCost = new HashMap<>();
 
 
     public Map<Intersection, Map<Intersection, Segment>> getMatAdj() {
@@ -87,7 +99,21 @@ public class MapIF {
             adj.get(s.getOriginIntersection()).put(s.getDestinationIntersection(), s);
         }
         this.MatAdj=adj;
+    }
 
+    public Map<Long, Map<Long, List<Long>>> getShortestPathsIntersections() {
+        return shortestPathsIntersections;
+    }
 
+    public Map<Long, Map<Long, Double>> getShortestPathsCost() {
+        return shortestPathsCost;
+    }
+
+    public void setShortestPathsIntersections(Map<Long, Map<Long, List<Long>>> shortestPathsIntersections) {
+        this.shortestPathsIntersections = shortestPathsIntersections;
+    }
+
+    public void setShortestPathsCost(Map<Long, Map<Long, Double>> shortestPathsCost) {
+        this.shortestPathsCost = shortestPathsCost;
     }
 }
