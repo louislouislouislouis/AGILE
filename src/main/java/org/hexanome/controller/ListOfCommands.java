@@ -53,8 +53,10 @@ public class ListOfCommands {
      * Reinsert the last command removed by undo
      */
     public void redo() {
-        currentIndex++;
-        commands.get(currentIndex).doCommand();
+        if (currentIndex < commands.size() - 1) {
+            currentIndex++;
+            commands.get(currentIndex).doCommand();
+        }
     }
 
     /**
