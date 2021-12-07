@@ -40,10 +40,14 @@ public class Point {
         return color;
     }
     
+
     @Override
     public String toString() {
         return "Point{" +
                 "address=" + address +
-                "}";
+                ", id=" + id +
+                ", type='" + type + '\'' +
+                ", color=" + color +
+                '}';
     }
 }

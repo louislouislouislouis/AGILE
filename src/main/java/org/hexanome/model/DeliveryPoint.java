@@ -46,8 +46,8 @@ public class DeliveryPoint extends Point {
     @Override
     public String toString() {
         return "DeliveryPoint{" +
-                "duration=" + duration +
-                "Point=" + super.toString() +
+                "duration= " + duration +
+                "Point= " + super.toString() +
                 "}";
     }
 }
