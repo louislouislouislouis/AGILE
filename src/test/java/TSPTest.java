@@ -72,7 +72,8 @@ public class TSPTest {
             // Génération du planning
             planning = new PlanningRequest();
             Intersection warehouse = intersections.get(1L);
-            planning.setWarehouse(new Warehouse(LocalTime.MIDNIGHT, warehouse, Color.GREEN));
+            System.out.println(warehouse);
+            planning.setWarehouse(new Warehouse(LocalTime.MIDNIGHT, warehouse, Color.BLACK));
             intersections.forEach((id, intersection) -> {
                 PickupPoint pp = new PickupPoint(warehouse, 0, Color.RED);
                 DeliveryPoint dp = new DeliveryPoint(intersection, 0, Color.RED);
