@@ -251,6 +251,12 @@ public class Tour extends Observable {
         points.remove(i - 1);
     }
 
+    /**
+     * calculate arrival and departure time for next point i+1
+     *
+     * @param map contains Intersections and Segments
+     * @param i   current point
+     */
     private void setTimings(MapIF map, int i) {
         Point start = points.get(i);
         Point destination = points.get(i + 1);
@@ -264,6 +270,15 @@ public class Tour extends Observable {
         }
     }
 
+    /**
+     * updates arrival and departure times for added request in the end of a tour,
+     * update arrival time warehouse
+     * all others points keep their arrival and departure times that have already been calculated
+     *
+     * @param map      contains Intersections and Segments
+     * @param pickUp   of new request
+     * @param delivery of new request
+     */
     public void updateTimingForNewRequest(MapIF map, Point pickUp, Point delivery) {
         points.add(pickUp);
         points.add(delivery);
