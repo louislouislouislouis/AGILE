@@ -23,11 +23,12 @@ public class Request {
         return deliveryPoint;
     }
 
+
     @Override
     public String toString() {
         return "\nRequest{" +
-                "pickupPoint=" + pickupPoint +
-                ", deliveryPoint=" + deliveryPoint +
+                "pickupPoint= " + pickupPoint +
+                ", deliveryPoint= " + deliveryPoint +
                 "\n}";
     }
 }

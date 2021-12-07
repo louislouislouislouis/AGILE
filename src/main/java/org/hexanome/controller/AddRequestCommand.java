@@ -20,7 +20,8 @@ public class AddRequestCommand implements Command {
         GraphAPI graphAPI = new GraphAPI();
         graphAPI.ADD_REQUEST(controller.getPlanning(), controller.getMap(), controller.getTour());
 
-        controller.updateRequestLayer();
+
+        controller.initRequestLayer();
         controller.updateTourLayer();
         controller.updateTableView();
     }
@@ -31,7 +32,9 @@ public class AddRequestCommand implements Command {
         GraphAPI graphAPI = new GraphAPI();
         graphAPI.DELETE_REQUEST(request, controller.getMap(), controller.getTour());
 
-        controller.updateRequestLayer();
+
+
+        controller.initRequestLayer();
         controller.updateTourLayer();
         controller.updateTableView();
     }

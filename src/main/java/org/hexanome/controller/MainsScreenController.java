@@ -3,7 +3,9 @@ package org.hexanome.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -19,6 +21,7 @@ import javafx.stage.Stage;
 import org.hexanome.data.ExceptionXML;
 import org.hexanome.model.*;
 import org.hexanome.vue.AlertBox;
+import org.hexanome.vue.App;
 import org.hexanome.vue.CustomMap;
 import org.hexanome.vue.CustomMapLayer;
 import org.xml.sax.SAXException;
@@ -57,10 +60,10 @@ public class MainsScreenController implements Observer {
     private State currentState = initialState;
 
     /* Création de la carte Gluon JavaFX */
-    private CustomMap mapView = new CustomMap();
-    private CustomMapLayer requestLayer = new CustomMapLayer();
-    private CustomMapLayer tourLayer = new CustomMapLayer();
-    private CustomMapLayer intersectionLayer = new CustomMapLayer();
+    private CustomMap mapView;
+    private CustomMapLayer requestLayer;
+    private CustomMapLayer tourLayer;
+    private CustomMapLayer intersectionLayer;
 
     //Declaration of the interactive buttons in the mainsScreen.fxml
     @FXML
@@ -105,6 +108,16 @@ public class MainsScreenController implements Observer {
         map = new MapIF();
         planning = new PlanningRequest();
         tour = new Tour();
+
+        mapView = new CustomMap();
+        requestLayer = new CustomMapLayer();
+        tourLayer = new CustomMapLayer();
+        intersectionLayer = new CustomMapLayer();
+
+        mapView.addLayer(requestLayer);
+        mapView.addLayer(tourLayer);
+        mapView.addLayer(intersectionLayer);
+
     }
 
     /*-------------------------GETTERS AND SETTERS-----------------------------------------------------*/
@@ -245,22 +258,15 @@ public class MainsScreenController implements Observer {
         //method that uploads an XML file (carte)
         File selectedFile = fileChooser(actionEvent);
         System.out.println(selectedFile);
-
         if (selectedFile == null) {
             AlertBox.displayAlert("Message d'erreur", "Veuillez sélectionner un fichier");
-
         } else {
-
             // We clear the map before loading an XML file with requests
-
             map.clearMap();
-
             try {
                 currentState.loadMap(this, map, selectedFile);
-
-                // update the map
-
-                this.updateMap();
+                // init the map
+                this.initMap();
             } catch (ExceptionXML | ParserConfigurationException | IOException | SAXException e) {
                 if (e.getMessage() == "Wrong format")
                     e.printStackTrace();
@@ -290,10 +296,8 @@ public class MainsScreenController implements Observer {
 
             try {
                 currentState.loadPlanning(this, map, planning, selectedFile);
-
                 // update the request layer
-
-                this.updateRequestLayer();
+                this.initRequestLayer();
             } catch (ExceptionXML | ParserConfigurationException | IOException | SAXException e) {
                 e.printStackTrace();
             }
@@ -325,21 +329,12 @@ public class MainsScreenController implements Observer {
         tour = new Tour(new ArrayList<>(), null, this, planning.getWarehouse().getDepartureTime(), map.getMatAdj());
 
         // we compute the tour
-
         currentState.computeTour(this, map, planning, tour);
-
-        // we update items from the gui
-
-        updateTourLayer();
-        updateTableView();
-
+        // this.updateTourLayer();
+        System.out.println("End of Compute Tour");
         currentState.enableButton(this);
     }
 
-    /**
-     * Method Called when there is a right click
-     * Used to start the rightclick method of each state
-     */
     public void rightClick() {
         this.currentState.rightClick(this);
         System.out.println("rightclick");
@@ -347,33 +342,18 @@ public class MainsScreenController implements Observer {
         currentState.enableButton(this);
     }
 
-    /**
-     * Method Called when there is a left click
-     * Used to start the leftClick method of each state
-     *
-     * @param i an intersection is given in certain cases
-     */
     public void leftClick(Intersection i) {
         this.currentState.leftClick(this, i);
         this.currentState.enableButton(this);
         this.currentState.showDialogBox(this);
     }
 
-    /**
-     * Method Called when we want to cancel a state
-     */
     public void cancel() {
         this.currentState.cancel(this);
         this.currentState.enableButton(this);
         this.currentState.showDialogBox(this);
     }
 
-    /**
-     * Method Called when we want to cancel a state
-     *
-     * @param duration A parameter used if we want to give a duration when we add a request
-     *                 if not put -1
-     */
     public void validate(int duration) {
         this.currentState.validate(this, duration, listOfCommands);
         this.currentState.enableButton(this);
@@ -393,6 +373,7 @@ public class MainsScreenController implements Observer {
     public void redo(ActionEvent actionEvent) {
         currentState.redo(listOfCommands);
     }
+
 
     /**
      * x
@@ -434,14 +415,33 @@ public class MainsScreenController implements Observer {
      */
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println("Une fonction d'actualisation à été appelé");
+        //System.out.println("Une fonction d'actualisation à été appelé");
         String action = (String) arg;
         switch (action) {
             case "UPDATEMAP":
                 System.out.println("Update map called");
-                requestLayer.forceReRender();
-                tourLayer.forceReRender();
-                mapView.layout();
+                Platform.runLater(new Runnable() {
+                    private MainsScreenController myController;
+
+                    public Runnable init(MainsScreenController myParam) {
+                        this.myController = myParam;
+                        return this;
+                    }
+
+                    @Override
+                    public void run() {
+                        myController.updateDynamycMap();
+                    }
+                }.init(this));
+                //this.updateDynamycMap();
+                try {
+                    System.out.println("updtaMapView222 Called");
+                    TimeUnit.MILLISECONDS.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
                 break;
             default:
                 System.out.println("Unknown method");
@@ -469,24 +469,12 @@ public class MainsScreenController implements Observer {
         mapView.addLayer(intersectionLayer);
 
         intersectionLayer.forceReRender();
+
+
     }
 
     public void updateTableView() {
-        // columns initialization
-        /*TableColumn<Point, String> idCol = (TableColumn) tableView.getColumns().get(0);
-        TableColumn<Point, String> typeCol = (TableColumn) tableView.getColumns().get(1);
-        TableColumn<Point, String> arrivalCol = (TableColumn) tableView.getColumns().get(2);
-        TableColumn<Point, String> waitingCol = (TableColumn) tableView.getColumns().get(3);
-        TableColumn<Point, String> departureCol = (TableColumn) tableView.getColumns().get(4);
-        TableColumn<Point, Color> colorCol = (TableColumn) tableView.getColumns().get(6);*/
-
         // cell factory
-        /*idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        arrivalCol.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
-        waitingCol.setCellValueFactory(new PropertyValueFactory<>("duration"));
-        departureCol.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
-        colorCol.setCellValueFactory(new PropertyValueFactory<>("color"));*/
 
         columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
         columnType.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -496,7 +484,6 @@ public class MainsScreenController implements Observer {
         /*columnModify.setCellValueFactory(new PropertyValueFactory<>("modify"));
         columnDelete.setCellValueFactory(new PropertyValueFactory<>("delete"));
 */
-        //colorCol.setCellFactory(tv -> new TableCell<Point, Color>() {
         columnColor.setCellFactory(tv -> new TableCell<Point, Color>() {
             @Override
             protected void updateItem(Color item, boolean empty) {
@@ -527,10 +514,10 @@ public class MainsScreenController implements Observer {
     }
 
 
-    public void updateMap() {
+    public void initMap() {
         // clear possible layer
         mapView.removeLayer(requestLayer);
-        mapView.removeLayer(tourLayer);
+        //mapView.removeLayer(tourLayer);
 
         /* Zoom de 5 */
         mapView.setZoom(14);
@@ -557,13 +544,41 @@ public class MainsScreenController implements Observer {
             }
             System.out.println("onMousedetect");
             //Pour les layers de request
-            requestLayer.forceReRender();
-            tourLayer.forceReRender();
-
-            //Pour le fond de la map
-            mapView.layout();
+            this.updateMapView();
 
         });
+    }
+
+    public void updateDynamycMap() {
+        tourLayer.resetAll();
+
+        List<Intersection> intersectionList = tour.getIntersections();
+
+        for (int i = 0; i < intersectionList.size() - 1; i++) {
+            Intersection start;
+            Intersection end;
+            start = intersectionList.get(i);
+            end = intersectionList.get(i + 1);
+            MapPoint mapPointStart = new MapPoint(start.getLatitude(), start.getLongitude());
+            tourLayer.addPoint(start.getIdIntersection(), mapPointStart);
+            MapPoint mapPointEnd = new MapPoint(end.getLatitude(), end.getLongitude());
+            tourLayer.addPoint(end.getIdIntersection(), mapPointEnd);
+            tourLayer.addSegment(mapPointStart, mapPointEnd, (long) i);
+        }
+
+        tourLayer.tourLineHover();
+        tourLayer.forceReRender();
+        //mapView.layout();
+
+
+    }
+
+    public void updateMapView() {
+        //requestLayer.forceReRender();
+        //tourLayer.forceReRender();
+        mapView.layout();
+
+        System.out.println("updtaMapView Called");
     }
 
     public void updateTourLayer() {
@@ -596,12 +611,11 @@ public class MainsScreenController implements Observer {
         mapView.addLayer(tourLayer);
         mapView.addLayer(requestLayer);
 
-        tour.notifyChange("UPDATEMAP");
+        //tour.notifyChange("UPDATEMAP");
     }
 
-    public void updateRequestLayer() {
+    public void initRequestLayer() {
         mapView.removeLayer(requestLayer);
-        mapView.removeLayer(tourLayer);
 
         //Create the Request Layer
 
@@ -634,15 +648,49 @@ public class MainsScreenController implements Observer {
 
     @FXML
     void deleteTableRow(ActionEvent event) {
-        //Modify departure time , arrival time and point in the map
-
-        //tableView.getSelectionModel();
-        //tableView.setOnKeyReleased();
-        System.out.println(tableView.getSelectionModel().getSelectedItem());
+        //Delete point in the map
+        Point selectedItem = tableView.getSelectionModel().getSelectedItem();
+        String typeItem = selectedItem.getType();
+        Color colorItem = selectedItem.getColor();
+        planning.getRequests().forEach(request -> {
+            DeliveryPoint delivery = request.getDeliveryPoint();
+            PickupPoint pickup = request.getPickupPoint();
+            System.out.println("Delivery " + delivery);
+            System.out.println("Pickup " + pickup);
+            Color colorDelivery = request.getDeliveryPoint().getColor();
+            System.out.println("DeliveryColor : " + colorDelivery);
+            Color colorPickup = request.getPickupPoint().getColor();
+            System.out.println("PickupColor " + colorPickup);
+            Boolean equals = colorDelivery.equals(colorPickup);
+            Boolean colorEquals = colorDelivery.equals(colorItem);
+            System.out.println("Equals? " + equals);
+            System.out.println(colorEquals);
+            if (colorEquals == true){
+                planning.removeRequest(request);
+                System.out.println("Request que se elimina : " + request);
+            }else{
+                System.out.println("No se elimina ninguna request");
+            }
+        });
+        tableView.getItems().remove(selectedItem);
+        updateTableView();
+        updateTourLayer();
     }
 
     @FXML
     void editTableRow(ActionEvent event) {
+        //Modify departure time , arrival time and point in the map
 
+        Point selectedItem = tableView.getSelectionModel().getSelectedItem();
+        String typeItem = selectedItem.getType();
+
+        switch (typeItem){
+            case("warehouse"):
+                //getWarehouse()->PlanningRequest
+                break;
+        }
+        //tableView.getSelectionModel();
+        //tableView.setOnKeyReleased();
+        System.out.println(tableView.getSelectionModel().getSelectedItem());
     }
 }

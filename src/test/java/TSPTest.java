@@ -20,6 +20,11 @@ public class TSPTest {
     protected static PlanningRequest planning;
     protected static Long[] solution;
 
+    /**
+     * @param i1 première intersection
+     * @param i2 seconde intersection
+     * @return distance euclidienne entre les deux intersections
+     */
     public static double distanceEuclidienne(Intersection i1, Intersection i2) {
         double lat1 = i1.getLatitude();
         double lat2 = i2.getLatitude();
