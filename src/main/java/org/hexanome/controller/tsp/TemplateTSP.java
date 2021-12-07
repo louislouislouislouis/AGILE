@@ -1,9 +1,6 @@
 package org.hexanome.controller.tsp;
 
-import org.hexanome.model.Intersection;
-import org.hexanome.model.MapIF;
-import org.hexanome.model.Request;
-import org.hexanome.model.Tour;
+import org.hexanome.model.*;
 
 import java.util.*;
 
@@ -17,16 +14,17 @@ public abstract class TemplateTSP implements TSP {
 	private Map<Long, Map<Long, Double>> shortestPathsCost;
 	public Map<Integer,Long> mapIdTSP;
 	private MapIF map;
+	private Set<Intersection> destinations;
 
 	public TemplateTSP(
 			Map<Integer,Long> mapIdTSP,
-			Map<Long, Map<Long, List<Long>>> shortestPathsIntersection,
-			Map<Long, Map<Long, Double>> shortestPathsCost,
-			MapIF map) {
+			MapIF map,
+			Set<Intersection> destinations) {
 		this.mapIdTSP = mapIdTSP;
-		this.shortestPathsIntersections = shortestPathsIntersection;
-		this.shortestPathsCost = shortestPathsCost;
+		this.shortestPathsIntersections = map.getShortestPathsIntersections();
+		this.shortestPathsCost = map.getShortestPathsCost();
 		this.map = map;
+		this.destinations = destinations;
 	}
 
 	public void searchSolution(int timeLimit, Graph g, Tour tour){
@@ -41,7 +39,6 @@ public abstract class TemplateTSP implements TSP {
 		visited.add(0); // The first visited vertex is 0
 		bestSolCost = Double.MAX_VALUE;
 		branchAndBound(0, unvisited, visited, Double.valueOf(0), tour);
-		System.out.println("BranchAndBound OK");
 	}
 	
 	public Integer getSolution(int i){
@@ -83,66 +80,56 @@ public abstract class TemplateTSP implements TSP {
 	 */	
 	private void branchAndBound(int currentVertex, Collection<Integer> unvisited, 
 			Collection<Integer> visited, Double currentCost, Tour tour){
-		if (System.currentTimeMillis() - startTime > timeLimit) return;
+		//	if (System.currentTimeMillis() - startTime > timeLimit) return;
 	    if (unvisited.size() == 0){
-			System.out.println("IF1 : HAAAAAAAAAAAALLOOOOOOOOOOOOOOOOOOOOOOOO ADDVERTEXINTOOOOOOOOOOOOOOOOOOOOOOUUUUUUUUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
 	    	if (g.isArc(currentVertex,0)){
-				System.out.println("IF1.2 : HAAAAAAAAAAAALLOOOOOOOOOOOOOOOOOOOOOOOO ADDVERTEXINTOOOOOOOOOOOOOOOOOOOOOOUUUUUUUUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
 	    		if (currentCost+g.getCost(currentVertex,0) < bestSolCost){
-					System.out.println("IF 1.3 : HAAAAAAAAAAAALLOOOOOOOOOOOOOOOOOOOOOOOO ADDVERTEXINTOOOOOOOOOOOOOOOOOOOOOOUUUUUUUUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
 	    			visited.toArray(bestSol);
+					this.updateTour(tour);
 	    			bestSolCost = currentCost+g.getCost(currentVertex,0);
-					addVertexInTour(currentVertex, tour);
 	    		}
 	    	}
 	    } else if (currentCost+bound(currentVertex,unvisited) < bestSolCost){
-			System.out.println("IF2 : HAAAAAAAAAAAALLOOOOOOOOOOOOOOOOOOOOOOOO ADDVERTEXINTOOOOOOOOOOOOOOOOOOOOOOUUUUUUUUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
 	        Iterator<Integer> it = iterator(currentVertex, unvisited, g);
 	        while (it.hasNext()){
-				System.out.println("IF2 WHILE : HAAAAAAAAAAAALLOOOOOOOOOOOOOOOOOOOOOOOO ADDVERTEXINTOOOOOOOOOOOOOOOOOOOOOOUUUUUUUUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
 				Integer nextVertex = it.next();
 	        	visited.add(nextVertex);
 	            unvisited.remove(nextVertex);
 				Intersection lastIntersection = tour.getLastIntersection();
-				addVertexInTour(nextVertex, tour);
 
 	            branchAndBound(nextVertex, unvisited, visited, 
 	            		currentCost+g.getCost(currentVertex, nextVertex), tour);
 
 	            visited.remove(nextVertex);
 	            unvisited.add(nextVertex);
-				removeVertexInTour(tour, lastIntersection);
-				System.out.println("branchAndBound 1x bis zum Ende durchlaufen");
-	        }	    
+	        }
 	    }
 	}
 
-	public void addVertexInTour(Integer vertex, Tour tour) {
-		System.out.println("ADD VERTEX IN TOUR : HAAAAAAAAAAAALLOOOOOOOOOOOOOOOOOOOOOOOO ADDVERTEXINTOOOOOOOOOOOOOOOOOOOOOOUUUUUUUUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
-		Intersection newIntersection = map.getIntersections().get(mapIdTSP.get(vertex));
-		Intersection lastIntersection = tour.getLastIntersection();
-		System.out.println("Tour vorher: " + tour.getIntersections());
-		System.out.println("LastIntersection: " + tour.getLastIntersection());
-		if (lastIntersection != null) {
-			System.out.println("Check if");
-			for (Long l : shortestPathsIntersections.get(lastIntersection.getIdIntersection()).get(newIntersection.getIdIntersection())) {
-				Intersection i = map.getIntersections().get(l);
-				System.out.println("Check for " + !(i.equals(lastIntersection)));
-				if (!i.equals(lastIntersection)) {
-					System.out.println("Check if2");
-					tour.addIntersection(i);
-					System.out.println("Ergänzte Tour: " + tour.getIntersections());
-					}
-			}
-			tour.notifyChange("UPDATEMAP");
-		}
-		System.out.println("Tour nachher: " + tour.getIntersections());
-	}
+	/**
+	 * updates tour if a shorter route is found while continuing the calculation
+	 * @param tour displayed on map
+	 */
+	public void updateTour(Tour tour) {
+		Intersection[] LHSArray = new Intersection[destinations.size()];
+		// Converting LinkedHashMap to Array
+		LHSArray = destinations.toArray(LHSArray);
 
-	public void removeVertexInTour(Tour tour, Intersection lastIntersection) {
-		System.out.println("REMOVE VERTEX IN TOUR : HAAAAAAAAAAAALLOOOOOOOOOOOOOOOOOOOOOOOO ADDVERTEXINTOOOOOOOOOOOOOOOOOOOOOOUUUUUUUUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
-		tour.deleteIntersectionsAfter(lastIntersection);
-		System.out.println("OKKKK");
+		//tour.setDestinations(LHSArray);
+		//tour.computeCompleteTour(shortestPathsIntersections,map);
+
+		List<Intersection> pathTSP = new ArrayList<>();
+		for (int i = 0; i < bestSol.length; i++) {
+			pathTSP.add(LHSArray[this.getSolution(i)]);
+		}
+		Intersection warehouse = pathTSP.get(0);
+		pathTSP.add(warehouse);
+
+		tour.setDestinations(pathTSP);
+		tour.computeCompleteTour(map);
+
+		tour.setCost(this.getSolutionCost());
+
 		tour.notifyChange("UPDATEMAP");
 	}
 

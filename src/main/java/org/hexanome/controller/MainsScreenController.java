@@ -8,21 +8,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.effect.DropShadow;
+import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
-import javafx.scene.shape.Polyline;
-import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.hexanome.controller.tsp.GraphAPI;
 import org.hexanome.data.ExceptionXML;
-import org.hexanome.data.MapDeserializer;
-import org.hexanome.data.RequestDeserializer;
 import org.hexanome.model.*;
+import org.hexanome.vue.AlertBox;
 import org.hexanome.vue.CustomMap;
 import org.hexanome.vue.CustomMapLayer;
 import org.xml.sax.SAXException;
@@ -31,35 +27,81 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import com.gluonhq.maps.MapPoint;
 
-import static org.hexanome.vue.AlertBox.displayAlert;
-
 public class MainsScreenController implements Observer {
-    @FXML
-    HBox mapContainer;
-    @FXML
-    Button btnLoadRequest;
-    @FXML
-    TableView tableView;
 
     /*---------------------------VARIABLES------------------------------------------------------------*/
-    private MapIF map = new MapIF();
-    private PlanningRequest planning = new PlanningRequest();
+    private MapIF map;
+    private PlanningRequest planning;
     private Tour tour;
 
     private static final ObservableList<Point> data = FXCollections.observableArrayList();
+
+    /* command variable */
+    private ListOfCommands listOfCommands;
+
+    /* state variable */
+
+    // Instances associated with each possible state of the controller
+    protected final InitialState initialState = new InitialState();
+    protected final MapState mapState = new MapState();
+    protected final PlanningState planningState = new PlanningState();
+    protected final TourState tourState = new TourState();
+    protected final AddRequestState1 addRequestState1 = new AddRequestState1();
+    protected final AddRequestState2 addRequestState2 = new AddRequestState2();
+    protected final AddRequestState3 addRequestState3 = new AddRequestState3();
+    protected final AddRequestState4 addRequestState4 = new AddRequestState4();
+    protected final ModifyRequestState modifyRequestState = new ModifyRequestState();
+    protected final DeleteRequestState deleteRequestState = new DeleteRequestState();
+
+    // current state
+    private State currentState = initialState;
 
     /* Création de la carte Gluon JavaFX */
     private CustomMap mapView = new CustomMap();
     private CustomMapLayer requestLayer = new CustomMapLayer();
     private CustomMapLayer tourLayer = new CustomMapLayer();
+    private CustomMapLayer intersectionLayer = new CustomMapLayer();
 
     //Declaration of the interactive buttons in the mainsScreen.fxml
     @FXML
-    private Button btnLoadMap;
-    @FXML
     private Button btnAddRequest;
     @FXML
+    private Button btnLoadMap;
+    @FXML
+    private Button btnLoadRequest;
+    @FXML
+    private Button btnRedo;
+    @FXML
+    private Button btnUndo;
+    @FXML
     private Button btnValidateRoute;
+    @FXML
+    HBox mapContainer;
+    @FXML
+    private TableView<Point> tableView;
+    @FXML
+    private TableColumn<Point, String> columnArrivalTime;
+    @FXML
+    private TableColumn<Point, Color> columnColor;
+    @FXML
+    private TableColumn<Point, Button> columnDelete;
+    @FXML
+    private TableColumn<Point, String> columnDepartureTime;
+    @FXML
+    private TableColumn<Point, String> columnID;
+    @FXML
+    private TableColumn<Point, Button> columnModify;
+    @FXML
+    private TableColumn<Point, String> columnType;
+
+    /*----------------------Constructor---------------------------------------*/
+
+    public MainsScreenController() {
+        listOfCommands = new ListOfCommands();
+        map = new MapIF();
+        planning = new PlanningRequest();
+        tour = new Tour();
+    }
 
     /*-------------------------GETTERS AND SETTERS-----------------------------------------------------*/
     public Button getBtnLoadMap() {
@@ -86,55 +128,142 @@ public class MainsScreenController implements Observer {
         this.btnValidateRoute = btnValidateRoute;
     }
 
+    public MapIF getMap() {
+        return map;
+    }
+
+    public void setMap(MapIF map) {
+        this.map = map;
+    }
+
+    public PlanningRequest getPlanning() {
+        return planning;
+    }
+
+    public void setPlanning(PlanningRequest planning) {
+        this.planning = planning;
+    }
+
+    public Tour getTour() {
+        return tour;
+    }
+
+    public void setTour(Tour tour) {
+        this.tour = tour;
+    }
+
+    public CustomMap getMapView() {
+        return mapView;
+    }
+
+    public void setMapView(CustomMap mapView) {
+        this.mapView = mapView;
+    }
+
+    public CustomMapLayer getRequestLayer() {
+        return requestLayer;
+    }
+
+    public void setRequestLayer(CustomMapLayer requestLayer) {
+        this.requestLayer = requestLayer;
+    }
+
+    public CustomMapLayer getTourLayer() {
+        return tourLayer;
+    }
+
+    public void setTourLayer(CustomMapLayer tourLayer) {
+        this.tourLayer = tourLayer;
+    }
+
+    public Button getBtnLoadRequest() {
+        return btnLoadRequest;
+    }
+
+    public void setBtnLoadRequest(Button btnLoadRequest) {
+        this.btnLoadRequest = btnLoadRequest;
+    }
+
+    public Button getBtnRedo() {
+        return btnRedo;
+    }
+
+    public void setBtnRedo(Button btnRedo) {
+        this.btnRedo = btnRedo;
+    }
+
+    public Button getBtnUndo() {
+        return btnUndo;
+    }
+
+    public void setBtnUndo(Button btnUndo) {
+        this.btnUndo = btnUndo;
+    }
+
+    public HBox getMapContainer() {
+        return mapContainer;
+    }
+
+    public void setMapContainer(HBox mapContainer) {
+        this.mapContainer = mapContainer;
+    }
+
+    public TableView<Point> getTableView() {
+        return tableView;
+    }
+
+    public void setTableView(TableView<Point> tableView) {
+        this.tableView = tableView;
+    }
+
+    public CustomMapLayer getIntersectionLayer() {
+        return intersectionLayer;
+    }
+
     /*--------------------------------Methods----------------------------------------------------------*/
 
+    /**
+     * Change the current state of the controller
+     *
+     * @param state the new current state
+     */
+    protected void setCurrentState(State state) {
+        currentState = state;
+    }
+
+    /**
+     * Method be called everytime button load Map is Handled
+     *
+     * @param actionEvent
+     * @return void
+     */
     public void selectionMap(ActionEvent actionEvent) {
         //method that uploads an XML file (carte)
         File selectedFile = fileChooser(actionEvent);
         System.out.println(selectedFile);
 
-        // We initialize the deserializer
-        MapDeserializer domMap = new MapDeserializer();
+        if (selectedFile == null) {
+            AlertBox.displayAlert("Message d'erreur", "Veuillez sélectionner un fichier");
 
-        // We delete the map's content before loading the xml
+        } else {
 
-        map.clearMap();
-        mapView.removeLayer(requestLayer);
-        mapView.removeLayer(tourLayer);
+            // We clear the map before loading an XML file with requests
 
-        try {
-            domMap.load(map, selectedFile);
-            btnLoadRequest.setDisable(false);
-        } catch (ParserConfigurationException | SAXException | IOException | ExceptionXML e) {
-            e.printStackTrace();
+            map.clearMap();
+
+            try {
+                currentState.loadMap(this, map, selectedFile);
+
+                // update the map
+
+                this.updateMap();
+            } catch (ExceptionXML | ParserConfigurationException | IOException | SAXException e) {
+                if (e.getMessage() == "Wrong format")
+                    e.printStackTrace();
+                AlertBox.displayAlert("Message d'erreur", "Le fichier n'est pas valide pour cette action");
+            }
+            currentState.enableButton(this);
         }
-
-        /* Zoom de 5 */
-        mapView.setZoom(14);
-
-        /* creation of the mapPoint on which the camera will be centered
-         *  We use the longitude and latitude of Lyon
-         * */
-        MapPoint mapPointCamera = new MapPoint(45.760327, 4.876824);
-
-        /* Centre la carte sur le point */
-        mapView.flyTo(0, mapPointCamera, 0.1);
-
-        //force la mise à jour de la carte en la supprimant et la rajoutant dans le conteneur
-        mapContainer.getChildren().clear();
-        mapContainer.getChildren().add(mapView);
-
-        //Force rerender (Bug fix - Gluon Maps Issue drag)
-        mapView.setOnMouseReleased(e -> {
-            System.out.println("onMousedetect");
-            //Pour les layers de request
-            requestLayer.forceReRender();
-            tourLayer.forceReRender();
-
-            //Pour le fond de la map
-            mapView.layout();
-
-        });
     }
 
     /**
@@ -142,73 +271,30 @@ public class MainsScreenController implements Observer {
      *
      * @param actionEvent
      * @return void
-     *
      */
     public void loadRequest(ActionEvent actionEvent) {
         //method that uploads an XML file (carte)
         File selectedFile = fileChooser(actionEvent);
+        System.out.println(selectedFile);
 
-        //Remove the old layer
-        mapView.removeLayer(requestLayer);
-        mapView.removeLayer(tourLayer);
-
-        //Handle other button
-        if (selectedFile.exists()) {
-            btnAddRequest.setDisable(false);
-            btnValidateRoute.setDisable(false);
+        if (selectedFile == null) {
+            System.out.println("pas de fichier selectionné");
         } else {
-            btnAddRequest.setDisable(true);
-            btnValidateRoute.setDisable(true);
+
+            // We clear the requestLayer before loading an XML file with requests
+            planning.clearPlanning();
+
+            try {
+                currentState.loadPlanning(this, map, planning, selectedFile);
+
+                // update the request layer
+
+                this.updateRequestLayer();
+            } catch (ExceptionXML | ParserConfigurationException | IOException | SAXException e) {
+                e.printStackTrace();
+            }
+            currentState.enableButton(this);
         }
-
-        // We clear the requestLayer before loading an XML file with requests
-        planning.clearPlanning();
-
-        //Parse the xml file
-        RequestDeserializer mydomrequest = new RequestDeserializer();
-        try {
-            mydomrequest.load(planning, selectedFile, map);
-        } catch (ParserConfigurationException | SAXException | IOException | ExceptionXML e) {
-            e.printStackTrace();
-        }
-
-        //Create the Request Layer
-        requestLayer = new CustomMapLayer();
-
-        //Add the warehouse
-        Intersection warehouse = planning.getWarehouse().getAddress();
-        requestLayer.addSpecialPointRectangle(warehouse.getIdIntersection(),
-                new MapPoint(warehouse.getLatitude(), warehouse.getLongitude()), planning.getWarehouse().getColor());
-
-        //Add the requests
-        planning.getRequests().forEach((request) -> {
-            Intersection deliveryInt = request.getDeliveryPoint().getAddress();
-            MapPoint mapPointDelivery = new MapPoint(deliveryInt.getLatitude(), deliveryInt.getLongitude());
-            requestLayer.addSpecialPointCircle(deliveryInt.getIdIntersection(), mapPointDelivery, request.getDeliveryPoint().getColor());
-
-            Intersection pickupInt = request.getPickupPoint().getAddress();
-            MapPoint mapPointPickup = new MapPoint(pickupInt.getLatitude(), pickupInt.getLongitude());
-            requestLayer.addSpecialPointRectangle(pickupInt.getIdIntersection(), mapPointPickup, request.getPickupPoint().getColor());
-        });
-
-        HashMap<Long, Shape> shapeList = requestLayer.getShapeList();
-
-        // enable to scroll to selected point from the map
-
-        shapeList.forEach((id, shape) -> {
-            shape.setOnMouseClicked(mouseEvent -> {
-
-                for (int i = 0; i < tableView.getItems().size(); i++) {
-                    Point point = (Point) tableView.getItems().get(i);
-                    if (Objects.equals(point.getId(), id)) {
-                        tableView.scrollTo(i);
-                        tableView.getSelectionModel().select(i);
-                        break;
-                    }
-                }
-            });
-        });
-        mapView.addLayer(requestLayer);
 
     }
 
@@ -220,7 +306,9 @@ public class MainsScreenController implements Observer {
      * @return void
      */
     public void addRequest(ActionEvent actionEvent) {
-        displayAlert("ALERT!", "For the moment this functionality is not available");
+        currentState.addRequest(this);
+
+        currentState.enableButton(this);
     }
 
     /**
@@ -230,74 +318,60 @@ public class MainsScreenController implements Observer {
      * @return void
      */
     public void computeTour(ActionEvent actionEvent) {
-        //method that calculates the most optimal path of the tour
-        tour = new Tour(new ArrayList<>(), null, this,planning.getWarehouse().getDepartureTime());
+        tour = new Tour(new ArrayList<>(), null, this, planning.getWarehouse().getDepartureTime(), map.getMatAdj());
 
-        // clear
-        mapView.removeLayer(tourLayer);
+        // we compute the tour
 
-        new GraphAPI().V1_TSP(planning, map, tour);
+        currentState.computeTour(this, map, planning, tour);
 
-        //Add Segment to the layer
+        // we update items from the gui
 
-        tourLayer = new CustomMapLayer();
-
-        List<Intersection> intersectionList = tour.getIntersections();
-
-        System.out.println(intersectionList.size());
-
-        for (int i = 0; i < intersectionList.size() - 1; i++) {
-            Intersection start;
-            Intersection end;
-            start = intersectionList.get(i);
-            end = intersectionList.get(i + 1);
-            MapPoint mapPointStart = new MapPoint(start.getLatitude(), start.getLongitude());
-            tourLayer.addPoint(start.getIdIntersection(), mapPointStart);
-            MapPoint mapPointEnd = new MapPoint(end.getLatitude(), end.getLongitude());
-            tourLayer.addPoint(end.getIdIntersection(), mapPointEnd);
-            tourLayer.addSegment(mapPointStart, mapPointEnd, (long) i);
-        }
-
-        HashMap<Long, Polyline> polylineList = tourLayer.getPolylineList();
-
-        polylineList.forEach((aLong, polyline) -> {
-            polyline.hoverProperty().addListener((observable, oldValue, newValue) -> {
-
-                if (newValue) {
-                    polylineList.forEach((id, poly) -> {
-
-                        if (id <= aLong) {
-                            poly.setStrokeWidth(7);
-                            poly.setStroke(Color.DODGERBLUE);
-                            DropShadow e = new DropShadow();
-                            e.setColor(Color.BLUE);
-                            e.setRadius(9);
-                            poly.setEffect(e);
-                        }
-                    });
-                } else {
-                    polylineList.forEach((id, poly) -> {
-                        if (id <= aLong) {
-                            poly.setStrokeWidth(5);
-                            poly.setStroke(Color.DODGERBLUE);
-                            poly.setEffect(null);
-                        }
-                    });
-                }
-            });
-        });
-
-        mapView.removeLayer(requestLayer);
-        mapView.addLayer(tourLayer);
-        mapView.addLayer(requestLayer);
-
-        tour.notifyChange("UPDATEMAP");
-
+        updateTourLayer();
         updateTableView();
+
+        currentState.enableButton(this);
     }
 
+    public void rightClick() {
+        this.currentState.rightClick(this);
+        System.out.println("rightclick");
+        System.out.println(this.currentState);
+        currentState.enableButton(this);
+    }
+
+    public void leftClick(Intersection i) {
+        this.currentState.leftClick(this, i);
+        this.currentState.enableButton(this);
+        this.currentState.showDialogBox(this);
+    }
+
+    public void cancel() {
+        this.currentState.cancel(this);
+        this.currentState.enableButton(this);
+        this.currentState.showDialogBox(this);
+    }
+
+    public void validate(int duration) {
+        this.currentState.validate(this, duration, listOfCommands);
+        this.currentState.enableButton(this);
+        this.currentState.showDialogBox(this);
+    }
 
     /**
+     * Method called by window after a click on the button "Undo"
+     */
+    public void undo(ActionEvent actionEvent) {
+        currentState.undo(listOfCommands);
+    }
+
+    /**
+     * Method called by window after a click on the button "Redo"
+     */
+    public void redo(ActionEvent actionEvent) {
+        currentState.redo(listOfCommands);
+    }
+
+    /**x
      * Method called to open a Nevigation File
      * Return the file
      *
@@ -346,25 +420,35 @@ public class MainsScreenController implements Observer {
 
     }
 
+    public void updateMapIntersection() {
+        // Add all the intersection to the layer
+        intersectionLayer = new CustomMapLayer();
 
-    private void updateTableView() {
-        // columns initialization
-        TableColumn<Point, String> idCol = (TableColumn) tableView.getColumns().get(0);
-        TableColumn<Point, String> typeCol = (TableColumn) tableView.getColumns().get(1);
-        TableColumn<Point, String> arrivalCol = (TableColumn) tableView.getColumns().get(2);
-        TableColumn<Point, String> waitingCol = (TableColumn) tableView.getColumns().get(3);
-        TableColumn<Point, String> departureCol = (TableColumn) tableView.getColumns().get(4);
-        TableColumn<Point, Color> colorCol = (TableColumn) tableView.getColumns().get(6);
+        HashMap<Long, Intersection> intersectionMap = map.getIntersections();
 
+        intersectionMap.forEach((id, intersection) -> {
+            MapPoint mapPoint = new MapPoint(intersection.getLatitude(), intersection.getLongitude());
+            intersectionLayer.addPoint(id, mapPoint);
+        });
+
+        intersectionLayer.intersectionEvent(this, map);
+
+        mapView.addLayer(intersectionLayer);
+
+        intersectionLayer.forceReRender();
+    }
+
+    public void updateTableView() {
         // cell factory
-        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        arrivalCol.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
-        waitingCol.setCellValueFactory(new PropertyValueFactory<>("duration"));
-        departureCol.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
-        colorCol.setCellValueFactory(new PropertyValueFactory<>("color"));
+        columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        columnType.setCellValueFactory(new PropertyValueFactory<>("type"));
+        columnArrivalTime.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
+        columnDepartureTime.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
+        columnColor.setCellValueFactory(new PropertyValueFactory<>("color"));
+        columnModify.setCellValueFactory(new PropertyValueFactory<>("btnModify"));
+        columnDelete.setCellValueFactory(new PropertyValueFactory<>("btnDelete"));
 
-        colorCol.setCellFactory(tv -> new TableCell<Point, Color>() {
+        columnColor.setCellFactory(tv -> new TableCell<Point, Color>() {
             @Override
             protected void updateItem(Color item, boolean empty) {
                 super.updateItem(item, empty);
@@ -376,11 +460,39 @@ public class MainsScreenController implements Observer {
                     this.setStyle("-fx-background-color: rgb(" + r + ", " + g + ", " + b + ");");
 
                 }
+            }
+        });
+
+        columnModify.setCellFactory(tv -> new TableCell<Point, Button>() {
+            @Override
+            protected void updateItem(Button item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null) {
+                    item = new Point().getBtnModify();
+                    item.setText("Editar");
+                    this.setPrefSize(30,30);
+                    System.out.println("Se crea botón Editar");
+                }
+            }
+        });
+
+        columnDelete.setCellFactory(tv -> new TableCell<Point, Button>() {
+            @Override
+            protected void updateItem(Button item, boolean empty) {
+                super.updateItem(item, empty);
+                System.out.println(item + "antes de Editar" + empty);
+                if (item == null) {
+                    this.setPrefSize(30,30);
+                    System.out.println("Se crea botón Editar");
+                }
 
             }
         });
 
         tableView.setItems(data);
+
+        // we delete the previous data to avoid duplicate
+        data.clear();
 
         data.add(planning.getWarehouse());
 
@@ -388,11 +500,112 @@ public class MainsScreenController implements Observer {
             data.add(request.getDeliveryPoint());
             data.add(request.getPickupPoint());
         });
+        System.out.println(planning);
     }
 
-    public void undoAction(ActionEvent actionEvent) {
+
+    public void updateMap() {
+        // clear possible layer
+        mapView.removeLayer(requestLayer);
+        mapView.removeLayer(tourLayer);
+
+        /* Zoom de 5 */
+        mapView.setZoom(14);
+
+        /* creation of the mapPoint on which the camera will be centered
+         *  We use the longitude and latitude of Lyon
+         * */
+        MapPoint mapPointCamera = new MapPoint(45.760327, 4.876824);
+
+        /* Centre la carte sur le point */
+        mapView.flyTo(0, mapPointCamera, 0.1);
+
+        //force la mise à jour de la carte en la supprimant et la rajoutant dans le conteneur
+        mapContainer.getChildren().clear();
+        mapContainer.getChildren().add(mapView);
+
+        //Force rerender (Bug fix - Gluon Maps Issue drag)
+        mapView.setOnMouseReleased(e -> {
+
+            if (e.getButton() == MouseButton.SECONDARY) {
+                this.rightClick();
+            } else if (e.getButton() == MouseButton.PRIMARY) {
+                this.leftClick(null);
+            }
+            System.out.println("onMousedetect");
+            //Pour les layers de request
+            requestLayer.forceReRender();
+            tourLayer.forceReRender();
+
+            //Pour le fond de la map
+            mapView.layout();
+
+        });
     }
 
-    public void redoAction(ActionEvent actionEvent) {
+    public void updateTourLayer() {
+        // clear
+        mapView.removeLayer(tourLayer);
+
+        //Add Segment to the layer
+
+        tourLayer = new CustomMapLayer();
+
+        List<Intersection> intersectionList = tour.getIntersections();
+
+        System.out.println(intersectionList.size());
+
+        for (int i = 0; i < intersectionList.size() - 1; i++) {
+            Intersection start;
+            Intersection end;
+            start = intersectionList.get(i);
+            end = intersectionList.get(i + 1);
+            MapPoint mapPointStart = new MapPoint(start.getLatitude(), start.getLongitude());
+            tourLayer.addPoint(start.getIdIntersection(), mapPointStart);
+            MapPoint mapPointEnd = new MapPoint(end.getLatitude(), end.getLongitude());
+            tourLayer.addPoint(end.getIdIntersection(), mapPointEnd);
+            tourLayer.addSegment(mapPointStart, mapPointEnd, (long) i);
+        }
+
+        tourLayer.tourLineHover();
+
+        mapView.removeLayer(requestLayer);
+        mapView.addLayer(tourLayer);
+        mapView.addLayer(requestLayer);
+
+        tour.notifyChange("UPDATEMAP");
+    }
+
+    public void updateRequestLayer() {
+        mapView.removeLayer(requestLayer);
+        mapView.removeLayer(tourLayer);
+
+        //Create the Request Layer
+
+        requestLayer = new CustomMapLayer();
+
+        //Add the warehouse
+        Intersection warehouse = planning.getWarehouse().getAddress();
+        requestLayer.addSpecialPointRectangle(warehouse.getIdIntersection(),
+                new MapPoint(warehouse.getLatitude(), warehouse.getLongitude()), planning.getWarehouse().getColor());
+
+        //Add the requests
+        for (Request request : planning.getRequests()) {
+            Intersection deliveryInt = request.getDeliveryPoint().getAddress();
+            MapPoint mapPointDelivery = new MapPoint(deliveryInt.getLatitude(), deliveryInt.getLongitude());
+            requestLayer.addSpecialPointCircle(deliveryInt.getIdIntersection(), mapPointDelivery, request.getDeliveryPoint().getColor());
+
+            Intersection pickupInt = request.getPickupPoint().getAddress();
+            MapPoint mapPointPickup = new MapPoint(pickupInt.getLatitude(), pickupInt.getLongitude());
+            requestLayer.addSpecialPointRectangle(pickupInt.getIdIntersection(), mapPointPickup, request.getPickupPoint().getColor());
+        }
+
+        // enable to scroll to selected point from the map
+
+        requestLayer.scrollToPointEvent(tableView);
+
+        mapView.addLayer(requestLayer);
+
+        requestLayer.forceReRender();
     }
 }

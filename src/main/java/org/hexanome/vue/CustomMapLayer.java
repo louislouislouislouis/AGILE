@@ -4,12 +4,18 @@ import com.gluonhq.maps.MapLayer;
 import com.gluonhq.maps.MapPoint;
 
 import javafx.geometry.Point2D;
+import javafx.scene.control.TableView;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.util.Pair;
+import org.hexanome.controller.MainsScreenController;
+import org.hexanome.model.MapIF;
+import org.hexanome.model.Point;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Affiche un point rouge sur la carte
@@ -38,7 +44,7 @@ public class CustomMapLayer extends MapLayer {
      * @param mapPoint mapPoint that will be added
      */
     public void addPoint(Long id, MapPoint mapPoint) {
-        Circle circle = new Circle(1.5, Color.FIREBRICK);
+        Circle circle = new Circle(2, Color.FIREBRICK);
 
         pointList.put(id, mapPoint);
         shapeList.put(id, circle);
@@ -108,6 +114,79 @@ public class CustomMapLayer extends MapLayer {
         this.getChildren().add(polyline);
     }
 
+    public void scrollToPointEvent(TableView<Point> tableView) {
+        shapeList.forEach((id, shape) -> {
+            shape.setOnMouseClicked(mouseEvent -> {
+
+                for (int i = 0; i < tableView.getItems().size(); i++) {
+                    Point point = (Point) tableView.getItems().get(i);
+                    if (Objects.equals(point.getId(), id)) {
+                        tableView.scrollTo(i);
+                        tableView.getSelectionModel().select(i);
+                        break;
+                    }
+                }
+            });
+        });
+    }
+
+    public void intersectionEvent(MainsScreenController c, MapIF map) {
+        shapeList.forEach((id, shape) -> {
+            // hover pour changer la taille des points
+            shape.hoverProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    Circle circle = (Circle) shape;
+                    circle.setRadius(6);
+                } else {
+                    Circle circle = (Circle) shape;
+                    circle.setRadius(2);
+                }
+            });
+
+            // event sur le click de la souris
+            shape.setOnMouseClicked(mouseEvent -> {
+                if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                    c.leftClick(map.getIntersections().get(id));
+
+                    // pas au bon endroit je pense
+                    shape.setFill(Color.DARKORANGE);
+                    ((Circle) shape).setRadius(10);
+                } else if (mouseEvent.getButton() == MouseButton.SECONDARY) {
+                    c.rightClick();
+                }
+            });
+        });
+    }
+
+    public void tourLineHover() {
+        polylineList.forEach((aLong, polyline) -> {
+            polyline.hoverProperty().addListener((observable, oldValue, newValue) -> {
+
+                if (newValue) {
+                    polylineList.forEach((id, poly) -> {
+
+                        if (id <= aLong) {
+                            poly.setStrokeWidth(7);
+                            poly.setStroke(Color.DODGERBLUE);
+                            DropShadow e = new DropShadow();
+                            e.setColor(Color.BLUE);
+                            e.setRadius(9);
+                            poly.setEffect(e);
+                        }
+                    });
+                } else {
+                    polylineList.forEach((id, poly) -> {
+                        if (id <= aLong) {
+                            poly.setStrokeWidth(5);
+                            poly.setStroke(Color.DODGERBLUE);
+                            poly.setEffect(null);
+                        }
+                    });
+                }
+            });
+        });
+    }
+
     public HashMap<Long, MapPoint> getPointList() {
         return pointList;
     }
@@ -125,7 +204,6 @@ public class CustomMapLayer extends MapLayer {
     }
 
     public void forceReRender() {
-        System.out.println("forceRender is calleds");
         layoutLayer();
     }
 
@@ -133,7 +211,6 @@ public class CustomMapLayer extends MapLayer {
     @Override
     protected void layoutLayer() {
         /* Conversion des MapPoint vers Point2D */
-        System.out.println("LayoutLayer is Called");
         pointList.forEach((id, mapPoint) -> {
 
             Shape shape = shapeList.get(id);
