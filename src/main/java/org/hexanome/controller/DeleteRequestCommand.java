@@ -1,5 +1,6 @@
 package org.hexanome.controller;
 
+import org.hexanome.controller.tsp.GraphAPI;
 import org.hexanome.model.Request;
 
 public class DeleteRequestCommand implements Command {
@@ -13,6 +14,10 @@ public class DeleteRequestCommand implements Command {
 
     public void doCommand() {
         controller.getPlanning().removeRequest(request);
+
+        GraphAPI graphAPI = new GraphAPI();
+        graphAPI.DELETE_REQUEST(request, controller.getMap(), controller.getTour());
+        
         controller.initRequestLayer();
         controller.updateTourLayer();
         controller.updateTableView();
@@ -20,6 +25,10 @@ public class DeleteRequestCommand implements Command {
 
     public void undoCommand() {
         controller.getPlanning().addRequest(request);
+
+        GraphAPI graphAPI = new GraphAPI();
+        graphAPI.ADD_REQUEST(controller.getPlanning(), controller.getMap(), controller.getTour());
+
         controller.initRequestLayer();
         controller.updateTourLayer();
         controller.updateTableView();

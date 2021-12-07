@@ -102,10 +102,10 @@ public class MainsScreenController implements Observer {
     private TableColumn<Point, Button> columnModify;*/
     @FXML
     private TableColumn<Point, String> columnType;
-    /*@FXML
+    @FXML
     private Button btnDeleteTableRow;
     @FXML
-    private Button btnEditTableRow;*/
+    private Button btnEditTableRow;
 
     /*----------------------Constructor---------------------------------------*/
 
@@ -680,31 +680,8 @@ public class MainsScreenController implements Observer {
     void deleteTableRow(ActionEvent event) {
         //Delete point in the map
         Point selectedItem = tableView.getSelectionModel().getSelectedItem();
-        String typeItem = selectedItem.getType();
-        Color colorItem = selectedItem.getColor();
-        planning.getRequests().forEach(request -> {
-            DeliveryPoint delivery = request.getDeliveryPoint();
-            PickupPoint pickup = request.getPickupPoint();
-            System.out.println("Delivery " + delivery);
-            System.out.println("Pickup " + pickup);
-            Color colorDelivery = request.getDeliveryPoint().getColor();
-            System.out.println("DeliveryColor : " + colorDelivery);
-            Color colorPickup = request.getPickupPoint().getColor();
-            System.out.println("PickupColor " + colorPickup);
-            Boolean equals = colorDelivery.equals(colorPickup);
-            Boolean colorEquals = colorDelivery.equals(colorItem);
-            System.out.println("Equals? " + equals);
-            System.out.println(colorEquals);
-            if (colorEquals == true) {
-                planning.removeRequest(request);
-                System.out.println("Request que se elimina : " + request);
-            } else {
-                System.out.println("No se elimina ninguna request");
-            }
-        });
-        tableView.getItems().remove(selectedItem);
-        updateTableView();
-        updateTourLayer();
+
+        this.currentState.deleteRequest(this, selectedItem, listOfCommands);
     }
 
     @FXML

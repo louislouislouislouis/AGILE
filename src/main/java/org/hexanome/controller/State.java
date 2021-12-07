@@ -1,10 +1,7 @@
 package org.hexanome.controller;
 
 import org.hexanome.data.ExceptionXML;
-import org.hexanome.model.Intersection;
-import org.hexanome.model.MapIF;
-import org.hexanome.model.PlanningRequest;
-import org.hexanome.model.Tour;
+import org.hexanome.model.*;
 import org.hexanome.vue.CustomMap;
 import org.hexanome.vue.CustomMapLayer;
 import org.xml.sax.SAXException;
@@ -43,7 +40,7 @@ public interface State {
     }
 
 
-    default void deleteRequest(MainsScreenController controller) {
+    default void deleteRequest(MainsScreenController controller, Point selectedItem, ListOfCommands listOfCommands) {
     }
 
 

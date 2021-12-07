@@ -1,10 +1,10 @@
 package org.hexanome.controller;
 
+import javafx.scene.paint.Color;
 import org.hexanome.data.ExceptionXML;
 import org.hexanome.data.MapDeserializer;
 import org.hexanome.data.RequestDeserializer;
-import org.hexanome.model.MapIF;
-import org.hexanome.model.PlanningRequest;
+import org.hexanome.model.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -79,6 +79,33 @@ public class TourState implements State {
         controller.getBtnAddRequest().setDisable(false);
         controller.getBtnRedo().setDisable(false);
         controller.getBtnUndo().setDisable(false);
+    }
+
+    @Override
+    public void deleteRequest(MainsScreenController controller, Point selectedItem, ListOfCommands listOfCommands) {
+        Color colorItem = selectedItem.getColor();
+        controller.getPlanning().getRequests().forEach(request -> {
+            DeliveryPoint delivery = request.getDeliveryPoint();
+            PickupPoint pickup = request.getPickupPoint();
+            System.out.println("Delivery " + delivery);
+            System.out.println("Pickup " + pickup);
+            Color colorDelivery = request.getDeliveryPoint().getColor();
+            System.out.println("DeliveryColor : " + colorDelivery);
+            Color colorPickup = request.getPickupPoint().getColor();
+            System.out.println("PickupColor " + colorPickup);
+            Boolean equals = colorDelivery.equals(colorPickup);
+            Boolean colorEquals = colorDelivery.equals(colorItem);
+            System.out.println("Equals? " + equals);
+            System.out.println(colorEquals);
+            if (colorEquals == true) {
+                // we add the command to the list of command
+                // it will be executed there
+                listOfCommands.add(new DeleteRequestCommand(controller, request));
+                System.out.println("Request que se elimina : " + request);
+            } else {
+                System.out.println("No se elimina ninguna request");
+            }
+        });
     }
 
     @Override
