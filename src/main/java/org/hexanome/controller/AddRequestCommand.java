@@ -1,7 +1,5 @@
 package org.hexanome.controller;
 
-import org.hexanome.model.MapIF;
-import org.hexanome.model.PlanningRequest;
 import org.hexanome.model.Request;
 
 public class AddRequestCommand implements Command {

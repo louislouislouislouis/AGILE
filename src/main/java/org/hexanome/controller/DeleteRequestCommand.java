@@ -1,22 +1,21 @@
 package org.hexanome.controller;
 
-import org.hexanome.model.PlanningRequest;
 import org.hexanome.model.Request;
 
 public class DeleteRequestCommand implements Command {
-    private PlanningRequest planning;
+    private MainsScreenController controller;
     private Request request;
 
-    public DeleteRequestCommand(PlanningRequest planning, Request request) {
-        this.planning = planning;
+    public DeleteRequestCommand(MainsScreenController controller, Request request) {
+        this.controller = controller;
         this.request = request;
     }
 
     public void doCommand() {
-        planning.removeRequest(request);
+        controller.getPlanning().removeRequest(request);
     }
 
     public void undoCommand() {
-        planning.addRequest(request);
+        controller.getPlanning().addRequest(request);
     }
 }
