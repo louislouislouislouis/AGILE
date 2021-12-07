@@ -70,6 +70,16 @@ public class GraphAPI {
         this.updateShortestPathIntersections(map, dijkstra2, newDeliveryPoint);
         this.updateShortestPathsCost(map, dijkstra2, newDeliveryPoint);
 
+        // pairs of points where new request could potentially be added
+        List<Pair<Point, Point>> haveWaitingTimes = new ArrayList<>();
+
+        if (this.addPickupPointDuringTour(tour, planning, map, haveWaitingTimes)) {
+            if (!this.addDeliveryPointDuringTour(tour, planning, map, haveWaitingTimes)) {
+                tour.removeLastDestination();
+                tour.addDestination();
+            }
+        }
+
 //        if (!this.addRequestDuringTour(tour, planning, map)) {
         tour.removeLastDestination(); // remove Warehouse in the end of the tour
         tour.addDestination(newPickUpPoint); // add new PickupPoint
@@ -82,12 +92,86 @@ public class GraphAPI {
         //       }
     }
 
- /*   private boolean addRequestDuringTour(Tour tour, PlanningRequest planning, MapIF map) {
-        if (!isTimeLeftDuringDeliveries(tour, planning, map)) {
+    /**
+     * @param tour      contains tour data
+     * @param planning  contains requests
+     * @param map       contains Intersections and Segments
+     * @param emptyList where to store pairs with the potential to add new request between
+     * @return true if newPickup could have been added during the tour, false otherwise
+     */
+    public boolean addPickupPointDuringTour(Tour tour, PlanningRequest planning, MapIF map, List<Pair<Point, Point>> emptyList) {
+        List<Pair<Point, Point>> haveWaitingTimes = isTimeLeftDuringDeliveries(tour, planning, map, emptyList);
+        if (haveWaitingTimes.isEmpty()) {
             return false;
         }
+
+        Point newPickup = planning.getRequests().getLast().getPickupPoint();
+
+        for (Pair<Point, Point> p : haveWaitingTimes) {
+            Point start = p.getKey();
+            Point destination = p.getKey();
+
+            // delete pair from list with potential spaces for adding request
+            haveWaitingTimes.remove(p);
+
+            int timeToTravel = start.getDepartureTime().getSecond() - destination.getArrivalTime().getSecond();
+
+            int timeStartToNewPickup = tour.getSecondsForPath(map, start.getAddress(), newPickup.getAddress());
+            int timeNewpickupToDestination = tour.getSecondsForPath(map, newPickup.getAddress(), destination.getAddress());
+
+            int newTimeToTravel = timeStartToNewPickup + newPickup.getDuration() + timeNewpickupToDestination;
+
+            if (newTimeToTravel <= timeToTravel) {
+                tour.addPointBetween(start, destination, newPickup);
+                // update timetable
+                newPickup.setArrivalTime(start.getDepartureTime().plusSeconds(timeStartToNewPickup));
+                newPickup.setDepartureTime(newPickup.getArrivalTime().plusSeconds(newPickup.getDuration()));
+
+                //check if time left between newPickup and next Point and if so at to havingWaitingTimes
+                int restTimeToTravel = destination.getArrivalTime().getSecond() - newPickup.getDepartureTime().getSecond();
+                int currentTimeToTravel = tour.getSecondsForPath(map, newPickup.getAddress(), destination.getAddress());
+                if (currentTimeToTravel < restTimeToTravel) {
+                    Pair<Point, Point> newPair = new Pair<>(newPickup, destination);
+                    haveWaitingTimes.add(newPair);
+                }
+
+                return true;
+            }
+        }
+        return false;
     }
-  */
+
+    public boolean addDeliveryPointDuringTour(Tour tour, PlanningRequest planning, MapIF map, List<Pair<Point, Point>> haveWaitingTimes) {
+        if (haveWaitingTimes.isEmpty()) {
+            return false;
+        }
+
+        Point newPickup = planning.getRequests().getLast().getDeliveryPoint();
+
+        for (Pair<Point, Point> p : haveWaitingTimes) {
+            Point start = p.getKey();
+            Point destination = p.getKey();
+
+            int timeToTravel = start.getDepartureTime().getSecond() - destination.getArrivalTime().getSecond();
+
+            int timeStartToNewPickup = tour.getSecondsForPath(map, start.getAddress(), newPickup.getAddress());
+            int timeNewpickupToDestination = tour.getSecondsForPath(map, newPickup.getAddress(), destination.getAddress());
+
+            int newTimeToTravel = timeStartToNewPickup + newPickup.getDuration() + timeNewpickupToDestination;
+
+            if (newTimeToTravel <= timeToTravel) {
+                tour.addPointBetween(start, destination, newPickup);
+                // update timetable
+                newPickup.setArrivalTime(start.getDepartureTime().plusSeconds(timeStartToNewPickup));
+                newPickup.setDepartureTime(newPickup.getArrivalTime().plusSeconds(newPickup.getDuration()));
+                return true;
+            }
+
+            // delete pair from list with potential spaces for adding request
+            haveWaitingTimes.remove(p);
+        }
+        return false;
+    }
 
     /**
      * @param tour     contains planned tour
@@ -96,9 +180,7 @@ public class GraphAPI {
      * @return list with pairs of points between them driver has waiting times
      * (= potential spaces for adding request)
      */
-    private List<Pair<Point, Point>> isTimeLeftDuringDeliveries(Tour tour, PlanningRequest planning, MapIF map) {
-        List<Pair<Point, Point>> haveWaitingTimes = new ArrayList<>();
-
+    private List<Pair<Point, Point>> isTimeLeftDuringDeliveries(Tour tour, PlanningRequest planning, MapIF map, List<Pair<Point, Point>> haveWaitingTimes) {
         for (int i = 0; i < tour.getPoints().size() - 1; i++) {
             Point start = tour.getPoints().get(i);
             Point destination = tour.getPoints().get(i + 1);

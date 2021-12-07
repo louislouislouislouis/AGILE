@@ -298,4 +298,26 @@ public class Tour extends Observable {
     public void setDepartureTime(LocalTime departureTime) {
         this.departureTime = departureTime;
     }
+
+    /**
+     * @param start       where to come from
+     * @param destination where to go
+     * @param newPoint    to add between start and destination
+     */
+    public void addPointBetween(Point start, Point destination, Point newPoint) {
+        List<Point> newPoints = new ArrayList<>();
+        for (int i = 0; i < points.size() - 1; i++) {
+            if (points.get(i).equals(start) && points.get(i + 1).equals(destination)) {
+                for (int j = 0; j <= i; j++) {
+                    newPoints.add(points.get(j));
+                }
+                newPoints.add(newPoint);
+                for (int j = i + 1; j < points.size(); j++) {
+                    newPoints.add(points.get(j));
+                }
+                this.points = newPoints;
+                return;
+            }
+        }
+    }
 }
