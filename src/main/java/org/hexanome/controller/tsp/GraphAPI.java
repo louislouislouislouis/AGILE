@@ -69,35 +69,42 @@ public class GraphAPI {
         this.updateShortestPathIntersections(map, dijkstra2, newDeliveryPoint);
         this.updateShortestPathsCost(map, dijkstra2, newDeliveryPoint);
 
-        //      if (!this.addRequestDuringTour(tour, planning, map)) {
-        tour.removeLastDestination(); // remove Warehouse in the end of the tour
-        tour.addDestination(newPickUpPoint); // add new PickupPoint
-        tour.addDestination(newDeliveryPoint); // add new DeliveryPoint
-        tour.addDestination(planning.getWarehouse().getAddress()); // add Warehouse in the end of the tour
-        tour.computeCompleteTour(map);
-        tour.calculateCost(map);
-        tour.notifyChange("UPDATEMAP");
-        //      }
+        if (!this.addRequestDuringTour(tour, planning, map)) {
+            tour.removeLastDestination(); // remove Warehouse in the end of the tour
+            tour.addDestination(newPickUpPoint); // add new PickupPoint
+            tour.addDestination(newDeliveryPoint); // add new DeliveryPoint
+            tour.addDestination(planning.getWarehouse().getAddress()); // add Warehouse in the end of the tour
+            tour.computeCompleteTour(map);
+            tour.calculateCost(map);
+            tour.notifyChange("UPDATEMAP");
+        }
     }
 
-/*    private boolean addRequestDuringTour(Tour tour, PlanningRequest planning, MapIF map) {
+    private boolean addRequestDuringTour(Tour tour, PlanningRequest planning, MapIF map) {
         if (!isTimeLeftDuringDeliveries(tour, planning, map)) {
             return false;
         }
     }
 
- */
-
- /*   private boolean isTimeLeftDuringDeliveries(Tour tour, PlanningRequest planning, MapIF map) {
+    /**
+     * @param tour     contains planned tour
+     * @param planning contains requests
+     * @param map      contains Intersections and Segments
+     * @return true if driver has waiting between two Points, otherwise false
+     */
+    private boolean isTimeLeftDuringDeliveries(Tour tour, PlanningRequest planning, MapIF map) {
         for (Request r : planning.getRequests()) {
             LocalTime departureTime = r.getPickupPoint().getDepartureTime();
             LocalTime arrivalTime = r.getDeliveryPoint().getArrivalTime();
             int maxSecondsForPath = arrivalTime.getSecond() - departureTime.getSecond();
             int actualSecondsForPath = tour.getSecondsForPath(map, r.getPickupPoint().getAddress(), r.getDeliveryPoint().getAddress());
+            if (maxSecondsForPath - actualSecondsForPath > 0) {
+                return true;
+            }
         }
+        return false;
     }
 
-  */
 
     public void DELETE_REQUEST(Request request, MapIF map, Tour tour) {
         tour.removeRequest(request, map);
