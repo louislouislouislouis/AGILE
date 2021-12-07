@@ -12,6 +12,15 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * This class is the representation of initial state of our project
+ * <p>
+ * Initial state of our project, we enter it during the initialization of our controller
+ * <p>
+ * -> Wait for the user to load a map
+ *
+ * @author Gastronom'if
+ */
 public class InitialState implements State {
     // initial state
 

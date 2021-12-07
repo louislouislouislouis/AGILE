@@ -3,11 +3,18 @@ package org.hexanome.controller;
 import org.hexanome.model.Intersection;
 
 /**
+ * This class is the representation of the first AddRequestState
+ * <p>
+ * State after entering the method addRequest from TourState
+ * <p>
+ * -> Wait for the user leftClick on a first point (corresponding to the pickup point)
+ * <p>
+ * -> Wait for the user to rightClick to come back to the tour state
+ *
  * @author Gastronom'if
  */
 public class AddRequestState1 implements State {
-    // State when receiving the message addRequest() from InitialState
-    // -> Wait for the user to enter a first point (corresponding to the pickup point)
+    //
 
     @Override
     public void leftClick(MainsScreenController controller, Intersection i) {

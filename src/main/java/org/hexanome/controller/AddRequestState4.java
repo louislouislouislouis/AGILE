@@ -2,11 +2,23 @@ package org.hexanome.controller;
 
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.paint.Color;
-import org.hexanome.controller.State;
 import org.hexanome.model.*;
 
 import java.util.Optional;
 
+/**
+ * This class is the representation of the forth AddRequestState
+ * <p>
+ * State after entering the method leftClick() from AddRequest3
+ * <p>
+ * State must be initialized with the previous delivery Point, pickup Point and the pickup duration
+ * <p>
+ * -> Wait for the user to validate a correct duration (positive), it will call AddRequestCommand
+ * <p>
+ * -> Wait for the user to cancel his input, it returns to the tour state
+ *
+ * @author Gastronom'if
+ */
 public class AddRequestState4 implements State {
     Intersection pickUp;
     Intersection delivery;
@@ -51,7 +63,7 @@ public class AddRequestState4 implements State {
             // add command to listOfCommand
             listOfCommands.add(new AddRequestCommand(controller, request));
 
-            
+
             controller.getMapView().removeLayer(controller.getIntersectionLayer());
 
             // we change the state of the controller
