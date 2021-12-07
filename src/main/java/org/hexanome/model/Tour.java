@@ -58,10 +58,6 @@ public class Tour extends Observable {
         this.departureTime = departureTime;
     }
 
-    public void setDepartureTime(LocalTime departureTime) {
-        this.departureTime = departureTime;
-    }
-
     public void setIntersections(List<Intersection> intersections) {
         this.intersections = intersections;
     }
@@ -249,18 +245,38 @@ public class Tour extends Observable {
         warehouse.setDepartureTime(this.departureTime);
         points.add(warehouse);
         for (int i = 0; i < points.size() - 1; i++) {
-            Point start = points.get(i);
-            Point destination = points.get(i + 1);
-            int secondsForPath = this.getSecondsForPath(map, start.getAddress(), destination.getAddress());
-            LocalTime newArrivalTime = start.getDepartureTime().plusSeconds(secondsForPath);
-            destination.setArrivalTime(newArrivalTime);
-            // we don't want to overwrite the departure time from the warehouse
-            if (!(destination instanceof Warehouse)) {
-                LocalTime newDepartureTime = destination.getArrivalTime().plusSeconds(destination.getDuration());
-                destination.setDepartureTime(newDepartureTime);
-            }
+            this.setTimings(map, i);
         }
         int i = points.size();
         points.remove(i - 1);
+    }
+
+    private void setTimings(MapIF map, int i) {
+        Point start = points.get(i);
+        Point destination = points.get(i + 1);
+        int secondsForPath = this.getSecondsForPath(map, start.getAddress(), destination.getAddress());
+        LocalTime newArrivalTime = start.getDepartureTime().plusSeconds(secondsForPath);
+        destination.setArrivalTime(newArrivalTime);
+        // we don't want to overwrite the departure time from the warehouse
+        if (!(destination instanceof Warehouse)) {
+            LocalTime newDepartureTime = destination.getArrivalTime().plusSeconds(destination.getDuration());
+            destination.setDepartureTime(newDepartureTime);
+        }
+    }
+
+    public void updateTimingForNewRequest(MapIF map, Point pickUp, Point delivery) {
+        points.add(pickUp);
+        points.add(delivery);
+        points.add(points.get(0)); //add warehouse as last point
+
+        for (int i = points.size() - 4; i < points.size() - 1; i++) {
+            setTimings(map, i);
+        }
+
+        points.remove(points.size() - 1); // remove last warehouse
+    }
+
+    public void setDepartureTime(LocalTime departureTime) {
+        this.departureTime = departureTime;
     }
 }
