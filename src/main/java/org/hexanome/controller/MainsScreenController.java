@@ -83,16 +83,20 @@ public class MainsScreenController implements Observer {
     private TableColumn<Point, String> columnArrivalTime;
     @FXML
     private TableColumn<Point, Color> columnColor;
-    @FXML
-    private TableColumn<Point, Button> columnDelete;
+    /*@FXML
+    private TableColumn<Point, Button> columnDelete;*/
     @FXML
     private TableColumn<Point, String> columnDepartureTime;
     @FXML
     private TableColumn<Point, String> columnID;
-    @FXML
-    private TableColumn<Point, Button> columnModify;
+    /*@FXML
+    private TableColumn<Point, Button> columnModify;*/
     @FXML
     private TableColumn<Point, String> columnType;
+    @FXML
+    private Button btnDeleteTableRow;
+    @FXML
+    private Button btnEditTableRow;
 
     /*----------------------Constructor---------------------------------------*/
 
@@ -455,7 +459,7 @@ public class MainsScreenController implements Observer {
         departureCol.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
         colorCol.setCellValueFactory(new PropertyValueFactory<>("color"));*/
 
- /*       columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
         columnType.setCellValueFactory(new PropertyValueFactory<>("type"));
         columnArrivalTime.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
         columnDepartureTime.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
@@ -491,8 +495,6 @@ public class MainsScreenController implements Observer {
             data.add(request.getDeliveryPoint());
             data.add(request.getPickupPoint());
         });
-
-  */
     }
 
 
