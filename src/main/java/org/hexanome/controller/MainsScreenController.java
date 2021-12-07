@@ -429,6 +429,7 @@ public class MainsScreenController implements Observer {
                     @Override
                     public void run() {
                         myController.updateDynamicMap();
+                        myController.updateTableView();
                     }
                 }.init(this));
                 //this.updateDynamycMap();
@@ -616,7 +617,7 @@ public class MainsScreenController implements Observer {
     public void initRequestLayer() {
         mapView.removeLayer(requestLayer);
         tourLayer.resetAll();
-        
+
         //Create the Request Layer
 
         requestLayer = new CustomMapLayer();
