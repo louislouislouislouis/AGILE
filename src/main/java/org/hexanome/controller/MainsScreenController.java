@@ -455,7 +455,7 @@ public class MainsScreenController implements Observer {
         departureCol.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
         colorCol.setCellValueFactory(new PropertyValueFactory<>("color"));*/
 
-        columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
+ /*       columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
         columnType.setCellValueFactory(new PropertyValueFactory<>("type"));
         columnArrivalTime.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
         columnDepartureTime.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
@@ -491,6 +491,8 @@ public class MainsScreenController implements Observer {
             data.add(request.getDeliveryPoint());
             data.add(request.getPickupPoint());
         });
+
+  */
     }
 
 
