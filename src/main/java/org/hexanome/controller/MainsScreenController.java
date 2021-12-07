@@ -50,8 +50,8 @@ public class MainsScreenController implements Observer {
     protected final AddRequestState2 addRequestState2 = new AddRequestState2();
     protected final AddRequestState3 addRequestState3 = new AddRequestState3();
     protected final AddRequestState4 addRequestState4 = new AddRequestState4();
-    protected final ModifyRequestState modifyRequestState = new ModifyRequestState();
-    protected final DeleteRequestState deleteRequestState = new DeleteRequestState();
+    /*protected final ModifyRequestState modifyRequestState = new ModifyRequestState();
+    protected final DeleteRequestState deleteRequestState = new DeleteRequestState();*/
 
     // current state
     private State currentState = initialState;
@@ -93,10 +93,10 @@ public class MainsScreenController implements Observer {
     private TableColumn<Point, Button> columnModify;*/
     @FXML
     private TableColumn<Point, String> columnType;
-    @FXML
+    /*@FXML
     private Button btnDeleteTableRow;
     @FXML
-    private Button btnEditTableRow;
+    private Button btnEditTableRow;*/
 
     /*----------------------Constructor---------------------------------------*/
 
@@ -601,5 +601,19 @@ public class MainsScreenController implements Observer {
         mapView.addLayer(requestLayer);
 
         requestLayer.forceReRender();
+    }
+
+    @FXML
+    void deleteTableRow(ActionEvent event) {
+        //Modify departure time , arrival time and point in the map
+
+        //tableView.getSelectionModel();
+        //tableView.setOnKeyReleased();
+        System.out.println(tableView.getSelectionModel().getSelectedItem());
+    }
+
+    @FXML
+    void editTableRow(ActionEvent event) {
+
     }
 }
