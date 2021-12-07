@@ -136,8 +136,8 @@ public abstract class TemplateTSP implements TSP {
         tour.setDestinations(pathTSP);
         tour.setPoints(planning, pathTSP);
         tour.computeCompleteTour(map);
-
         tour.setCost(this.getSolutionCost());
+        tour.updateTiming(map, planning);
 
         tour.notifyChange("UPDATEMAP");
     }

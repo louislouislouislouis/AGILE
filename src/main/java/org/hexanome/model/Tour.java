@@ -201,6 +201,7 @@ public class Tour extends Observable {
 
     public void setPoints(PlanningRequest planning, List<Intersection> path) {
         List<Point> newPoints = new ArrayList<>();
+        newPoints.add(planning.getWarehouse());
         for (Intersection i : path) {
             this.addNewPoint(i, planning, newPoints);
         }
@@ -231,5 +232,31 @@ public class Tour extends Observable {
                 }
             }
         }
+    }
+
+    /**
+     * updating arrival and departure times for all points
+     *
+     * @param map      contains Intersections and Segments
+     * @param planning contains requests
+     */
+    public void updateTiming(MapIF map, PlanningRequest planning) {
+        Point warehouse = points.get(0);
+        warehouse.setDepartureTime(this.departureTime);
+        points.add(warehouse);
+        for (int i = 0; i < points.size() - 1; i++) {
+            Point start = points.get(i);
+            Point destination = points.get(i + 1);
+            int secondsForPath = this.getSecondsForPath(map, start.getAddress(), destination.getAddress());
+            LocalTime newArrivalTime = start.getDepartureTime().plusSeconds(secondsForPath);
+            destination.setArrivalTime(newArrivalTime);
+            // we don't want to overwrite the departure time from the warehouse
+            if (!(destination instanceof Warehouse)) {
+                LocalTime newDepartureTime = destination.getArrivalTime().plusSeconds(destination.getDuration());
+                destination.setDepartureTime(newDepartureTime);
+            }
+        }
+        int i = points.size();
+        points.remove(i - 1);
     }
 }

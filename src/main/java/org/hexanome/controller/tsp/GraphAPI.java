@@ -69,22 +69,23 @@ public class GraphAPI {
         this.updateShortestPathIntersections(map, dijkstra2, newDeliveryPoint);
         this.updateShortestPathsCost(map, dijkstra2, newDeliveryPoint);
 
-        if (!this.addRequestDuringTour(tour, planning, map)) {
-            tour.removeLastDestination(); // remove Warehouse in the end of the tour
-            tour.addDestination(newPickUpPoint); // add new PickupPoint
-            tour.addDestination(newDeliveryPoint); // add new DeliveryPoint
-            tour.addDestination(planning.getWarehouse().getAddress()); // add Warehouse in the end of the tour
-            tour.computeCompleteTour(map);
-            tour.calculateCost(map);
-            tour.notifyChange("UPDATEMAP");
-        }
+//        if (!this.addRequestDuringTour(tour, planning, map)) {
+        tour.removeLastDestination(); // remove Warehouse in the end of the tour
+        tour.addDestination(newPickUpPoint); // add new PickupPoint
+        tour.addDestination(newDeliveryPoint); // add new DeliveryPoint
+        tour.addDestination(planning.getWarehouse().getAddress()); // add Warehouse in the end of the tour
+        tour.computeCompleteTour(map);
+        tour.calculateCost(map);
+        tour.notifyChange("UPDATEMAP");
+        //       }
     }
 
-    private boolean addRequestDuringTour(Tour tour, PlanningRequest planning, MapIF map) {
+ /*   private boolean addRequestDuringTour(Tour tour, PlanningRequest planning, MapIF map) {
         if (!isTimeLeftDuringDeliveries(tour, planning, map)) {
             return false;
         }
     }
+  */
 
     /**
      * @param tour     contains planned tour

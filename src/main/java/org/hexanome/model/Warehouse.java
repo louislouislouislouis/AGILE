@@ -5,8 +5,6 @@ import javafx.scene.paint.Color;
 import java.time.LocalTime;
 
 public class Warehouse extends Point {
-    private LocalTime departureTime;
-    private LocalTime arrivalTime;
 
     /**
      * create a warehouse
@@ -16,24 +14,15 @@ public class Warehouse extends Point {
      * @param color            color of the warehouse
      */
     public Warehouse(LocalTime departureTime, Intersection departureAddress, Color color) {
-        super(departureAddress, "warehouse", color);
-        this.departureTime = departureTime;
-        this.arrivalTime = LocalTime.MIDNIGHT;
-    }
-
-    public LocalTime getDepartureTime() {
-        return departureTime;
-    }
-
-    public LocalTime getArrivalTime() {
-        return arrivalTime;
+        super(departureAddress, "warehouse", color, departureTime, LocalTime.MIDNIGHT, 0);
     }
 
     @Override
     public String toString() {
         return "Warehouse{" +
-                "departureTime=" + departureTime +
+                "departureTime=" + super.getDepartureTime() +
                 "Point=" + super.toString() +
                 "}";
     }
+
 }

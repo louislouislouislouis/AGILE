@@ -4,6 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 
+import java.time.LocalTime;
+
 public class Point {
     private Intersection address;
     private Long id;
@@ -11,6 +13,9 @@ public class Point {
     private Color color;
     private Button btnModify;
     private Button btnDelete;
+    private LocalTime departureTime;
+    private LocalTime arrivalTime;
+    private int duration;
 
     /**
      * Clear a point
@@ -19,7 +24,7 @@ public class Point {
      * @param type    type of the point
      * @param color   color of the point
      */
-    public Point(Intersection address, String type, Color color) {
+    public Point(Intersection address, String type, Color color, LocalTime departureTime, LocalTime arrivalTime, int duration) {
         this.address = address;
         this.id = address.getIdIntersection();
         this.type = type;
@@ -27,13 +32,17 @@ public class Point {
         this.btnModify = new Button("Modify");
         this.btnDelete = new Button("Delete");
 
-        btnModify.setOnAction((ActionEvent e)->{
+        btnModify.setOnAction((ActionEvent e) -> {
             System.out.println("Modifying Point");
         });
 
-        btnDelete.setOnAction((ActionEvent e)->{
+        btnDelete.setOnAction((ActionEvent e) -> {
             System.out.println("Deleting Point");
         });
+
+        this.departureTime = departureTime;
+        this.arrivalTime = arrivalTime;
+        this.duration = duration;
     }
 
     public Intersection getAddress() {
@@ -64,6 +73,32 @@ public class Point {
     public String toString() {
         return "Point{" +
                 "address=" + address +
+                "departure-time=" + departureTime +
+                "arrival-time=" + arrivalTime +
                 "}";
+    }
+
+    public LocalTime getDepartureTime() {
+        return departureTime;
+    }
+
+    public void setDepartureTime(LocalTime departureTime) {
+        this.departureTime = departureTime;
+    }
+
+    public LocalTime getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public void setArrivalTime(LocalTime arrivalTime) {
+        this.arrivalTime = arrivalTime;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 }
