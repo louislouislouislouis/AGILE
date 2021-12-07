@@ -68,6 +68,10 @@ public class Tour extends Observable {
 
     }
 
+    public List<Point> getPoints() {
+        return points;
+    }
+
     public void setCost(Double cost) {
         this.cost = cost;
     }

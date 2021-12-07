@@ -1,5 +1,6 @@
 package org.hexanome.controller.tsp;
 
+import javafx.util.Pair;
 import org.hexanome.model.*;
 
 import java.time.LocalTime;
@@ -92,19 +93,28 @@ public class GraphAPI {
      * @param tour     contains planned tour
      * @param planning contains requests
      * @param map      contains Intersections and Segments
-     * @return true if driver has waiting between two Points, otherwise false
+     * @return list with pairs of points between them driver has waiting times
+     * (= potential spaces for adding request)
      */
-    private boolean isTimeLeftDuringDeliveries(Tour tour, PlanningRequest planning, MapIF map) {
-        for (Request r : planning.getRequests()) {
-            LocalTime departureTime = r.getPickupPoint().getDepartureTime();
-            LocalTime arrivalTime = r.getDeliveryPoint().getArrivalTime();
+    private List<Pair<Point, Point>> isTimeLeftDuringDeliveries(Tour tour, PlanningRequest planning, MapIF map) {
+        List<Pair<Point, Point>> haveWaitingTimes = new ArrayList<>();
+
+        for (int i = 0; i < tour.getPoints().size() - 1; i++) {
+            Point start = tour.getPoints().get(i);
+            Point destination = tour.getPoints().get(i + 1);
+
+            LocalTime departureTime = start.getDepartureTime();
+            LocalTime arrivalTime = destination.getArrivalTime();
+
             int maxSecondsForPath = arrivalTime.getSecond() - departureTime.getSecond();
-            int actualSecondsForPath = tour.getSecondsForPath(map, r.getPickupPoint().getAddress(), r.getDeliveryPoint().getAddress());
+            int actualSecondsForPath = tour.getSecondsForPath(map, start.getAddress(), destination.getAddress());
+
             if (maxSecondsForPath - actualSecondsForPath > 0) {
-                return true;
+                Pair<Point, Point> pair = new Pair<>(start, destination);
+                haveWaitingTimes.add(pair);
             }
         }
-        return false;
+        return haveWaitingTimes;
     }
 
 
