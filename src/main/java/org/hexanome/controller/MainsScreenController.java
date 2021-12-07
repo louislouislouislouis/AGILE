@@ -1,7 +1,6 @@
 package org.hexanome.controller;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 import javafx.application.Platform;
@@ -11,6 +10,8 @@ import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,6 +24,7 @@ import org.hexanome.model.*;
 import org.hexanome.vue.AlertBox;
 import org.hexanome.vue.CustomMap;
 import org.hexanome.vue.CustomMapLayer;
+import org.hexanome.vue.ExceptionBox;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -283,6 +285,7 @@ public class MainsScreenController implements Observer {
         File selectedFile = fileChooser(actionEvent);
         System.out.println(selectedFile);
         if (selectedFile == null) {
+            //new ExceptionXML("null");
             AlertBox.displayAlert("Message d'erreur", "Veuillez sélectionner un fichier");
         } else {
             // We clear the map before loading an XML file with requests
@@ -292,9 +295,7 @@ public class MainsScreenController implements Observer {
                 // init the map
                 this.initMap();
             } catch (ExceptionXML | ParserConfigurationException | IOException | SAXException e) {
-                if (e.getMessage() == "Wrong format")
-                    e.printStackTrace();
-                AlertBox.displayAlert("Message d'erreur", "Le fichier n'est pas valide pour cette action");
+                new ExceptionBox(e).display();
             }
             currentState.enableButton(this);
         }
