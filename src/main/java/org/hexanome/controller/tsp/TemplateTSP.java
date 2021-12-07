@@ -28,6 +28,7 @@ public abstract class TemplateTSP implements TSP {
 	}
 
 	public void searchSolution(int timeLimit, Graph g, Tour tour){
+		// TODO: delete timeout when calculation can be stopped
 		if (timeLimit <= 0) return;
 		startTime = System.currentTimeMillis();	
 		this.timeLimit = timeLimit;
@@ -80,7 +81,7 @@ public abstract class TemplateTSP implements TSP {
 	 */	
 	private void branchAndBound(int currentVertex, Collection<Integer> unvisited, 
 			Collection<Integer> visited, Double currentCost, Tour tour){
-		//	if (System.currentTimeMillis() - startTime > timeLimit) return;
+			if (System.currentTimeMillis() - startTime > timeLimit) return;
 	    if (unvisited.size() == 0){
 	    	if (g.isArc(currentVertex,0)){
 	    		if (currentCost+g.getCost(currentVertex,0) < bestSolCost){
