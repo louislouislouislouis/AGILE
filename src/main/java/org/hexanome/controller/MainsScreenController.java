@@ -3,7 +3,9 @@ package org.hexanome.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -19,6 +21,7 @@ import javafx.stage.Stage;
 import org.hexanome.data.ExceptionXML;
 import org.hexanome.model.*;
 import org.hexanome.vue.AlertBox;
+import org.hexanome.vue.App;
 import org.hexanome.vue.CustomMap;
 import org.hexanome.vue.CustomMapLayer;
 import org.xml.sax.SAXException;
@@ -57,10 +60,10 @@ public class MainsScreenController implements Observer {
     private State currentState = initialState;
 
     /* Création de la carte Gluon JavaFX */
-    private CustomMap mapView = new CustomMap();
-    private CustomMapLayer requestLayer = new CustomMapLayer();
-    private CustomMapLayer tourLayer = new CustomMapLayer();
-    private CustomMapLayer intersectionLayer = new CustomMapLayer();
+    private CustomMap mapView;
+    private CustomMapLayer requestLayer;
+    private CustomMapLayer tourLayer;
+    private CustomMapLayer intersectionLayer;
 
     //Declaration of the interactive buttons in the mainsScreen.fxml
     @FXML
@@ -101,6 +104,16 @@ public class MainsScreenController implements Observer {
         map = new MapIF();
         planning = new PlanningRequest();
         tour = new Tour();
+
+        mapView = new CustomMap();
+        requestLayer = new CustomMapLayer();
+        tourLayer = new CustomMapLayer();
+        intersectionLayer = new CustomMapLayer();
+
+        mapView.addLayer(requestLayer);
+        mapView.addLayer(tourLayer);
+        mapView.addLayer(intersectionLayer);
+
     }
 
     /*-------------------------GETTERS AND SETTERS-----------------------------------------------------*/
@@ -241,22 +254,15 @@ public class MainsScreenController implements Observer {
         //method that uploads an XML file (carte)
         File selectedFile = fileChooser(actionEvent);
         System.out.println(selectedFile);
-
         if (selectedFile == null) {
             AlertBox.displayAlert("Message d'erreur", "Veuillez sélectionner un fichier");
-
         } else {
-
             // We clear the map before loading an XML file with requests
-
             map.clearMap();
-
             try {
                 currentState.loadMap(this, map, selectedFile);
-
-                // update the map
-
-                this.updateMap();
+                // init the map
+                this.initMap();
             } catch (ExceptionXML | ParserConfigurationException | IOException | SAXException e) {
                 if (e.getMessage() == "Wrong format")
                     e.printStackTrace();
@@ -286,10 +292,8 @@ public class MainsScreenController implements Observer {
 
             try {
                 currentState.loadPlanning(this, map, planning, selectedFile);
-
                 // update the request layer
-
-                this.updateRequestLayer();
+                this.initRequestLayer();
             } catch (ExceptionXML | ParserConfigurationException | IOException | SAXException e) {
                 e.printStackTrace();
             }
@@ -321,14 +325,9 @@ public class MainsScreenController implements Observer {
         tour = new Tour(new ArrayList<>(), null, this, planning.getWarehouse().getDepartureTime(), map.getMatAdj());
 
         // we compute the tour
-
         currentState.computeTour(this, map, planning, tour);
-
-        // we update items from the gui
-
-        updateTourLayer();
-        updateTableView();
-
+        // this.updateTourLayer();
+        System.out.println("End of Compute Tour");
         currentState.enableButton(this);
     }
 
@@ -371,7 +370,8 @@ public class MainsScreenController implements Observer {
         currentState.redo(listOfCommands);
     }
 
-    /**x
+    /**
+     * x
      * Method called to open a Nevigation File
      * Return the file
      *
@@ -404,14 +404,33 @@ public class MainsScreenController implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println("Une fonction d'actualisation à été appelé");
+        //System.out.println("Une fonction d'actualisation à été appelé");
         String action = (String) arg;
         switch (action) {
             case "UPDATEMAP":
                 System.out.println("Update map called");
-                requestLayer.forceReRender();
-                tourLayer.forceReRender();
-                mapView.layout();
+                Platform.runLater(new Runnable() {
+                    private MainsScreenController myController;
+
+                    public Runnable init(MainsScreenController myParam) {
+                        this.myController = myParam;
+                        return this;
+                    }
+
+                    @Override
+                    public void run() {
+                        myController.updateDynamycMap();
+                    }
+                }.init(this));
+                //this.updateDynamycMap();
+                try {
+                    System.out.println("updtaMapView222 Called");
+                    TimeUnit.MILLISECONDS.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
                 break;
             default:
                 System.out.println("Unknown method");
@@ -436,6 +455,8 @@ public class MainsScreenController implements Observer {
         mapView.addLayer(intersectionLayer);
 
         intersectionLayer.forceReRender();
+
+
     }
 
     public void updateTableView() {
@@ -494,10 +515,10 @@ public class MainsScreenController implements Observer {
     }
 
 
-    public void updateMap() {
+    public void initMap() {
         // clear possible layer
         mapView.removeLayer(requestLayer);
-        mapView.removeLayer(tourLayer);
+        //mapView.removeLayer(tourLayer);
 
         /* Zoom de 5 */
         mapView.setZoom(14);
@@ -524,13 +545,41 @@ public class MainsScreenController implements Observer {
             }
             System.out.println("onMousedetect");
             //Pour les layers de request
-            requestLayer.forceReRender();
-            tourLayer.forceReRender();
-
-            //Pour le fond de la map
-            mapView.layout();
+            this.updateMapView();
 
         });
+    }
+
+    public void updateDynamycMap() {
+        tourLayer.resetAll();
+
+        List<Intersection> intersectionList = tour.getIntersections();
+
+        for (int i = 0; i < intersectionList.size() - 1; i++) {
+            Intersection start;
+            Intersection end;
+            start = intersectionList.get(i);
+            end = intersectionList.get(i + 1);
+            MapPoint mapPointStart = new MapPoint(start.getLatitude(), start.getLongitude());
+            tourLayer.addPoint(start.getIdIntersection(), mapPointStart);
+            MapPoint mapPointEnd = new MapPoint(end.getLatitude(), end.getLongitude());
+            tourLayer.addPoint(end.getIdIntersection(), mapPointEnd);
+            tourLayer.addSegment(mapPointStart, mapPointEnd, (long) i);
+        }
+
+        tourLayer.tourLineHover();
+        tourLayer.forceReRender();
+        //mapView.layout();
+
+
+    }
+
+    public void updateMapView() {
+        //requestLayer.forceReRender();
+        //tourLayer.forceReRender();
+        mapView.layout();
+
+        System.out.println("updtaMapView Called");
     }
 
     public void updateTourLayer() {
@@ -563,12 +612,11 @@ public class MainsScreenController implements Observer {
         mapView.addLayer(tourLayer);
         mapView.addLayer(requestLayer);
 
-        tour.notifyChange("UPDATEMAP");
+        //tour.notifyChange("UPDATEMAP");
     }
 
-    public void updateRequestLayer() {
+    public void initRequestLayer() {
         mapView.removeLayer(requestLayer);
-        mapView.removeLayer(tourLayer);
 
         //Create the Request Layer
 

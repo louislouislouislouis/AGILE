@@ -15,14 +15,14 @@ public class AddRequestCommand implements Command {
 
     public void doCommand() {
         controller.getPlanning().addRequest(request);
-        controller.updateRequestLayer();
+        controller.initRequestLayer();
         controller.updateTourLayer();
         controller.updateTableView();
     }
 
     public void undoCommand() {
         controller.getPlanning().removeRequest(request);
-        controller.updateRequestLayer();
+        controller.initRequestLayer();
         controller.updateTourLayer();
         controller.updateTableView();
     }

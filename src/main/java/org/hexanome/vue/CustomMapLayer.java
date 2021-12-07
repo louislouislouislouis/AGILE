@@ -53,6 +53,14 @@ public class CustomMapLayer extends MapLayer {
         this.getChildren().add(circle);
     }
 
+    public void resetAll() {
+        pointList.clear();
+        segmentList.clear();
+        shapeList.clear();
+        polylineList.clear();
+        this.getChildren().clear();
+    }
+
     /**
      * add a special Point to the layer
      * with a circle shape
@@ -161,10 +169,8 @@ public class CustomMapLayer extends MapLayer {
     public void tourLineHover() {
         polylineList.forEach((aLong, polyline) -> {
             polyline.hoverProperty().addListener((observable, oldValue, newValue) -> {
-
                 if (newValue) {
                     polylineList.forEach((id, poly) -> {
-
                         if (id <= aLong) {
                             poly.setStrokeWidth(7);
                             poly.setStroke(Color.DODGERBLUE);
@@ -204,17 +210,10 @@ public class CustomMapLayer extends MapLayer {
     }
 
     public void forceReRender() {
-        layoutLayer();
-    }
-
-    /* La fonction est appelée à chaque rafraichissement de la carte */
-    @Override
-    protected void layoutLayer() {
-        /* Conversion des MapPoint vers Point2D */
+        System.out.println("eze");
         pointList.forEach((id, mapPoint) -> {
 
             Shape shape = shapeList.get(id);
-
             Point2D point2d = this.getMapPoint(mapPoint.getLatitude(), mapPoint.getLongitude());
 
             if (shape instanceof Circle) {
@@ -229,11 +228,54 @@ public class CustomMapLayer extends MapLayer {
         });
 
         segmentList.forEach((id, pair) -> {
+
             MapPoint mapPointStart = pair.getKey();
             MapPoint mapPointEnd = pair.getValue();
 
             Point2D point2dStart = this.getMapPoint(mapPointStart.getLatitude(), mapPointStart.getLongitude());
             Point2D point2dEnd = this.getMapPoint(mapPointEnd.getLatitude(), mapPointEnd.getLongitude());
+
+
+            Polyline polyline = polylineList.get(id);
+
+            polyline.getPoints().clear();
+
+            polyline.getPoints().addAll(
+                    point2dStart.getX(), point2dStart.getY(),
+                    point2dEnd.getX(), point2dEnd.getY()
+            );
+        });
+    }
+
+    /* La fonction est appelée à chaque rafraichissement de la carte */
+    @Override
+    protected void layoutLayer() {
+        System.out.println("lll");
+        /* Conversion des MapPoint vers Point2D */
+        pointList.forEach((id, mapPoint) -> {
+
+            Shape shape = shapeList.get(id);
+            Point2D point2d = this.getMapPoint(mapPoint.getLatitude(), mapPoint.getLongitude());
+
+            if (shape instanceof Circle) {
+                /* Déplace le cercle selon les coordonnées du point */
+                shape.setTranslateX(point2d.getX());
+                shape.setTranslateY(point2d.getY());
+            } else {
+                /* Déplace le cercle selon les coordonnées du point */
+                shape.setTranslateX(point2d.getX() - shape.getLayoutBounds().getWidth() / 2);
+                shape.setTranslateY(point2d.getY() - shape.getLayoutBounds().getWidth() / 2);
+            }
+        });
+
+        segmentList.forEach((id, pair) -> {
+
+            MapPoint mapPointStart = pair.getKey();
+            MapPoint mapPointEnd = pair.getValue();
+
+            Point2D point2dStart = this.getMapPoint(mapPointStart.getLatitude(), mapPointStart.getLongitude());
+            Point2D point2dEnd = this.getMapPoint(mapPointEnd.getLatitude(), mapPointEnd.getLongitude());
+
 
             Polyline polyline = polylineList.get(id);
 
