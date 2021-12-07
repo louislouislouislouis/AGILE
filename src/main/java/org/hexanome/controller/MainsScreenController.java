@@ -319,12 +319,16 @@ public class MainsScreenController implements Observer {
 
     /**
      * Method to be called every time button compute tour is handled
+     * This method call the method computeTour of the current state and reset the listOfCommands
      *
      * @param actionEvent
      * @return void
      */
     public void computeTour(ActionEvent actionEvent) {
         tour = new Tour(new ArrayList<>(), null, this, planning.getWarehouse().getDepartureTime(), map.getMatAdj());
+
+        // we must reset the command list
+        listOfCommands.reset();
 
         // we compute the tour
         currentState.computeTour(this, map, planning, tour);

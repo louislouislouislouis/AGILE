@@ -44,7 +44,7 @@ public class GraphAPI {
         tour.addDestination(planning.getWarehouse().getAddress());
         tour.addPoint(planning.getWarehouse());
 
-        tsp.searchSolution(1800000, g, tour);
+        tsp.searchSolution(60000, g, tour);
         // System.out.print("Solution of cost " + tsp.getSolutionCost() + " found in "
         //       + (System.currentTimeMillis() - startTime) + "ms : ");
     }

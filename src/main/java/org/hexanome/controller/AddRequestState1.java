@@ -2,6 +2,9 @@ package org.hexanome.controller;
 
 import org.hexanome.model.Intersection;
 
+/**
+ * @author Gastronom'if
+ */
 public class AddRequestState1 implements State {
     // State when receiving the message addRequest() from InitialState
     // -> Wait for the user to enter a first point (corresponding to the pickup point)
@@ -9,6 +12,11 @@ public class AddRequestState1 implements State {
     @Override
     public void leftClick(MainsScreenController controller, Intersection i) {
         if (i != null) {
+            // we must check if the intersection has segment associated
+            System.out.println(controller.getMap().getMatAdj().get(i));
+            if (controller.getMap().getMatAdj().get(i) != null) {
+
+            }
             // we change the selected intersection in the next state
             controller.addRequestState2.setPickUp(i);
 
