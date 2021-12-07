@@ -53,8 +53,8 @@ public class MainsScreenController implements Observer {
     protected final AddRequestState2 addRequestState2 = new AddRequestState2();
     protected final AddRequestState3 addRequestState3 = new AddRequestState3();
     protected final AddRequestState4 addRequestState4 = new AddRequestState4();
-    protected final ModifyRequestState modifyRequestState = new ModifyRequestState();
-    protected final DeleteRequestState deleteRequestState = new DeleteRequestState();
+    /*protected final ModifyRequestState modifyRequestState = new ModifyRequestState();
+    protected final DeleteRequestState deleteRequestState = new DeleteRequestState();*/
 
     // current state
     private State currentState = initialState;
@@ -86,16 +86,20 @@ public class MainsScreenController implements Observer {
     private TableColumn<Point, String> columnArrivalTime;
     @FXML
     private TableColumn<Point, Color> columnColor;
-    @FXML
-    private TableColumn<Point, Button> columnDelete;
+    /*@FXML
+    private TableColumn<Point, Button> columnDelete;*/
     @FXML
     private TableColumn<Point, String> columnDepartureTime;
     @FXML
     private TableColumn<Point, String> columnID;
-    @FXML
-    private TableColumn<Point, Button> columnModify;
+    /*@FXML
+    private TableColumn<Point, Button> columnModify;*/
     @FXML
     private TableColumn<Point, String> columnType;
+    /*@FXML
+    private Button btnDeleteTableRow;
+    @FXML
+    private Button btnEditTableRow;*/
 
     /*----------------------Constructor---------------------------------------*/
 
@@ -370,9 +374,10 @@ public class MainsScreenController implements Observer {
         currentState.redo(listOfCommands);
     }
 
+
     /**
      * x
-     * Method called to open a Nevigation File
+     * Method called to open a Navigation File
      * Return the file
      *
      * @param actionEvent
@@ -402,6 +407,12 @@ public class MainsScreenController implements Observer {
         return validationPlaningRequest;
     }
 
+    /**
+     * used to Update the map
+     *
+     * @param o observable
+     * @arg arg
+     */
     @Override
     public void update(Observable o, Object arg) {
         //System.out.println("Une fonction d'actualisation à été appelé");
@@ -439,6 +450,9 @@ public class MainsScreenController implements Observer {
 
     }
 
+    /**
+     * this method update the layer with intersections
+     */
     public void updateMapIntersection() {
         // Add all the intersection to the layer
         intersectionLayer = new CustomMapLayer();
@@ -481,9 +495,9 @@ public class MainsScreenController implements Observer {
         columnArrivalTime.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
         columnDepartureTime.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
         columnColor.setCellValueFactory(new PropertyValueFactory<>("color"));
-        columnModify.setCellValueFactory(new PropertyValueFactory<>("modify"));
+        /*columnModify.setCellValueFactory(new PropertyValueFactory<>("modify"));
         columnDelete.setCellValueFactory(new PropertyValueFactory<>("delete"));
-
+*/
         //colorCol.setCellFactory(tv -> new TableCell<Point, Color>() {
         columnColor.setCellFactory(tv -> new TableCell<Point, Color>() {
             @Override
@@ -645,5 +659,19 @@ public class MainsScreenController implements Observer {
         mapView.addLayer(requestLayer);
 
         requestLayer.forceReRender();
+    }
+
+    @FXML
+    void deleteTableRow(ActionEvent event) {
+        //Modify departure time , arrival time and point in the map
+
+        //tableView.getSelectionModel();
+        //tableView.setOnKeyReleased();
+        System.out.println(tableView.getSelectionModel().getSelectedItem());
+    }
+
+    @FXML
+    void editTableRow(ActionEvent event) {
+
     }
 }
