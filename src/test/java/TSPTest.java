@@ -112,7 +112,7 @@ public class TSPTest {
         GraphAPI ga = new GraphAPI();
         Tour t = new Tour();
         t.setDepartureTime(LocalTime.MIDNIGHT);
-        ga.V1_TSP(planning, map, t);
+        ga.V1_TSP(planning, map, t, null);
         assertEquals(t.getIntersections().size(), 281);
 
         for (int i = 0; i < solution.length; ++i) {

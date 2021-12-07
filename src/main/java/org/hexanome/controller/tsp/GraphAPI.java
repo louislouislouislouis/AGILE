@@ -1,5 +1,6 @@
 package org.hexanome.controller.tsp;
 
+import org.hexanome.controller.MainsScreenController;
 import org.hexanome.model.*;
 
 import java.time.LocalTime;
@@ -10,7 +11,7 @@ public class GraphAPI {
     public GraphAPI() {
     }
 
-    public void V1_TSP(PlanningRequest planning, MapIF map, Tour tour) {
+    public void V1_TSP(PlanningRequest planning, MapIF map, Tour tour, MainsScreenController allowCalculation) {
         Map<Intersection, Map<Intersection, Segment>> adj = map.getMatAdj();
         Set<Intersection> destinations = this.getDestinations(planning);
 
@@ -44,9 +45,10 @@ public class GraphAPI {
         tour.addDestination(planning.getWarehouse().getAddress());
         tour.addPoint(planning.getWarehouse());
 
-        tsp.searchSolution(60000, g, tour);
-        // System.out.print("Solution of cost " + tsp.getSolutionCost() + " found in "
+        tsp.searchSolution(60000, g, tour, allowCalculation);
+        System.out.print("End of method");
         //       + (System.currentTimeMillis() - startTime) + "ms : ");
+
     }
 
     public void ADD_REQUEST(PlanningRequest planning, MapIF map, Tour tour) {

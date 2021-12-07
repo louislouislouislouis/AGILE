@@ -231,7 +231,6 @@ public class CustomMapLayer extends MapLayer {
      * This public method is used to force the render of this layer
      */
     public void forceReRender() {
-        System.out.println("eze");
         pointList.forEach((id, mapPoint) -> {
 
             Shape shape = shapeList.get(id);
@@ -271,7 +270,7 @@ public class CustomMapLayer extends MapLayer {
     /* La fonction est appelée à chaque rafraichissement de la carte */
     @Override
     protected void layoutLayer() {
-        System.out.println("lll");
+
         /* Conversion des MapPoint vers Point2D */
         pointList.forEach((id, mapPoint) -> {
 

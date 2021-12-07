@@ -7,6 +7,7 @@ import java.util.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
@@ -47,6 +48,7 @@ public class MainsScreenController implements Observer {
     protected final MapState mapState = new MapState();
     protected final PlanningState planningState = new PlanningState();
     protected final TourState tourState = new TourState();
+    protected final ComputeWaitingState waitingComputeState = new ComputeWaitingState();
     protected final AddRequestState1 addRequestState1 = new AddRequestState1();
     protected final AddRequestState2 addRequestState2 = new AddRequestState2();
     protected final AddRequestState3 addRequestState3 = new AddRequestState3();
@@ -63,7 +65,13 @@ public class MainsScreenController implements Observer {
     private CustomMapLayer tourLayer;
     private CustomMapLayer intersectionLayer;
 
+
+    //
+    private Boolean allowcalculation;
+
     //Declaration of the interactive buttons in the mainsScreen.fxml
+    @FXML
+    private Button btnStopCalcul;
     @FXML
     private Button btnAddRequest;
     @FXML
@@ -115,10 +123,28 @@ public class MainsScreenController implements Observer {
         mapView.addLayer(requestLayer);
         mapView.addLayer(tourLayer);
         mapView.addLayer(intersectionLayer);
+        this.allowcalculation = false;
 
     }
 
     /*-------------------------GETTERS AND SETTERS-----------------------------------------------------*/
+    public Boolean isAllowcalculation() {
+        return allowcalculation;
+    }
+
+    public void setAllowcalculation(boolean allowcalculation) {
+        this.allowcalculation = allowcalculation;
+    }
+
+    public Button getBtnStopCalcul() {
+        return btnStopCalcul;
+    }
+
+    public void setBtnStopCalcul(Button btnStopCalcul) {
+        this.btnStopCalcul = btnStopCalcul;
+    }
+
+
     public Button getBtnLoadMap() {
         return btnLoadMap;
     }
@@ -332,8 +358,7 @@ public class MainsScreenController implements Observer {
 
         // we compute the tour
         currentState.computeTour(this, map, planning, tour);
-        // this.updateTourLayer();
-        System.out.println("End of Compute Tour");
+
         currentState.enableButton(this);
     }
 
@@ -697,5 +722,17 @@ public class MainsScreenController implements Observer {
         //tableView.getSelectionModel();
         //tableView.setOnKeyReleased();
         System.out.println(tableView.getSelectionModel().getSelectedItem());
+    }
+
+    public void stopTour(ActionEvent actionEvent) {
+        currentState.finishCompute(this);
+    }
+
+    public void changeCusror(String w) {
+        System.out.println("VERIFY CURSOR IF NEEDED");
+        if (w.equals("W")) {
+            System.out.println(btnAddRequest.getScene().getRoot());
+            btnAddRequest.getScene().getRoot().setCursor(Cursor.WAIT);
+        }
     }
 }

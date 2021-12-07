@@ -1,5 +1,6 @@
 package org.hexanome.controller.tsp;
 
+import org.hexanome.controller.MainsScreenController;
 import org.hexanome.model.*;
 
 import java.util.*;
@@ -30,7 +31,7 @@ public abstract class TemplateTSP implements TSP {
         this.planning = planning;
     }
 
-    public void searchSolution(int timeLimit, Graph g, Tour tour) {
+    public void searchSolution(int timeLimit, Graph g, Tour tour, MainsScreenController allowCalculation) {
         // TODO: delete timeout when calculation can be stopped
         if (timeLimit <= 0) return;
         startTime = System.currentTimeMillis();
@@ -42,7 +43,7 @@ public abstract class TemplateTSP implements TSP {
         Collection<Integer> visited = new ArrayList<Integer>(g.getNbVertices());
         visited.add(0); // The first visited vertex is 0
         bestSolCost = Double.MAX_VALUE;
-        branchAndBound(0, unvisited, visited, Double.valueOf(0), tour);
+        branchAndBound(0, unvisited, visited, Double.valueOf(0), tour, allowCalculation);
     }
 
     public Integer getSolution(int i) {
@@ -86,8 +87,13 @@ public abstract class TemplateTSP implements TSP {
      * @param currentCost   the cost of the path corresponding to <code>visited</code>
      */
     private void branchAndBound(int currentVertex, Collection<Integer> unvisited,
-                                Collection<Integer> visited, Double currentCost, Tour tour) {
+                                Collection<Integer> visited, Double currentCost, Tour tour, MainsScreenController allowCalculation) {
+
         if (System.currentTimeMillis() - startTime > timeLimit) return;
+        if (!allowCalculation.isAllowcalculation() && tour.getIntersections().size() > 1) {
+            System.out.println("Tour have been forced to stop");
+            return;
+        }
         if (unvisited.size() == 0) {
             if (g.isArc(currentVertex, 0)) {
                 if (currentCost + g.getCost(currentVertex, 0) < bestSolCost) {
@@ -105,7 +111,7 @@ public abstract class TemplateTSP implements TSP {
                 Intersection lastIntersection = tour.getLastIntersection();
 
                 branchAndBound(nextVertex, unvisited, visited,
-                        currentCost + g.getCost(currentVertex, nextVertex), tour);
+                        currentCost + g.getCost(currentVertex, nextVertex), tour, allowCalculation);
 
                 visited.remove(nextVertex);
                 unvisited.add(nextVertex);

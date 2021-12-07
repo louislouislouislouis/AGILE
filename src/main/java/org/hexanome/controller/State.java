@@ -72,4 +72,8 @@ public interface State {
 
     default void showDialogBox(MainsScreenController controller) {
     }
+
+    default void finishCompute(MainsScreenController controller) {
+
+    }
 }
