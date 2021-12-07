@@ -605,15 +605,22 @@ public class MainsScreenController implements Observer {
 
     @FXML
     void deleteTableRow(ActionEvent event) {
+        //Delete point in the map
+        Point selectedItem = tableView.getSelectionModel().getSelectedItem();
+        if (selectedItem.getType().contains("pickup")||selectedItem.getType().contains("delivery") ){
+
+        }
+        tableView.getItems().remove(selectedItem);
+
+
+    }
+
+    @FXML
+    void editTableRow(ActionEvent event) {
         //Modify departure time , arrival time and point in the map
 
         //tableView.getSelectionModel();
         //tableView.setOnKeyReleased();
         System.out.println(tableView.getSelectionModel().getSelectedItem());
-    }
-
-    @FXML
-    void editTableRow(ActionEvent event) {
-
     }
 }
