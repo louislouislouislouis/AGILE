@@ -60,10 +60,20 @@ public class Point {
         this.btnModify = btnModify;
     }
 
-    @Override
+    /*@Override
     public String toString() {
         return "Point{" +
                 "address=" + address +
                 "}";
+    }*/
+
+    @Override
+    public String toString() {
+        return "Point{" +
+                "address=" + address +
+                ", id=" + id +
+                ", type='" + type + '\'' +
+                ", color=" + color +
+                '}';
     }
 }

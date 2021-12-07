@@ -443,21 +443,7 @@ public class MainsScreenController implements Observer {
     }
 
     public void updateTableView() {
-        // columns initialization
-        /*TableColumn<Point, String> idCol = (TableColumn) tableView.getColumns().get(0);
-        TableColumn<Point, String> typeCol = (TableColumn) tableView.getColumns().get(1);
-        TableColumn<Point, String> arrivalCol = (TableColumn) tableView.getColumns().get(2);
-        TableColumn<Point, String> waitingCol = (TableColumn) tableView.getColumns().get(3);
-        TableColumn<Point, String> departureCol = (TableColumn) tableView.getColumns().get(4);
-        TableColumn<Point, Color> colorCol = (TableColumn) tableView.getColumns().get(6);*/
-
         // cell factory
-        /*idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        arrivalCol.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
-        waitingCol.setCellValueFactory(new PropertyValueFactory<>("duration"));
-        departureCol.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
-        colorCol.setCellValueFactory(new PropertyValueFactory<>("color"));*/
 
         columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
         columnType.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -467,7 +453,6 @@ public class MainsScreenController implements Observer {
         /*columnModify.setCellValueFactory(new PropertyValueFactory<>("modify"));
         columnDelete.setCellValueFactory(new PropertyValueFactory<>("delete"));
 */
-        //colorCol.setCellFactory(tv -> new TableCell<Point, Color>() {
         columnColor.setCellFactory(tv -> new TableCell<Point, Color>() {
             @Override
             protected void updateItem(Color item, boolean empty) {
@@ -607,18 +592,64 @@ public class MainsScreenController implements Observer {
     void deleteTableRow(ActionEvent event) {
         //Delete point in the map
         Point selectedItem = tableView.getSelectionModel().getSelectedItem();
-        if (selectedItem.getType().contains("pickup")||selectedItem.getType().contains("delivery") ){
+        String typeItem = selectedItem.getType();
+        Color colorItem = selectedItem.getColor();
+        planning.getRequests().forEach(request -> {
+            DeliveryPoint delivery = request.getDeliveryPoint();
+            PickupPoint pickup = request.getPickupPoint();
+            System.out.println("Delivery " + delivery);
+            System.out.println("Pickup " + pickup);
+            Color colorDelivery = request.getDeliveryPoint().getColor();
+            System.out.println("DeliveryColor : " + colorDelivery);
+            Color colorPickup = request.getPickupPoint().getColor();
+            System.out.println("PickupColor " + colorPickup);
+            Boolean equals = colorDelivery.equals(colorPickup);
+            Boolean colorEquals = colorDelivery.equals(colorItem);
+            System.out.println("Equals? " + equals);
+            System.out.println(colorEquals);
+            if (colorEquals == true){
+                planning.removeRequest(request);
+                System.out.println("Request que se elimina : " + request);
+            }else{
+                System.out.println("No se elimina ninguna request");
+            }
+        });
 
-        }
+        /*Color colorDeliveryPoint = request.getDeliveryPoint().getColor();
+        Color colorPickupPoint = request.getPickupPoint().getColor();
+        DeliveryPoint delivery = request.getDeliveryPoint();
+        PickupPoint pickup = request.getPickupPoint();
+        System.out.println(colorDeliveryPoint);
+        System.out.println(colorPickupPoint);
+        if (colorDeliveryPoint == colorPickupPoint){
+            //Delete pair
+            request = Request(pickup,delivery);
+            planning.removeRequest(request);
+        }*/
+
+        //if(planning.getRequests())
+        System.out.println(typeItem);
+        System.out.println(colorItem);
+        System.out.println(planning);
+        //if ()
         tableView.getItems().remove(selectedItem);
-
-
+        updateTableView();
+        updateTourLayer();
+        updateRequestLayer();
     }
 
     @FXML
     void editTableRow(ActionEvent event) {
         //Modify departure time , arrival time and point in the map
 
+        Point selectedItem = tableView.getSelectionModel().getSelectedItem();
+        String typeItem = selectedItem.getType();
+
+        switch (typeItem){
+            case("warehouse"):
+                //getWarehouse()->PlanningRequest
+                break;
+        }
         //tableView.getSelectionModel();
         //tableView.setOnKeyReleased();
         System.out.println(tableView.getSelectionModel().getSelectedItem());

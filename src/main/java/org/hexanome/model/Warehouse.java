@@ -29,6 +29,14 @@ public class Warehouse extends Point {
         return arrivalTime;
     }
 
+    public void setDepartureTime(LocalTime departureTime) {
+        this.departureTime = departureTime;
+    }
+
+    public void setArrivalTime(LocalTime arrivalTime) {
+        this.arrivalTime = arrivalTime;
+    }
+
     @Override
     public String toString() {
         return "Warehouse{" +
