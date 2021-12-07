@@ -114,6 +114,12 @@ public class CustomMapLayer extends MapLayer {
         this.getChildren().add(polyline);
     }
 
+    /**
+     * this method create event for each shape of the map that enable to scroll to the
+     * element in the table view. It scrolls if you click on one of the shape.
+     *
+     * @param tableView
+     */
     public void scrollToPointEvent(TableView<Point> tableView) {
         shapeList.forEach((id, shape) -> {
             shape.setOnMouseClicked(mouseEvent -> {
@@ -130,6 +136,14 @@ public class CustomMapLayer extends MapLayer {
         });
     }
 
+    /**
+     * This method create events for each intersection of the map
+     * The first event is a hover event that change the size of the shape
+     * The second event trigger the method leftClick or rightClick of the controller when we click on them
+     *
+     * @param c   main controller
+     * @param map param that contains all the segments and all the intersections of the current map
+     */
     public void intersectionEvent(MainsScreenController c, MapIF map) {
         shapeList.forEach((id, shape) -> {
             // hover pour changer la taille des points
@@ -158,6 +172,10 @@ public class CustomMapLayer extends MapLayer {
         });
     }
 
+    /**
+     * This method create event for each segment of the layer
+     * This help the user to know the path that has been taken to arrive to this segment
+     */
     public void tourLineHover() {
         polylineList.forEach((aLong, polyline) -> {
             polyline.hoverProperty().addListener((observable, oldValue, newValue) -> {
@@ -203,6 +221,9 @@ public class CustomMapLayer extends MapLayer {
         return segmentList;
     }
 
+    /**
+     * This public method is used to force the render of this layer
+     */
     public void forceReRender() {
         layoutLayer();
     }

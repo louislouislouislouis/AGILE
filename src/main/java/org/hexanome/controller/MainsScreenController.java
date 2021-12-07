@@ -50,8 +50,8 @@ public class MainsScreenController implements Observer {
     protected final AddRequestState2 addRequestState2 = new AddRequestState2();
     protected final AddRequestState3 addRequestState3 = new AddRequestState3();
     protected final AddRequestState4 addRequestState4 = new AddRequestState4();
-    protected final ModifyRequestState modifyRequestState = new ModifyRequestState();
-    protected final DeleteRequestState deleteRequestState = new DeleteRequestState();
+    /*protected final ModifyRequestState modifyRequestState = new ModifyRequestState();
+    protected final DeleteRequestState deleteRequestState = new DeleteRequestState();*/
 
     // current state
     private State currentState = initialState;
@@ -93,10 +93,10 @@ public class MainsScreenController implements Observer {
     private TableColumn<Point, Button> columnModify;*/
     @FXML
     private TableColumn<Point, String> columnType;
-    @FXML
+    /*@FXML
     private Button btnDeleteTableRow;
     @FXML
-    private Button btnEditTableRow;
+    private Button btnEditTableRow;*/
 
     /*----------------------Constructor---------------------------------------*/
 
@@ -336,6 +336,10 @@ public class MainsScreenController implements Observer {
         currentState.enableButton(this);
     }
 
+    /**
+     * Method Called when there is a right click
+     * Used to start the rightclick method of each state
+     */
     public void rightClick() {
         this.currentState.rightClick(this);
         System.out.println("rightclick");
@@ -343,18 +347,33 @@ public class MainsScreenController implements Observer {
         currentState.enableButton(this);
     }
 
+    /**
+     * Method Called when there is a left click
+     * Used to start the leftClick method of each state
+     *
+     * @param i an intersection is given in certain cases
+     */
     public void leftClick(Intersection i) {
         this.currentState.leftClick(this, i);
         this.currentState.enableButton(this);
         this.currentState.showDialogBox(this);
     }
 
+    /**
+     * Method Called when we want to cancel a state
+     */
     public void cancel() {
         this.currentState.cancel(this);
         this.currentState.enableButton(this);
         this.currentState.showDialogBox(this);
     }
 
+    /**
+     * Method Called when we want to cancel a state
+     *
+     * @param duration A parameter used if we want to give a duration when we add a request
+     *                 if not put -1
+     */
     public void validate(int duration) {
         this.currentState.validate(this, duration, listOfCommands);
         this.currentState.enableButton(this);
@@ -375,8 +394,9 @@ public class MainsScreenController implements Observer {
         currentState.redo(listOfCommands);
     }
 
-    /**x
-     * Method called to open a Nevigation File
+    /**
+     * x
+     * Method called to open a Navigation File
      * Return the file
      *
      * @param actionEvent
@@ -406,6 +426,12 @@ public class MainsScreenController implements Observer {
         return validationPlaningRequest;
     }
 
+    /**
+     * used to Update the map
+     *
+     * @param o observable
+     * @arg arg
+     */
     @Override
     public void update(Observable o, Object arg) {
         System.out.println("Une fonction d'actualisation à été appelé");
@@ -424,6 +450,9 @@ public class MainsScreenController implements Observer {
 
     }
 
+    /**
+     * this method update the layer with intersections
+     */
     public void updateMapIntersection() {
         // Add all the intersection to the layer
         intersectionLayer = new CustomMapLayer();
@@ -601,5 +630,19 @@ public class MainsScreenController implements Observer {
         mapView.addLayer(requestLayer);
 
         requestLayer.forceReRender();
+    }
+
+    @FXML
+    void deleteTableRow(ActionEvent event) {
+        //Modify departure time , arrival time and point in the map
+
+        //tableView.getSelectionModel();
+        //tableView.setOnKeyReleased();
+        System.out.println(tableView.getSelectionModel().getSelectedItem());
+    }
+
+    @FXML
+    void editTableRow(ActionEvent event) {
+
     }
 }
