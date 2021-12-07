@@ -1,6 +1,8 @@
 package org.hexanome.model;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class PlanningRequest {
     public Warehouse warehouse;
@@ -46,5 +48,36 @@ public class PlanningRequest {
                 "\nwarehouse=\n" + warehouse +
                 "\n, requests=\n" + requests +
                 "\n}";
+    }
+
+    /**
+     * @param idIntersection to check for
+     * @return list with all pickup points followed by all delivery points with given ID
+     */
+    public List<Point> getPointByIdIntersection(long idIntersection) {
+        List<Point> points = new ArrayList<>();
+        for (Request r : requests) {
+            if (idIntersection == r.getPickupPoint().getAddress().getIdIntersection()) {
+                points.add(r.getPickupPoint());
+            }
+        }
+        for (Request r2 : requests) {
+            if (idIntersection == r2.getDeliveryPoint().getAddress().getIdIntersection()) {
+                points.add(r2.getDeliveryPoint());
+            }
+        }
+        return points;
+    }
+
+    public Point getPickupByDelivery(Point delivery) {
+        if (!(delivery instanceof DeliveryPoint)) {
+            return null;
+        }
+        for (Request r : requests) {
+            if (r.getDeliveryPoint().equals(delivery)) {
+                return r.getPickupPoint();
+            }
+        }
+        return null;
     }
 }

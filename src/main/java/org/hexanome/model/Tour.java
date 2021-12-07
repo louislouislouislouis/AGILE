@@ -14,6 +14,7 @@ public class Tour extends Observable {
     private Map<Intersection, Map<Intersection, Segment>> MatAdj;
     private Intersection warehouse;
     private List<Intersection> destinations = new ArrayList<>();
+    private List<Point> points = new ArrayList<>();
 
     @Override
     public String toString() {
@@ -49,12 +50,12 @@ public class Tour extends Observable {
      * @param intersections list of all intersections of the tour
      * @param cost          calculated cost of the tour
      */
-    public Tour(List<Intersection> intersections, Double cost, Observer o, LocalTime departureTime,Map<Intersection, Map<Intersection, Segment>> MatAdj  ) {
+    public Tour(List<Intersection> intersections, Double cost, Observer o, LocalTime departureTime, Map<Intersection, Map<Intersection, Segment>> MatAdj) {
         this.addObserver(o);
         this.intersections = intersections;
         this.cost = cost;
         this.MatAdj = MatAdj;
-        this.departureTime= departureTime;
+        this.departureTime = departureTime;
     }
 
     public void setIntersections(List<Intersection> intersections) {
@@ -113,6 +114,7 @@ public class Tour extends Observable {
 
     /**
      * completes list of all intersections to visit during the tour
+     *
      * @param map contains all Intersections and Segments and shortestPathsIntersections
      */
     public void computeCompleteTour(MapIF map) {
@@ -134,14 +136,15 @@ public class Tour extends Observable {
 
     /**
      * sum of cost of all visited Segments
+     *
      * @param map contains all Intersections and Segments and shortestPathsCost
      */
     public void calculateCost(MapIF map) {
         Map<Long, Map<Long, Double>> shortestPathsCost = map.getShortestPathsCost();
         double cost = 0;
-        for (int i = 0; i < destinations.size()-1; i++) {
+        for (int i = 0; i < destinations.size() - 1; i++) {
             Intersection startIntersection = destinations.get(i);
-            Intersection destinationIntersection = destinations.get(i+1);
+            Intersection destinationIntersection = destinations.get(i + 1);
             System.out.println("startIntersection: " + startIntersection.getIdIntersection());
             System.out.println("destinationIntersection: " + destinationIntersection.getIdIntersection());
             System.out.println("OK");
@@ -155,7 +158,7 @@ public class Tour extends Observable {
     }
 
     public void removeLastDestination() {
-        this.destinations.remove(this.destinations.size()-1);
+        this.destinations.remove(this.destinations.size() - 1);
     }
 
     public void removeRequest(Request request, MapIF map) {
@@ -166,5 +169,67 @@ public class Tour extends Observable {
 
         this.computeCompleteTour(map);
         this.calculateCost(map);
+    }
+
+    /**
+     * @param map
+     * @param start
+     * @param destination
+     * @return time for going from a given startIntersection to a given destinationIntersection
+     */
+    public int getSecondsForPath(MapIF map, Intersection start, Intersection destination) {
+        List<Long> intersectionsFromStartToDestination = map.getShortestPathsIntersections().get(start.getIdIntersection()).get(destination.getIdIntersection());
+        List<Segment> segmentsFromStartToDestination = new ArrayList<>();
+        for (int i = 0; i < intersectionsFromStartToDestination.size() - 1; i++) {
+            Long idCurrentStart = intersectionsFromStartToDestination.get(i);
+            Intersection currentStart = map.getIntersections().get(idCurrentStart);
+            Long idCurrentDestination = intersectionsFromStartToDestination.get(i + 1);
+            Intersection currentDestination = map.getIntersections().get(idCurrentDestination);
+
+            segmentsFromStartToDestination.add(map.getMatAdj().get(currentStart).get(currentDestination));
+        }
+        int time = 0;
+        for (Segment s : segmentsFromStartToDestination) {
+            //          time += (int) s.getDuration();
+        }
+        return time;
+    }
+
+    public void addPoint(Point point) {
+        this.points.add(point);
+    }
+
+    public void setPoints(PlanningRequest planning, List<Intersection> path) {
+        List<Point> newPoints = new ArrayList<>();
+        for (Intersection i : path) {
+            this.addNewPoint(i, planning, newPoints);
+        }
+        this.points = newPoints;
+    }
+
+    /**
+     * helper method for setPoints for the case that there are multiple points at the same intersection
+     * it will first add the pickup points, then the delivery points
+     * for the delivery points the corresponding pickupPoint must already be in the list
+     *
+     * @param i         current Intersection
+     * @param planning  contains all requests
+     * @param newPoints list of points in tour
+     */
+    private void addNewPoint(Intersection i, PlanningRequest planning, List<Point> newPoints) {
+        for (Point p : planning.getPointByIdIntersection(i.getIdIntersection())) {
+            if (!newPoints.contains(p)) {
+                if (!(p instanceof DeliveryPoint)) {
+                    newPoints.add(p);
+                    return;
+                } else {
+                    Point correspondingPickUpPoint = planning.getPickupByDelivery(p);
+                    if (newPoints.contains(correspondingPickUpPoint)) {
+                        newPoints.add(p);
+                        return;
+                    }
+                }
+            }
+        }
     }
 }
