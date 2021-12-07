@@ -13,14 +13,14 @@ public class DeleteRequestCommand implements Command {
 
     public void doCommand() {
         controller.getPlanning().removeRequest(request);
-        controller.updateRequestLayer();
+        controller.initRequestLayer();
         controller.updateTourLayer();
         controller.updateTableView();
     }
 
     public void undoCommand() {
         controller.getPlanning().addRequest(request);
-        controller.updateRequestLayer();
+        controller.initRequestLayer();
         controller.updateTourLayer();
         controller.updateTableView();
     }

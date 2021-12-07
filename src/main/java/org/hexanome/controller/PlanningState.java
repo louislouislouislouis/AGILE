@@ -48,7 +48,24 @@ public class PlanningState implements State {
     public void computeTour(MainsScreenController controller, MapIF map, PlanningRequest planning, Tour tour) {
         //method that calculates the most optimal path of the tour
 
-        new GraphAPI().V1_TSP(planning, map, tour);
+        new Thread(new Runnable() {
+            private PlanningRequest planning;
+            private MapIF map;
+            private Tour tour;
+
+            public Runnable init(PlanningRequest planning, MapIF map, Tour tour) {
+                this.planning = planning;
+                this.map = map;
+                this.tour = tour;
+                return this;
+            }
+
+            @Override
+            public void run() {
+                new GraphAPI().V1_TSP(this.planning, this.map, this.tour);
+            }
+        }.init(planning, map, tour)).start();
+
 
         // we change the state of the controller
         controller.setCurrentState(controller.tourState);

@@ -2,6 +2,7 @@ package org.hexanome.controller.tsp;
 
 import org.hexanome.model.*;
 
+import java.time.LocalTime;
 import java.util.*;
 
 public class GraphAPI {
@@ -28,21 +29,22 @@ public class GraphAPI {
             this.updateAdjTSP(adjTSP, dijkstra, destinations, idZero++);
         }
 
-        Map<Integer,Long> mapIdTSP = new HashMap<>();
+        Map<Integer, Long> mapIdTSP = new HashMap<>();
         Double[][] costTSP = new Double[nbVerticesTSP][nbVerticesTSP];
 
         this.calculateMapIdTSPAndCostTSP(adjTSP, mapIdTSP, costTSP, nbVerticesTSP);
 
         Graph g = new CompleteGraph(nbVerticesTSP, costTSP);
         long startTime = System.currentTimeMillis();
-        TSP tsp = new TSP1(costTSP, mapIdTSP, planning.getRequests(), map, destinations);
+        TSP tsp = new TSP1(costTSP, mapIdTSP, planning.getRequests(), map, destinations, planning);
 
         // add Warehouse to tour
         tour.addIntersection(planning.getWarehouse().getAddress());
         tour.setWarehouse(planning.getWarehouse().getAddress());
         tour.addDestination(planning.getWarehouse().getAddress());
+        tour.addPoint(planning.getWarehouse());
 
-        tsp.searchSolution(20000, g, tour);
+        tsp.searchSolution(60000, g, tour);
         // System.out.print("Solution of cost " + tsp.getSolutionCost() + " found in "
         //       + (System.currentTimeMillis() - startTime) + "ms : ");
     }
@@ -67,6 +69,7 @@ public class GraphAPI {
         this.updateShortestPathIntersections(map, dijkstra2, newDeliveryPoint);
         this.updateShortestPathsCost(map, dijkstra2, newDeliveryPoint);
 
+        //      if (!this.addRequestDuringTour(tour, planning, map)) {
         tour.removeLastDestination(); // remove Warehouse in the end of the tour
         tour.addDestination(newPickUpPoint); // add new PickupPoint
         tour.addDestination(newDeliveryPoint); // add new DeliveryPoint
@@ -74,7 +77,27 @@ public class GraphAPI {
         tour.computeCompleteTour(map);
         tour.calculateCost(map);
         tour.notifyChange("UPDATEMAP");
+        //      }
     }
+
+/*    private boolean addRequestDuringTour(Tour tour, PlanningRequest planning, MapIF map) {
+        if (!isTimeLeftDuringDeliveries(tour, planning, map)) {
+            return false;
+        }
+    }
+
+ */
+
+ /*   private boolean isTimeLeftDuringDeliveries(Tour tour, PlanningRequest planning, MapIF map) {
+        for (Request r : planning.getRequests()) {
+            LocalTime departureTime = r.getPickupPoint().getDepartureTime();
+            LocalTime arrivalTime = r.getDeliveryPoint().getArrivalTime();
+            int maxSecondsForPath = arrivalTime.getSecond() - departureTime.getSecond();
+            int actualSecondsForPath = tour.getSecondsForPath(map, r.getPickupPoint().getAddress(), r.getDeliveryPoint().getAddress());
+        }
+    }
+
+  */
 
     public void DELETE_REQUEST(Request request, MapIF map, Tour tour) {
         tour.removeRequest(request, map);
@@ -82,10 +105,9 @@ public class GraphAPI {
     }
 
     /**
-     *
-     * @param adjTSP contains cost between Intersections
+     * @param adjTSP   contains cost between Intersections
      * @param mapIdTSP maps idTSP to idIntersection
-     * @param costTSP array 2 dimensions index idTSP
+     * @param costTSP  array 2 dimensions index idTSP
      */
     private void calculateMapIdTSPAndCostTSP(Map<Long, Map<Long, Double>> adjTSP,
                                              Map<Integer, Long> mapIdTSP,
@@ -96,7 +118,7 @@ public class GraphAPI {
             int jj = 0;
             for (Map.Entry<Long, Double> j : i.getValue().entrySet()) {
                 if (j.getValue() == 0) {
-                    mapIdTSP.put(i.getKey().intValue(),j.getKey());
+                    mapIdTSP.put(i.getKey().intValue(), j.getKey());
                 }
                 costTSP[i.getKey().intValue()][jj++] = j.getValue();
             }
@@ -115,9 +137,8 @@ public class GraphAPI {
     }
 
     /**
-     *
-     * @param adjTSP adjacency matrix for calculating TSP
-     * @param dijkstra instance for calculating the shortest paths
+     * @param adjTSP       adjacency matrix for calculating TSP
+     * @param dijkstra     instance for calculating the shortest paths
      * @param destinations
      * @param idZero
      */
@@ -134,11 +155,12 @@ public class GraphAPI {
 
     /**
      * add the cost of the shortest paths from origin to every other destination to shortestPathsCost
-     * @param map contains shortestPathsCost
+     *
+     * @param map      contains shortestPathsCost
      * @param dijkstra instance for calculating the shortest paths
-     * @param origin startIntersection
+     * @param origin   startIntersection
      */
-    private void  updateShortestPathsCost(MapIF map, Dijkstra dijkstra, Intersection origin) {
+    private void updateShortestPathsCost(MapIF map, Dijkstra dijkstra, Intersection origin) {
         Map<Long, Map<Long, Double>> shortestPathsCost = map.getShortestPathsCost();
         if (!shortestPathsCost.containsKey(origin.getIdIntersection())) {
             Map<Long, Double> emptyCosts = new HashMap<>();
@@ -153,9 +175,10 @@ public class GraphAPI {
 
     /**
      * add the sequence of intersections for the shortest paths from origin to every other destination to shortestPathsIntersections
-     * @param map contains shortestPathIntersections
+     *
+     * @param map      contains shortestPathIntersections
      * @param dijkstra instance for calculating the shortest paths
-     * @param origin startIntersection
+     * @param origin   startIntersection
      */
     private void updateShortestPathIntersections(MapIF map, Dijkstra dijkstra, Intersection origin) {
         Map<Long, Map<Long, List<Long>>> shortestPathsIntersections = map.getShortestPathsIntersections();
@@ -171,9 +194,7 @@ public class GraphAPI {
     }
 
 
-
     /**
-     *
      * @param planning contains all requests
      * @return Set of Warehouse and all Pickup and Delivery Points
      */
