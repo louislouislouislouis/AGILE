@@ -5,6 +5,7 @@ public class Segment {
     private Intersection destinationIntersection;
     private String name;
     private double length;
+    private int duration;
 
     /**
      * create a segment
@@ -19,6 +20,19 @@ public class Segment {
         this.destinationIntersection = destinationIntersection;
         this.name = name;
         this.length = length;
+        this.duration = this.calculateDuration();
+    }
+
+    /**
+     * t = s/v
+     * s = length
+     * v = 15km/h : 3,6 --> converting km/h in m/s
+     *
+     * @return duration for passing the segment in seconds
+     */
+    private int calculateDuration() {
+        int duration = (int) Math.ceil((this.length / (15 / 3.6)));
+        return duration;
     }
 
     public Intersection getOriginIntersection() {
@@ -37,6 +51,7 @@ public class Segment {
         return length;
     }
 
+
     @Override
     public String toString() {
         return "\nSegment{" +
@@ -45,5 +60,9 @@ public class Segment {
                 ", name='" + name + '\'' +
                 ", length=" + length +
                 "\n}";
+    }
+
+    public int getDuration() {
+        return this.duration;
     }
 }

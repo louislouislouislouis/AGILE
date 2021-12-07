@@ -172,10 +172,10 @@ public class Tour extends Observable {
     }
 
     /**
-     * @param map
-     * @param start
-     * @param destination
-     * @return time for going from a given startIntersection to a given destinationIntersection
+     * @param map         contains all Intersections and Segments
+     * @param start       startIntersection
+     * @param destination destinationIntersection
+     * @return time for going from a given startIntersection to a given destinationIntersection in seconds
      */
     public int getSecondsForPath(MapIF map, Intersection start, Intersection destination) {
         List<Long> intersectionsFromStartToDestination = map.getShortestPathsIntersections().get(start.getIdIntersection()).get(destination.getIdIntersection());
@@ -190,7 +190,7 @@ public class Tour extends Observable {
         }
         int time = 0;
         for (Segment s : segmentsFromStartToDestination) {
-            //          time += (int) s.getDuration();
+            time += s.getDuration();
         }
         return time;
     }
