@@ -4,7 +4,7 @@ import javafx.scene.control.Alert;
 
 public class ExceptionBox {
 
-    private Exception exception;
+    private Exception exception = null;
     private String type;
 
     public ExceptionBox(Exception e, String s){
