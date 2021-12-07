@@ -83,16 +83,20 @@ public class MainsScreenController implements Observer {
     private TableColumn<Point, String> columnArrivalTime;
     @FXML
     private TableColumn<Point, Color> columnColor;
-    @FXML
-    private TableColumn<Point, Button> columnDelete;
+    /*@FXML
+    private TableColumn<Point, Button> columnDelete;*/
     @FXML
     private TableColumn<Point, String> columnDepartureTime;
     @FXML
     private TableColumn<Point, String> columnID;
-    @FXML
-    private TableColumn<Point, Button> columnModify;
+    /*@FXML
+    private TableColumn<Point, Button> columnModify;*/
     @FXML
     private TableColumn<Point, String> columnType;
+    @FXML
+    private Button btnDeleteTableRow;
+    @FXML
+    private Button btnEditTableRow;
 
     /*----------------------Constructor---------------------------------------*/
 
@@ -445,8 +449,8 @@ public class MainsScreenController implements Observer {
         columnArrivalTime.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
         columnDepartureTime.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
         columnColor.setCellValueFactory(new PropertyValueFactory<>("color"));
-        columnModify.setCellValueFactory(new PropertyValueFactory<>("btnModify"));
-        columnDelete.setCellValueFactory(new PropertyValueFactory<>("btnDelete"));
+        /*columnModify.setCellValueFactory(new PropertyValueFactory<>("btnModify"));
+        columnDelete.setCellValueFactory(new PropertyValueFactory<>("btnDelete"));*/
 
         columnColor.setCellFactory(tv -> new TableCell<Point, Color>() {
             @Override
@@ -463,15 +467,22 @@ public class MainsScreenController implements Observer {
             }
         });
 
-        columnModify.setCellFactory(tv -> new TableCell<Point, Button>() {
+        /*columnModify.setCellFactory(tv -> new TableCell<Point, Button>() {
             @Override
             protected void updateItem(Button item, boolean empty) {
                 super.updateItem(item, empty);
                 if (item == null) {
-                    item = new Point().getBtnModify();
-                    item.setText("Editar");
-                    this.setPrefSize(30,30);
-                    System.out.println("Se crea botón Editar");
+                    //item = new Button("modify");
+                    //item = new Button();
+                    //item = new Point(columnID.getCellValueFactory(), columnType.getCellValueFactory(), columnColor.getCellValueFactory()).
+                    String id = columnID.getCellValueFactory().toString();
+                    String type = columnType.getCellValueFactory().toString();
+                    String color = columnColor.getCellValueFactory().toString();
+                    System.out.println(id + type + color);
+                    //item = new Point().
+                    item.setText("Modify");
+                    item.setPrefSize(30,30);
+                    System.out.println("Se crea botón modify");
                 }
             }
         });
@@ -487,7 +498,7 @@ public class MainsScreenController implements Observer {
                 }
 
             }
-        });
+        });*/
 
         tableView.setItems(data);
 
@@ -607,5 +618,18 @@ public class MainsScreenController implements Observer {
         mapView.addLayer(requestLayer);
 
         requestLayer.forceReRender();
+    }
+
+
+    @FXML
+    void deleteTableRow(ActionEvent event) {
+        //tableView.getSelectionModel();
+        //tableView.setOnKeyReleased();
+        System.out.println(tableView.getSelectionModel().getSelectedItem());
+    }
+
+    @FXML
+    void editTableRow(ActionEvent event) {
+
     }
 }
