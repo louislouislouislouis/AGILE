@@ -672,28 +672,9 @@ public class MainsScreenController implements Observer {
                 System.out.println("No se elimina ninguna request");
             }
         });
-
-        /*Color colorDeliveryPoint = request.getDeliveryPoint().getColor();
-        Color colorPickupPoint = request.getPickupPoint().getColor();
-        DeliveryPoint delivery = request.getDeliveryPoint();
-        PickupPoint pickup = request.getPickupPoint();
-        System.out.println(colorDeliveryPoint);
-        System.out.println(colorPickupPoint);
-        if (colorDeliveryPoint == colorPickupPoint){
-            //Delete pair
-            request = Request(pickup,delivery);
-            planning.removeRequest(request);
-        }*/
-
-        //if(planning.getRequests())
-        System.out.println(typeItem);
-        System.out.println(colorItem);
-        System.out.println(planning);
-        //if ()
         tableView.getItems().remove(selectedItem);
         updateTableView();
         updateTourLayer();
-        updateRequestLayer();
     }
 
     @FXML
