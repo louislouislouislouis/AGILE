@@ -85,9 +85,6 @@ public class GraphAPI {
                 tour.addDestination(newDeliveryPoint); // add new DeliveryPoint
                 tour.addDestination(planning.getWarehouse().getAddress()); // add Warehouse in the end of the tour
                 tour.updateTimingForNewDestination(map, newRequest.getDeliveryPoint());
-                tour.computeCompleteTour(map);
-                tour.calculateCost(map);
-                tour.notifyChange("UPDATEMAP");
             }
         }
         // if not possible add newPickup and newDelivery in the end of the tour
@@ -97,10 +94,10 @@ public class GraphAPI {
             tour.addDestination(newDeliveryPoint); // add new DeliveryPoint
             tour.addDestination(planning.getWarehouse().getAddress()); // add Warehouse in the end of the tour
             tour.updateTimingForNewRequest(map, newRequest.getPickupPoint(), newRequest.getDeliveryPoint());
-            tour.computeCompleteTour(map);
-            tour.calculateCost(map);
-            tour.notifyChange("UPDATEMAP");
         }
+        tour.computeCompleteTour(map);
+        tour.calculateCost(map);
+        tour.notifyChange("UPDATEMAP");
     }
 
     /**
