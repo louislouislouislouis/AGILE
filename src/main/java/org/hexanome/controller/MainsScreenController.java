@@ -3,7 +3,6 @@ package org.hexanome.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -21,7 +20,6 @@ import javafx.stage.Stage;
 import org.hexanome.data.ExceptionXML;
 import org.hexanome.model.*;
 import org.hexanome.vue.AlertBox;
-import org.hexanome.vue.App;
 import org.hexanome.vue.CustomMap;
 import org.hexanome.vue.CustomMapLayer;
 import org.xml.sax.SAXException;
@@ -430,16 +428,17 @@ public class MainsScreenController implements Observer {
 
                     @Override
                     public void run() {
-                        myController.updateDynamycMap();
+                        myController.updateDynamicMap();
                     }
                 }.init(this));
                 //this.updateDynamycMap();
-                try {
+                System.out.println("updtaMapView222 Called");
+                /*try {
                     System.out.println("updtaMapView222 Called");
-                    TimeUnit.MILLISECONDS.sleep(100);
+                    //TimeUnit.MILLISECONDS.sleep(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }
+                }*/
 
 
                 break;
@@ -517,7 +516,7 @@ public class MainsScreenController implements Observer {
     public void initMap() {
         // clear possible layer
         mapView.removeLayer(requestLayer);
-        //mapView.removeLayer(tourLayer);
+        tourLayer.resetAll();
 
         /* Zoom de 5 */
         mapView.setZoom(14);
@@ -549,7 +548,7 @@ public class MainsScreenController implements Observer {
         });
     }
 
-    public void updateDynamycMap() {
+    public void updateDynamicMap() {
         tourLayer.resetAll();
 
         List<Intersection> intersectionList = tour.getIntersections();
@@ -616,7 +615,8 @@ public class MainsScreenController implements Observer {
 
     public void initRequestLayer() {
         mapView.removeLayer(requestLayer);
-
+        tourLayer.resetAll();
+        
         //Create the Request Layer
 
         requestLayer = new CustomMapLayer();
@@ -665,10 +665,10 @@ public class MainsScreenController implements Observer {
             Boolean colorEquals = colorDelivery.equals(colorItem);
             System.out.println("Equals? " + equals);
             System.out.println(colorEquals);
-            if (colorEquals == true){
+            if (colorEquals == true) {
                 planning.removeRequest(request);
                 System.out.println("Request que se elimina : " + request);
-            }else{
+            } else {
                 System.out.println("No se elimina ninguna request");
             }
         });
@@ -684,8 +684,8 @@ public class MainsScreenController implements Observer {
         Point selectedItem = tableView.getSelectionModel().getSelectedItem();
         String typeItem = selectedItem.getType();
 
-        switch (typeItem){
-            case("warehouse"):
+        switch (typeItem) {
+            case ("warehouse"):
                 //getWarehouse()->PlanningRequest
                 break;
         }
