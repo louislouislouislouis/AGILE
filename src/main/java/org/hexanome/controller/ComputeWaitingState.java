@@ -37,10 +37,12 @@ public class ComputeWaitingState implements State {
     public void finishCompute(MainsScreenController controller) {
         controller.setAllowcalculation(false);
         controller.getBtnStopCalcul().setDisable(true);
+        controller.changeCusror("N");
         // we change the state of the controller
         controller.setCurrentState(controller.tourState);
         System.out.println("in ComputeWaitings signal to stop");
-        System.out.println(controller.isAllowcalculation());
+
+
     }
 
 }
