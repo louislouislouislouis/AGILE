@@ -78,6 +78,7 @@ public class PlanningState implements State {
                 this.ctrl.setCurrentState(this.ctrl.tourState);
                 this.ctrl.getBtnStopCalcul().setDisable(true);
                 this.ctrl.setAllowcalculation(false);
+                this.ctrl.changeCusror("N");
             }
         }.init(planning, map, tour, controller)).start();
 

@@ -733,6 +733,9 @@ public class MainsScreenController implements Observer {
         if (w.equals("W")) {
             System.out.println(btnAddRequest.getScene().getRoot());
             btnAddRequest.getScene().getRoot().setCursor(Cursor.WAIT);
+        } else if (w.equals("N")) {
+            System.out.println(btnAddRequest.getScene().getRoot());
+            btnAddRequest.getScene().getRoot().setCursor(Cursor.DEFAULT);
         }
     }
 }
