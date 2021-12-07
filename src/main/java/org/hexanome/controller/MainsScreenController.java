@@ -436,7 +436,7 @@ public class MainsScreenController implements Observer {
                 //this.updateDynamycMap();
                 try {
                     System.out.println("updtaMapView222 Called");
-                    TimeUnit.MILLISECONDS.sleep(500);
+                    TimeUnit.MILLISECONDS.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
