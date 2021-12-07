@@ -289,9 +289,18 @@ public class Tour extends Observable {
         points.add(points.get(0)); //add warehouse as last point
 
         for (int i = points.size() - 4; i < points.size() - 1; i++) {
-            setTimings(map, i);
+            this.setTimings(map, i);
         }
 
+        points.remove(points.size() - 1); // remove last warehouse
+    }
+
+    public void updateTimingForNewDestination(MapIF map, DeliveryPoint deliveryPoint) {
+        points.add(deliveryPoint);
+        points.add(points.get(0)); //add warehouse as last point
+        for (int i = points.size() - 3; i < points.size() - 1; i++) {
+            this.setTimings(map, i);
+        }
         points.remove(points.size() - 1); // remove last warehouse
     }
 
@@ -319,5 +328,14 @@ public class Tour extends Observable {
                 return;
             }
         }
+    }
+
+    public void updateDestinationsByPoints() {
+        List<Intersection> newDestinations = new ArrayList<>();
+        for (Point p : points) {
+            newDestinations.add(p.getAddress());
+        }
+        newDestinations.add(points.get(0).getAddress()); //adding warehouse as last intersection
+        this.destinations = newDestinations;
     }
 }
