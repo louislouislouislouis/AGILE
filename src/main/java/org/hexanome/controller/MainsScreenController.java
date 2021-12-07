@@ -285,7 +285,7 @@ public class MainsScreenController implements Observer {
         File selectedFile = fileChooser(actionEvent);
         System.out.println(selectedFile);
         if (selectedFile == null) {
-            //new ExceptionXML("null");
+            new ExceptionBox("null");
             AlertBox.displayAlert("Message d'erreur", "Veuillez sélectionner un fichier");
         } else {
             // We clear the map before loading an XML file with requests
@@ -295,7 +295,7 @@ public class MainsScreenController implements Observer {
                 // init the map
                 this.initMap();
             } catch (ExceptionXML | ParserConfigurationException | IOException | SAXException e) {
-                new ExceptionBox(e).display();
+                new ExceptionBox(e, "XML").display();
             }
             currentState.enableButton(this);
         }
