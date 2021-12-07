@@ -1,8 +1,20 @@
 package org.hexanome.controller;
 
-import javafx.scene.paint.Color;
 import org.hexanome.model.*;
 
+/**
+ * This class is the representation of the third AddRequestState
+ * <p>
+ * State after entering the method validate() from AddRequest2
+ * <p>
+ * State must be initialized with the previous pickup Point and the pickup duration
+ * <p>
+ * -> Wait for the user leftClick on a second point (corresponding to the delivery point)
+ * <p>
+ * -> Wait for the user to rightClick to come back to the tour state
+ *
+ * @author Gastronom'if
+ */
 public class AddRequestState3 implements State {
     Intersection pickUp;
 

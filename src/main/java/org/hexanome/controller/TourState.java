@@ -11,6 +11,23 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * This class is the representation of planning state
+ * <p>
+ * State after entering the method loadPlanning from the map state
+ * <p>
+ * -> Wait for the user to load another planning from a xml file
+ * <p>
+ * -> Wait for the user to load another map from a xml file
+ * <p>
+ * -> Wait for the user to add a request
+ * <p>
+ * -> Wait for the user to modify a request
+ * <p>
+ * -> Wait for the user to delete a request
+ *
+ * @author Gastronom'if
+ */
 public class TourState implements State {
     // State after loading the map
     // -> Wait for the user to load a planning

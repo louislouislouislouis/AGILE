@@ -6,6 +6,17 @@ import org.hexanome.model.Request;
 
 import java.util.Optional;
 
+/**
+ * This class is the representation of Delete Request State
+ * <p>
+ * State after entering the method deleteRequest from TourState
+ * <p>
+ * -> Wait for the user to validate as a way to confirm the delete action
+ * <p>
+ * -> Wait for the user to cancel this action
+ *
+ * @author Gastronom'if
+ */
 public class DeleteRequestState implements State {
     Request request;
 

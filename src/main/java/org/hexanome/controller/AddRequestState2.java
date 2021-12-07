@@ -1,13 +1,23 @@
 package org.hexanome.controller;
 
-import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import org.hexanome.model.Intersection;
 
 import java.util.Optional;
 
+/**
+ * This class is the representation of the second AddRequestState
+ * <p>
+ * State after entering the method leftClick() from AddRequest1
+ * <p>
+ * State must be initialized with the previous pickup Point
+ * <p>
+ * -> Wait for the user to validate a correct duration (positive)
+ * <p>
+ * -> Wait for the user to cancel his input, it returns to the tour state
+ *
+ * @author Gastronom'if
+ */
 public class AddRequestState2 implements State {
 
     Intersection pickUp;

@@ -12,12 +12,20 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * This class is the representation of planning state
+ * <p>
+ * State after entering the method loadPlanning from the map state
+ * <p>
+ * -> Wait for the user to load another planning from a xml file
+ * <p>
+ * -> Wait for the user to load another map from a xml file
+ * <p>
+ * -> Wait for the user to launch the computing of the tour
+ *
+ * @author Gastronom'if
+ */
 public class PlanningState implements State {
-    // State after loading the planning
-    // -> Wait for the user to load a planning
-    // -> Wait for the user to load another map
-    // -> Wait for the user to compute the tour
-
     @Override
     public void loadPlanning(MainsScreenController controller, MapIF map, PlanningRequest planning, File selectedFile
     ) throws ExceptionXML, ParserConfigurationException, IOException, SAXException {
