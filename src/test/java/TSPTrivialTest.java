@@ -51,7 +51,7 @@ public class TSPTrivialTest {
         GraphAPI ga = new GraphAPI();
         Tour t = new Tour();
         t.setDepartureTime(LocalTime.MIDNIGHT);
-        ga.V1_TSP(planning, map, t);
+        ga.V1_TSP(planning, map, t, null);
         assertEquals("Erreur de calcul du coût", t.getCost(), 42.0, delta);
         assertEquals(t.getIntersections().get(0), i1);
         assertEquals(t.getIntersections().get(1), i2);
