@@ -139,9 +139,12 @@ public class Tour extends Observable {
     public void calculateCost(MapIF map) {
         Map<Long, Map<Long, Double>> shortestPathsCost = map.getShortestPathsCost();
         double cost = 0;
-        for (int i = 0; i < intersections.size()-1; i++) {
-            Intersection startIntersection = intersections.get(i);
-            Intersection destinationIntersection = intersections.get(i+1);
+        for (int i = 0; i < destinations.size()-1; i++) {
+            Intersection startIntersection = destinations.get(i);
+            Intersection destinationIntersection = destinations.get(i+1);
+            System.out.println("startIntersection: " + startIntersection.getIdIntersection());
+            System.out.println("destinationIntersection: " + destinationIntersection.getIdIntersection());
+            System.out.println("OK");
             cost += shortestPathsCost.get(startIntersection.getIdIntersection()).get(destinationIntersection.getIdIntersection());
         }
         this.cost = cost;
