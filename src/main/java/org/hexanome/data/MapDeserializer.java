@@ -1,7 +1,6 @@
 package org.hexanome.data;
 
 import org.hexanome.model.*;
-import org.hexanome.controller.tsp.Dijkstra;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -15,6 +14,11 @@ import java.io.IOException;
 import java.util.*;
 import java.lang.*;
 
+/**
+ * This class is used to parse xml files containing a representation of a map with segments and intersections
+ *
+ * @author Gastronom'if
+ */
 public class MapDeserializer {
     /**
      * Open an XML file and create plan from this file

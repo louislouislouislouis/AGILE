@@ -2,6 +2,11 @@ package org.hexanome.model;
 
 import javafx.scene.paint.Color;
 
+/**
+ * Enumeration used to associate a color for each request
+ *
+ * @author Gastronom'if
+ */
 public enum ColorEnum {
     BLUE(Color.BLUE),
     RED(Color.RED),

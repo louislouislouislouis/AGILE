@@ -13,6 +13,11 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * State interface from the state pattern that declare all the methods used by the states
+ *
+ * @author Gastronom'if
+ */
 public interface State {
     default void undo(ListOfCommands listOfCommands) {
     }

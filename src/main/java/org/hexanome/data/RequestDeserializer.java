@@ -12,11 +12,14 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Random;
 
+/**
+ * This class is used to parse xml files containing a representation of a planning with requests
+ *
+ * @author Gastronom'if
+ */
 public class RequestDeserializer {
     /**
      * Open an XML file and create a map from this file
