@@ -1,5 +1,7 @@
 package org.hexanome.model;
 
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 
 public class Point {
@@ -7,6 +9,8 @@ public class Point {
     private Long id;
     private String type;
     private Color color;
+    private Button btnModify;
+    private Button btnDelete;
 
     /**
      * Clear a point
@@ -20,6 +24,16 @@ public class Point {
         this.id = address.getIdIntersection();
         this.type = type;
         this.color = color;
+        this.btnModify = new Button("Modify");
+        this.btnDelete = new Button("Delete");
+
+        btnModify.setOnAction((ActionEvent e)->{
+            System.out.println("Modifying Point");
+        });
+
+        btnDelete.setOnAction((ActionEvent e)->{
+            System.out.println("Deleting Point");
+        });
     }
 
     public Intersection getAddress() {
@@ -36,6 +50,14 @@ public class Point {
 
     public Color getColor() {
         return color;
+    }
+
+    public Button getBtnModify() {
+        return btnModify;
+    }
+
+    public void setBtnModify(Button btnModify) {
+        this.btnModify = btnModify;
     }
 
     @Override

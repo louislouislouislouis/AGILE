@@ -13,36 +13,42 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.hexanome.controller.MainsScreenController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #1F5C22;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.hexanome.controller.MainsScreenController">
     <left>
-        <VBox minHeight="200.0" minWidth="150.0" prefHeight="200.0" prefWidth="150.0" BorderPane.alignment="CENTER">
+        <VBox minHeight="200.0" minWidth="150.0" prefHeight="200.0" prefWidth="150.0" style="-fx-background-color: #1F5C22;" BorderPane.alignment="CENTER">
             <children>
                 <HBox prefHeight="100.0" prefWidth="200.0">
                     <children>
-                        <Region prefHeight="26.0" prefWidth="90.0" />
-                        <Button fx:id="btnUndo" disable="true" mnemonicParsing="false" onAction="#undo" text="&lt;-" />
-                        <Button fx:id="btnRedo" disable="true" mnemonicParsing="false" onAction="#redo" text="-&gt;" />
+                        <Region prefHeight="26.0" prefWidth="70.0" />
+                        <Button fx:id="btnUndo" disable="true" mnemonicParsing="false" onAction="#undo" style="-fx-background-color: #1F5C22;" text="&lt;-" textFill="#cbd175">
+                     <font>
+                        <Font name="System Bold Italic" size="16.0" />
+                     </font></Button>
+                        <Button fx:id="btnRedo" disable="true" mnemonicParsing="false" onAction="#redo" style="-fx-background-color: #1F5C22;" text="-&gt;" textFill="#cbd175">
+                     <font>
+                        <Font name="System Bold Italic" size="16.0" />
+                     </font></Button>
                     </children>
                 </HBox>
                 <Region prefHeight="350.0" prefWidth="200.0" />
-                <Button fx:id="btnLoadMap" defaultButton="true" minWidth="100.0" mnemonicParsing="false" onAction="#selectionMap" text="Select Map" textAlignment="CENTER">
+                <Button fx:id="btnLoadMap" defaultButton="true" minWidth="150.0" mnemonicParsing="false" onAction="#selectionMap" prefHeight="26.0" prefWidth="150.0" style="-fx-background-color: #1F5C22;" text="Select Map" textAlignment="CENTER" textFill="#cbd175">
                     <VBox.margin>
-                        <Insets bottom="50.0" left="25.0" />
+                        <Insets bottom="15.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="btnLoadRequest" disable="true" layoutX="10.0" layoutY="10.0" minWidth="100.0" mnemonicParsing="false" onAction="#loadRequest" text="Load Request" textAlignment="CENTER">
+                <Button fx:id="btnLoadRequest" disable="true" layoutX="10.0" layoutY="10.0" minWidth="150.0" mnemonicParsing="false" onAction="#loadRequest" style="-fx-background-color: #1F5C22;" text="Load Request" textAlignment="CENTER" textFill="#cbd175">
                     <VBox.margin>
-                        <Insets bottom="50.0" left="25.0" />
+                        <Insets bottom="15.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="btnAddRequest" disable="true" layoutX="10.0" layoutY="10.0" minWidth="100.0" mnemonicParsing="false" onAction="#addRequest" text="Add Request" textAlignment="CENTER">
+                <Button fx:id="btnAddRequest" disable="true" layoutX="10.0" layoutY="10.0" minWidth="150.0" mnemonicParsing="false" onAction="#addRequest" style="-fx-background-color: #1F5C22;" text="Add Request" textAlignment="CENTER" textFill="#cbd175">
                     <VBox.margin>
-                        <Insets bottom="50.0" left="25.0" />
+                        <Insets bottom="15.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="btnValidateRoute" disable="true" minWidth="100.0" mnemonicParsing="false" onAction="#computeTour" text="Compute Tour">
+                <Button fx:id="btnValidateRoute" disable="true" minWidth="150.0" mnemonicParsing="false" onAction="#computeTour" style="-fx-background-color: #1F5C22;" text="Compute Tour" textFill="#cbd175">
                     <VBox.margin>
-                        <Insets left="25.0" />
+                        <Insets />
                     </VBox.margin>
                 </Button>
                 <Region layoutX="10.0" layoutY="10.0" prefHeight="350.0" prefWidth="200.0" />
@@ -63,9 +69,9 @@
                             <children>
                                 <VBox prefHeight="196.0" prefWidth="498.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
-                                        <TableView fx:id="tableView" prefHeight="775.0" prefWidth="338.0">
+                                        <TableView fx:id="tableView" prefHeight="775.0" prefWidth="338.0" style="-fx-background-color: #7FCD6A;">
                                             <columns>
-                                                <TableColumn id="columnIDofIntersection" fx:id="columnID" prefWidth="75.0" text="ID" />
+                                                <TableColumn id="columnIDofIntersection" fx:id="columnID" prefWidth="75.0" style="background: #1F5C22;" text="ID" />
                                                 <TableColumn id="columnTypOfPoint" fx:id="columnType" prefWidth="75.0" text="Type" />
                                                 <TableColumn id="columnArrivalTime" fx:id="columnArrivalTime" prefWidth="75.0" text="Arrival Time" />
                                                 <TableColumn id="columnDepartureTime" fx:id="columnDepartureTime" prefWidth="75.0" text="Departure Time" />
@@ -84,26 +90,26 @@
                     </items>
                 </SplitPane>
 
-                <HBox prefHeight="100.0" prefWidth="200.0">
+                <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #1F5C22;">
                     <children>
-                        <Label text="Total">
+                        <Label text="Total" textFill="#cbd175">
                             <font>
                                 <Font name="System Bold" size="12.0" />
                             </font>
                         </Label>
                         <Region minWidth="310.0" />
-                        <Label layoutX="36.0" layoutY="10.0" text="Time : XXX/XXX s" />
+                        <Label layoutX="36.0" layoutY="10.0" text="Time : XXX/XXX s" textFill="#cbd175" />
                         <Region layoutX="36.0" layoutY="10.0" minWidth="310.0" />
-                        <Label layoutX="10.0" layoutY="10.0" text="Distance : XXX/XXX m" />
+                        <Label layoutX="10.0" layoutY="10.0" text="Distance : XXX/XXX m" textFill="#cbd175" />
                     </children>
                 </HBox>
             </items>
         </SplitPane>
     </center>
     <bottom>
-        <HBox prefHeight="20.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <HBox prefHeight="20.0" prefWidth="200.0" style="-fx-background-color: #1F5C22;" BorderPane.alignment="CENTER">
             <children>
-                <Label text="Message(s) :">
+                <Label text="Message(s) :" textFill="#cbd175">
                     <padding>
                         <Insets left="20.0" />
                     </padding>
