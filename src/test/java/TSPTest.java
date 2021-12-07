@@ -68,14 +68,16 @@ public class TSPTest {
             }));
 
             map = new MapIF(intersections, segments);
+            map.setAdj();
 
             // Génération du planning
             planning = new PlanningRequest();
-            Intersection warehouse = intersections.get(1L);
-            System.out.println(warehouse);
-            planning.setWarehouse(new Warehouse(LocalTime.MIDNIGHT, warehouse, Color.BLACK));
+            Intersection warehouseIntersection = intersections.get(1L);
+            System.out.println(warehouseIntersection);
+            Warehouse warehouse = new Warehouse(LocalTime.MIDNIGHT, warehouseIntersection, Color.BLACK);
+            planning.setWarehouse(warehouse);
             intersections.forEach((id, intersection) -> {
-                PickupPoint pp = new PickupPoint(warehouse, 0, Color.RED);
+                PickupPoint pp = new PickupPoint(warehouseIntersection, 0, Color.RED);
                 DeliveryPoint dp = new DeliveryPoint(intersection, 0, Color.RED);
                 planning.addRequest(new Request(pp, dp));
             });
@@ -109,6 +111,7 @@ public class TSPTest {
     public void testTSP() {
         GraphAPI ga = new GraphAPI();
         Tour t = new Tour();
+        t.setDepartureTime(LocalTime.MIDNIGHT);
         ga.V1_TSP(planning, map, t);
         assertEquals(t.getIntersections().size(), 281);
 

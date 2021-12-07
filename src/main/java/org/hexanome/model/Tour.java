@@ -58,6 +58,10 @@ public class Tour extends Observable {
         this.departureTime = departureTime;
     }
 
+    public void setDepartureTime(LocalTime departureTime) {
+        this.departureTime = departureTime;
+    }
+
     public void setIntersections(List<Intersection> intersections) {
         this.intersections = intersections;
     }

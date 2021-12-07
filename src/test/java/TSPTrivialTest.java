@@ -33,6 +33,8 @@ public class TSPTrivialTest {
 
         map = new MapIF(intersections, segments);
 
+        map.setAdj();
+
         PickupPoint pp = new PickupPoint(i1, 10, Color.RED);
         DeliveryPoint dp = new DeliveryPoint(i2, 15, Color.RED);
         Request r = new Request(pp, dp);
@@ -48,6 +50,7 @@ public class TSPTrivialTest {
         double delta = 0.0000001;
         GraphAPI ga = new GraphAPI();
         Tour t = new Tour();
+        t.setDepartureTime(LocalTime.MIDNIGHT);
         ga.V1_TSP(planning, map, t);
         assertEquals("Erreur de calcul du coût", t.getCost(), 42.0, delta);
         assertEquals(t.getIntersections().get(0), i1);
