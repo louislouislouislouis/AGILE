@@ -468,7 +468,8 @@ public class MainsScreenController implements Observer {
             protected void updateItem(Button item, boolean empty) {
                 super.updateItem(item, empty);
                 if (item == null) {
-                    this.setText("Editar");
+                    item = new Point().getBtnModify();
+                    item.setText("Editar");
                     this.setPrefSize(30,30);
                     System.out.println("Se crea botón Editar");
                 }
