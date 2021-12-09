@@ -48,7 +48,7 @@ public class GraphAPI {
         tour.addDestination(planning.getWarehouse().getAddress());
         tour.addPoint(planning.getWarehouse());
 
-        tsp.searchSolution(60000, g, tour, allowCalculation);
+        tsp.searchSolution(g, tour, allowCalculation);
         System.out.print("End of method");
         //       + (System.currentTimeMillis() - startTime) + "ms : ");
 
@@ -167,7 +167,7 @@ public class GraphAPI {
 
                 // check DeliveryPoints
                 for (int j = 0; j < updatedHaveWaitingTimes.size(); j++) {
-                    Pair<Point, Point> p2 = updatedHaveWaitingTimes.get(i);
+                    Pair<Point, Point> p2 = updatedHaveWaitingTimes.get(j);
                     Point start2 = p2.getKey();
                     Point destination2 = p2.getValue();
 

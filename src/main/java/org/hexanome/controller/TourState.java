@@ -94,6 +94,8 @@ public class TourState implements State {
                 controller.deleteRequestState.setRequest(request);
 
                 controller.setCurrentState(controller.deleteRequestState);
+
+                break;
             }
         }
     }

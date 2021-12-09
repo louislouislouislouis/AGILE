@@ -239,12 +239,6 @@ public class MainsScreenController implements Observer {
         //method that uploads an XML file (carte)
         File selectedFile = fileChooser(actionEvent);
         if (selectedFile == null) {
-/*<<<<<<< HEAD
-            //new ExceptionBox("null");
-            AlertBox alertBox = new AlertBox(new Label("Veuillez sélectionner un fichier"));
-            alertBox.displayAlert("Message d'erreur");
-            //AlertBox.displayAlert("Message d'erreur", "Veuillez sélectionner un fichier");
-=======*/
             new ExceptionBox("Veuillez sélectionner un fichier", "Null").display();
         } else {
             // We clear the map before loading an XML file with requests
@@ -594,6 +588,7 @@ public class MainsScreenController implements Observer {
 
     public void initRequestLayer() {
         mapView.removeLayer(requestLayer);
+        requestLayer.resetAll();
         tourLayer.resetAll();
         //Create the Request Layer
 

@@ -40,6 +40,7 @@ public class PlanningRequest {
      */
     public void clearPlanning() {
         requests.clear();
+        warehouse = null;
     }
 
     @Override

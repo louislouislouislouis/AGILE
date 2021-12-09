@@ -31,11 +31,7 @@ public abstract class TemplateTSP implements TSP {
         this.planning = planning;
     }
 
-    public void searchSolution(int timeLimit, Graph g, Tour tour, MainsScreenController allowCalculation) {
-        // TODO: delete timeout when calculation can be stopped
-        if (timeLimit <= 0) return;
-        startTime = System.currentTimeMillis();
-        this.timeLimit = timeLimit;
+    public void searchSolution(Graph g, Tour tour, MainsScreenController allowCalculation) {
         this.g = g;
         bestSol = new Integer[g.getNbVertices()];
         Collection<Integer> unvisited = new ArrayList<Integer>(g.getNbVertices() - 1);
@@ -88,8 +84,6 @@ public abstract class TemplateTSP implements TSP {
      */
     private void branchAndBound(int currentVertex, Collection<Integer> unvisited,
                                 Collection<Integer> visited, Double currentCost, Tour tour, MainsScreenController allowCalculation) {
-
-        if (System.currentTimeMillis() - startTime > timeLimit) return;
         if (!allowCalculation.isAllowcalculation() && tour.getIntersections().size() > 1) {
             System.out.println("Tour have been forced to stop");
             return;

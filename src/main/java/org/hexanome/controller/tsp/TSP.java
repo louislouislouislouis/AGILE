@@ -12,10 +12,9 @@ public interface TSP {
      * (returns the best found tour whenever the time limit is reached)
      * Warning: The computed tour always start from vertex 0
      *
-     * @param timeLimit
      * @param g
      */
-    public void searchSolution(int timeLimit, Graph g, Tour tour, MainsScreenController allowCalculation);
+    public void searchSolution(Graph g, Tour tour, MainsScreenController allowCalculation);
 
     /**
      * @param i
