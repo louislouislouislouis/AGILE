@@ -10,7 +10,6 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * This class is the representation of planning state
@@ -57,7 +56,7 @@ public class PlanningState implements State {
         //method that calculates the most optimal path of the tour
         controller.setAllowcalculation(true);
         controller.getBtnStopCalcul().setDisable(false);
-        controller.changeCusror("W");
+        controller.changeCursor("W");
         new Thread(new Runnable() {
             private PlanningRequest planning;
             private MapIF map;
@@ -78,7 +77,7 @@ public class PlanningState implements State {
                 this.ctrl.setCurrentState(this.ctrl.tourState);
                 this.ctrl.getBtnStopCalcul().setDisable(true);
                 this.ctrl.setAllowcalculation(false);
-                this.ctrl.changeCusror("N");
+                this.ctrl.changeCursor("N");
             }
         }.init(planning, map, tour, controller)).start();
 

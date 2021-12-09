@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import org.hexanome.controller.MainsScreenController;
 
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * JavaFX App
@@ -34,6 +35,10 @@ public class App extends Application {
 
         Parent root = loader.load();
         scene = new Scene(root, 1450, 768);
+
+        URL url = this.getClass().getResource("stylesheet.css");
+        String css = url.toExternalForm();
+        scene.getStylesheets().add(css);
 
         controller = loader.getController();
 

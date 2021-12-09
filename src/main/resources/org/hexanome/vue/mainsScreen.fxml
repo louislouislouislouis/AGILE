@@ -23,13 +23,15 @@
                 <HBox prefHeight="100.0" prefWidth="200.0">
                     <children>
                         <Region prefHeight="26.0" prefWidth="70.0"/>
-                        <Button fx:id="btnUndo" disable="true" mnemonicParsing="false" onAction="#undo"
+                        <Button fx:id="btnUndo" styleClass="button" disable="true" mnemonicParsing="false"
+                                onAction="#undo"
                                 style="-fx-background-color: #1F5C22;" text="&lt;-" textFill="#cbd175">
                             <font>
                                 <Font name="System Bold Italic" size="16.0"/>
                             </font>
                         </Button>
-                        <Button fx:id="btnRedo" disable="true" mnemonicParsing="false" onAction="#redo"
+                        <Button fx:id="btnRedo" styleClass="button" disable="true" mnemonicParsing="false"
+                                onAction="#redo"
                                 style="-fx-background-color: #1F5C22;" text="-&gt;" textFill="#cbd175">
                             <font>
                                 <Font name="System Bold Italic" size="16.0"/>
@@ -38,7 +40,8 @@
                     </children>
                 </HBox>
                 <Region prefHeight="350.0" prefWidth="200.0"/>
-                <Button fx:id="btnLoadMap" defaultButton="true" minWidth="150.0" mnemonicParsing="false"
+                <Button fx:id="btnLoadMap" styleClass="button" defaultButton="true" minWidth="150.0"
+                        mnemonicParsing="false"
                         onAction="#selectionMap" prefHeight="26.0" prefWidth="150.0"
                         style="-fx-background-color: #1F5C22;" text="Select Map" textAlignment="CENTER"
                         textFill="#cbd175">
@@ -46,28 +49,32 @@
                         <Insets bottom="15.0"/>
                     </VBox.margin>
                 </Button>
-                <Button fx:id="btnLoadRequest" disable="true" layoutX="10.0" layoutY="10.0" minWidth="150.0"
+                <Button fx:id="btnLoadRequest" styleClass="button" disable="true" layoutX="10.0" layoutY="10.0"
+                        minWidth="150.0"
                         mnemonicParsing="false" onAction="#loadRequest" style="-fx-background-color: #1F5C22;"
                         text="Load Request" textAlignment="CENTER" textFill="#cbd175">
                     <VBox.margin>
                         <Insets bottom="15.0"/>
                     </VBox.margin>
                 </Button>
-                <Button fx:id="btnAddRequest" disable="true" layoutX="10.0" layoutY="10.0" minWidth="150.0"
+                <Button fx:id="btnAddRequest" styleClass="button" disable="true" layoutX="10.0" layoutY="10.0"
+                        minWidth="150.0"
                         mnemonicParsing="false" onAction="#addRequest" style="-fx-background-color: #1F5C22;"
                         text="Add Request" textAlignment="CENTER" textFill="#cbd175">
                     <VBox.margin>
                         <Insets bottom="15.0"/>
                     </VBox.margin>
                 </Button>
-                <Button fx:id="btnValidateRoute" disable="true" minWidth="150.0" mnemonicParsing="false"
+                <Button fx:id="btnValidateRoute" styleClass="button" disable="true" minWidth="150.0"
+                        mnemonicParsing="false"
                         onAction="#computeTour" style="-fx-background-color: #1F5C22;" text="Compute Tour"
                         textFill="#cbd175">
                     <VBox.margin>
                         <Insets bottom="15.0"/>
                     </VBox.margin>
                 </Button>
-                <Button fx:id="btnStopCalcul" disable="true" minWidth="150.0" mnemonicParsing="false"
+                <Button fx:id="btnStopCalcul" styleClass="button" disable="true" minWidth="150.0"
+                        mnemonicParsing="false"
                         onAction="#stopTour" style="-fx-background-color: #1F5C22;" text="Stop Tour" textFill="#cbd175">
                     <VBox.margin>
                         <Insets bottom="15.0"/>
@@ -76,11 +83,13 @@
                 <HBox prefHeight="100.0" prefWidth="200.0">
                     <children>
                         <Region layoutX="62.0" layoutY="10.0" minWidth="20.0" prefHeight="200.0"/>
-                        <Button fx:id="btnEditTableRow" disable="true" minHeight="40.0" minWidth="40.0"
+                        <Button fx:id="btnEditTableRow" styleClass="button" disable="true" minHeight="40.0"
+                                minWidth="40.0"
                                 mnemonicParsing="false" onAction="#editTableRow" style="-fx-background-color: #1F5C22;"
                                 text="E" textFill="#cbd175"/>
                         <Region minWidth="30.0"/>
-                        <Button fx:id="btnDeleteTableRow" disable="true" minHeight="40.0" minWidth="40.0"
+                        <Button fx:id="btnDeleteTableRow" styleClass="button" disable="true" minHeight="40.0"
+                                minWidth="40.0"
                                 mnemonicParsing="false" onAction="#deleteTableRow"
                                 style="-fx-background-color: #1F5C22;" text="D" textFill="#cbd175"/>
                         <Region layoutX="10.0" layoutY="10.0" minWidth="20.0"/>

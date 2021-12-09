@@ -279,6 +279,8 @@ public class MainsScreenController implements Observer {
      */
     protected void setCurrentState(State state) {
         currentState = state;
+        currentState.enableButton(this);
+        currentState.showDialogBox(this);
     }
 
     /**
@@ -306,7 +308,6 @@ public class MainsScreenController implements Observer {
             } catch (ExceptionXML | ParserConfigurationException | IOException | SAXException e) {
                 new ExceptionBox(e, "XML").display();
             }
-            currentState.enableButton(this);
         }
     }
 
@@ -335,7 +336,6 @@ public class MainsScreenController implements Observer {
             } catch (ExceptionXML | ParserConfigurationException | IOException | SAXException e) {
                 e.printStackTrace();
             }
-            currentState.enableButton(this);
         }
 
     }
@@ -349,8 +349,6 @@ public class MainsScreenController implements Observer {
      */
     public void addRequest(ActionEvent actionEvent) {
         currentState.addRequest(this);
-
-        currentState.enableButton(this);
     }
 
     /**
@@ -368,33 +366,24 @@ public class MainsScreenController implements Observer {
 
         // we compute the tour
         currentState.computeTour(this, map, planning, tour);
-
-        currentState.enableButton(this);
     }
 
     public void rightClick() {
         this.currentState.rightClick(this);
         System.out.println("rightclick");
         System.out.println(this.currentState);
-        currentState.enableButton(this);
     }
 
     public void leftClick(Intersection i) {
         this.currentState.leftClick(this, i);
-        this.currentState.enableButton(this);
-        this.currentState.showDialogBox(this);
     }
 
     public void cancel() {
         this.currentState.cancel(this);
-        this.currentState.enableButton(this);
-        this.currentState.showDialogBox(this);
     }
 
     public void validate(int duration) {
         this.currentState.validate(this, duration, listOfCommands);
-        this.currentState.enableButton(this);
-        this.currentState.showDialogBox(this);
     }
 
     /**
@@ -715,10 +704,9 @@ public class MainsScreenController implements Observer {
 
     public void stopTour(ActionEvent actionEvent) {
         currentState.finishCompute(this);
-        this.currentState.enableButton(this);
     }
 
-    public void changeCusror(String w) {
+    public void changeCursor(String w) {
         System.out.println("VERIFY CURSOR IF NEEDED");
         if (w.equals("W")) {
             System.out.println(btnAddRequest.getScene().getRoot());
