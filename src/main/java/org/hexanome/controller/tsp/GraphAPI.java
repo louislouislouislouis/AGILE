@@ -81,7 +81,6 @@ public class GraphAPI {
             // add newDelivery in tour if possible
             if (!this.addDeliveryPointDuringTour(tour, planning, map, haveWaitingTimes)) {
                 // if not possible add newDelivery in the end of the tour
-                tour.removeLastDestination();
                 tour.removeLastDestination(); // remove Warehouse in the end of the tour
                 tour.addDestination(newDeliveryPoint); // add new DeliveryPoint
                 tour.addDestination(planning.getWarehouse().getAddress()); // add Warehouse in the end of the tour
