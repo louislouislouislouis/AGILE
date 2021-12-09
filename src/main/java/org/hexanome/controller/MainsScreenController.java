@@ -1,14 +1,20 @@
 package org.hexanome.controller;
 
 import java.io.*;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.TemporalAccessor;
 import java.util.*;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
@@ -17,8 +23,10 @@ import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.converter.IntegerStringConverter;
 import org.hexanome.data.ExceptionXML;
 import org.hexanome.model.*;
+import org.hexanome.vue.*;
 import org.hexanome.vue.CustomMap;
 import org.hexanome.vue.CustomMapLayer;
 import org.hexanome.vue.ExceptionBox;
@@ -88,13 +96,13 @@ public class MainsScreenController implements Observer {
     @FXML
     private TableView<Point> tableView;
     @FXML
-    private TableColumn<Point, String> columnArrivalTime;
+    private TableColumn<Point, LocalTime> columnArrivalTime;
     @FXML
     private TableColumn<Point, Color> columnColor;
     /*@FXML
     private TableColumn<Point, Button> columnDelete;*/
     @FXML
-    private TableColumn<Point, String> columnDepartureTime;
+    private TableColumn<Point, LocalTime> columnDepartureTime;
     @FXML
     private TableColumn<Point, String> columnID;
     /*@FXML
@@ -105,6 +113,10 @@ public class MainsScreenController implements Observer {
     private Button btnDeleteTableRow;
     @FXML
     private Button btnEditTableRow;
+    @FXML
+    private Spinner<LocalTime> spnrArrivalTime;
+    @FXML
+    private Spinner<LocalTime> spnrDepartureTime;
 
     /*----------------------Constructor---------------------------------------*/
 
@@ -227,6 +239,12 @@ public class MainsScreenController implements Observer {
         //method that uploads an XML file (carte)
         File selectedFile = fileChooser(actionEvent);
         if (selectedFile == null) {
+/*<<<<<<< HEAD
+            //new ExceptionBox("null");
+            AlertBox alertBox = new AlertBox(new Label("Veuillez sélectionner un fichier"));
+            alertBox.displayAlert("Message d'erreur");
+            //AlertBox.displayAlert("Message d'erreur", "Veuillez sélectionner un fichier");
+=======*/
             new ExceptionBox("Veuillez sélectionner un fichier", "Null").display();
         } else {
             // We clear the map before loading an XML file with requests
@@ -444,6 +462,11 @@ public class MainsScreenController implements Observer {
         columnDepartureTime.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
         columnColor.setCellValueFactory(new PropertyValueFactory<>("color"));
 
+        //set editable columns
+        //columnArrivalTime.setCellFactory(TextFieldTableCell.forTableColumn(LocalTime)); //allows editing when the cell is double clicked
+        //columnDepartureTime.setCellFactory(TextFieldTableCell.forTableColumn());
+        //columnType.setCellFactory(TextFieldTableCell.forTableColumn());
+
         columnColor.setCellFactory(tv -> new TableCell<Point, Color>() {
             @Override
             protected void updateItem(Color item, boolean empty) {
@@ -572,7 +595,6 @@ public class MainsScreenController implements Observer {
     public void initRequestLayer() {
         mapView.removeLayer(requestLayer);
         tourLayer.resetAll();
-
         //Create the Request Layer
 
         requestLayer = new CustomMapLayer();
@@ -617,16 +639,10 @@ public class MainsScreenController implements Observer {
     @FXML
     void editTableRow(ActionEvent event) {
         //Modify departure time , arrival time and point in the map
-
+        //tableView.setEditable(true);
+        currentState.modifyRequest(this);
         Point selectedItem = tableView.getSelectionModel().getSelectedItem();
-        String typeItem = selectedItem.getType();
 
-        switch (typeItem) {
-            case ("warehouse"):
-                //getWarehouse()->PlanningRequest
-                break;
-        }
-        System.out.println(tableView.getSelectionModel().getSelectedItem());
     }
 
     public void stopTour(ActionEvent actionEvent) {

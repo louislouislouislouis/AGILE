@@ -1,5 +1,6 @@
 package org.hexanome.vue;
 
+import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -11,7 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class AlertBox {
+public class AlertBox{
 
     /*---------------------------VARIABLES------------------------------------------------------------*/
     //Declaration of the buttons in the alertBox.fxml
@@ -24,27 +25,36 @@ public class AlertBox {
 
     @FXML
     private Label lbMessageAlert;
+    Stage window = new Stage();
 
     //This class will create a popup for the user displaying any malfunction in the program
-    public void displayAlert(String title, String message){
+    public void displayAlert(String title){
 
-        if(title == null || message == null){
+        if(title == null || lbMessageAlert == null){
             return;
         }
-        System.out.println("Title : " + title + " Message : " + message);
-        Stage window = new Stage();
-
+        System.out.println("Title : " + title + " Message : " + lbMessageAlert);
+        //Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL); //blocks any action until the window is dealt with
         window.setTitle(title);
-
-        lbMessageAlert.setText(message);
-
         btnClose.setOnAction(e -> window.close());
-
-        layout.getChildren().addAll(lbMessageAlert, btnClose);
-
-        Scene scene = new Scene(layout);
-        window.setScene(scene);
+        /*layout.getChildren().addAll(lbMessageAlert*//*, btnClose*//*);*/
+        /*Scene scene = new Scene(layout);
+        window.setScene(scene);*/
         window.showAndWait(); //the window needs to be closed before returning
+    }
+
+    public AlertBox(Label lbMessageAlert) {
+        this.lbMessageAlert = lbMessageAlert;
+        this.btnClose = btnClose;
+
+    }
+
+    public Label getLbMessageAlert() {
+        return lbMessageAlert;
+    }
+
+    public void setLbMessageAlert(Label lbMessageAlert) {
+        this.lbMessageAlert = lbMessageAlert;
     }
 }

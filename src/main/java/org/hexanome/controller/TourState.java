@@ -99,6 +99,12 @@ public class TourState implements State {
     }
 
     @Override
+    public void modifyRequest(MainsScreenController controller) {
+        // on affiche les points des intersections sur la carte
+        controller.updateMapIntersection();
+    }
+
+    @Override
     public void undo(ListOfCommands listOfCommands) {
         listOfCommands.undo();
     }
