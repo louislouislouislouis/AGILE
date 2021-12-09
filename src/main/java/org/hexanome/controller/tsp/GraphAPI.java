@@ -14,7 +14,6 @@ public class GraphAPI {
     }
 
     public void V1_TSP(PlanningRequest planning, MapIF map, Tour tour, MainsScreenController allowCalculation) {
-        tour.setInitialRequests(planning.getRequests());
 
         Map<Intersection, Map<Intersection, Segment>> adj = map.getMatAdj();
         Set<Intersection> destinations = this.getDestinations(planning);
@@ -55,7 +54,7 @@ public class GraphAPI {
 
     }
 
-    public void ADD_REQUEST(PlanningRequest planning, MapIF map, Tour tour) {
+    public void ADD_REQUEST(PlanningRequest planning, MapIF map, Tour tour, Boolean isUndo) {
         Map<Intersection, Map<Intersection, Segment>> adj = map.getMatAdj();
         Set<Intersection> destinations = this.getDestinations(planning);
 
@@ -65,7 +64,7 @@ public class GraphAPI {
         Intersection newPickUpPoint = newRequest.getPickupPoint().getAddress();
         Intersection newDeliveryPoint = newRequest.getDeliveryPoint().getAddress();
 
-        if (tour.getInitialRequests().contains(newRequest)) {
+        if (isUndo) {
             tour.addPoint(tour.getPoints().get(0)); // add Warehouse
             Boolean isSet = false;
             int i = 1;

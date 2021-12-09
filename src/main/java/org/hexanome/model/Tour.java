@@ -15,7 +15,6 @@ public class Tour extends Observable {
     private Intersection warehouse;
     private List<Intersection> destinations = new ArrayList<>();
     private List<Point> points = new ArrayList<>();
-    private List<Request> initialRequests = new ArrayList<>();
 
     @Override
     public String toString() {
@@ -57,14 +56,6 @@ public class Tour extends Observable {
         this.cost = cost;
         this.MatAdj = MatAdj;
         this.departureTime = departureTime;
-    }
-
-    public List<Request> getInitialRequests() {
-        return initialRequests;
-    }
-
-    public void setInitialRequests(List<Request> initialRequests) {
-        this.initialRequests = initialRequests;
     }
 
     public void setIntersections(List<Intersection> intersections) {
