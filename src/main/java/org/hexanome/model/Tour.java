@@ -58,6 +58,16 @@ public class Tour extends Observable {
         this.departureTime = departureTime;
     }
 
+    public Tour(List<Intersection> intersections, Double cost, LocalTime departureTime, Map<Intersection, Map<Intersection, Segment>> matAdj, Intersection warehouse, List<Intersection> destinations, List<Point> points) {
+        this.intersections = intersections;
+        this.cost = cost;
+        this.departureTime = departureTime;
+        MatAdj = matAdj;
+        this.warehouse = warehouse;
+        this.destinations = destinations;
+        this.points = points;
+    }
+
     public void setIntersections(List<Intersection> intersections) {
         this.intersections = intersections;
     }
@@ -66,6 +76,22 @@ public class Tour extends Observable {
         //this.cost += this.intersections.get(this.intersections.size()-1).
         this.intersections.add(intersection);
 
+    }
+
+    public LocalTime getDepartureTime() {
+        return departureTime;
+    }
+
+    public Map<Intersection, Map<Intersection, Segment>> getMatAdj() {
+        return MatAdj;
+    }
+
+    public void setMatAdj(Map<Intersection, Map<Intersection, Segment>> matAdj) {
+        MatAdj = matAdj;
+    }
+
+    public void setPoints(List<Point> points) {
+        this.points = points;
     }
 
     public List<Point> getPoints() {
