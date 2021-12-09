@@ -96,13 +96,13 @@ public class MainsScreenController implements Observer {
     @FXML
     private TableView<Point> tableView;
     @FXML
-    private TableColumn<Point, String> columnArrivalTime;
+    private TableColumn<Point, LocalTime> columnArrivalTime;
     @FXML
     private TableColumn<Point, Color> columnColor;
     /*@FXML
     private TableColumn<Point, Button> columnDelete;*/
     @FXML
-    private TableColumn<Point, String> columnDepartureTime;
+    private TableColumn<Point, LocalTime> columnDepartureTime;
     @FXML
     private TableColumn<Point, String> columnID;
     /*@FXML
@@ -466,9 +466,9 @@ public class MainsScreenController implements Observer {
         columnColor.setCellValueFactory(new PropertyValueFactory<>("color"));
 
         //set editable columns
-        columnArrivalTime.setCellFactory(TextFieldTableCell.forTableColumn()); //allows editing when the cell is double clicked
-        columnDepartureTime.setCellFactory(TextFieldTableCell.forTableColumn());
-        columnType.setCellFactory(TextFieldTableCell.forTableColumn());
+        //columnArrivalTime.setCellFactory(TextFieldTableCell.forTableColumn(LocalTime)); //allows editing when the cell is double clicked
+        //columnDepartureTime.setCellFactory(TextFieldTableCell.forTableColumn());
+        //columnType.setCellFactory(TextFieldTableCell.forTableColumn());
 
         columnColor.setCellFactory(tv -> new TableCell<Point, Color>() {
             @Override
@@ -643,17 +643,9 @@ public class MainsScreenController implements Observer {
     void editTableRow(ActionEvent event) {
         //Modify departure time , arrival time and point in the map
         //tableView.setEditable(true);
-
+        currentState.modifyRequest(this);
         Point selectedItem = tableView.getSelectionModel().getSelectedItem();
 
-        //UpdateView updateView = new UpdateView(spnrArrivalTime,spnrDepartureTime);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
-        spnrArrivalTime.valueProperty().addListener((obs, oldTime, newTime) -> {
-            System.out.println(formatter.format(newTime));
-        });
-
-        spnrDepartureTime.valueProperty().addListener((obs, oldTime, newTime) ->
-                System.out.println(formatter.format(newTime)));
     }
 
     public void stopTour(ActionEvent actionEvent) {
