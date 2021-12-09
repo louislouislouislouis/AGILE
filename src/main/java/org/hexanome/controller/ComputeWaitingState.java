@@ -36,13 +36,23 @@ import java.io.IOException;
 public class ComputeWaitingState implements State {
     public void finishCompute(MainsScreenController controller) {
         controller.setAllowcalculation(false);
-        controller.getBtnStopCalcul().setDisable(true);
+
         controller.changeCusror("N");
         // we change the state of the controller
         controller.setCurrentState(controller.tourState);
         System.out.println("in ComputeWaitings signal to stop");
-
-
     }
 
+    @Override
+    public void enableButton(MainsScreenController controller) {
+        controller.getBtnLoadRequest().setDisable(true);
+        controller.getBtnLoadMap().setDisable(true);
+        controller.getBtnValidateRoute().setDisable(true);
+        controller.getBtnAddRequest().setDisable(true);
+        controller.getBtnRedo().setDisable(true);
+        controller.getBtnUndo().setDisable(true);
+        controller.getBtnStopCalcul().setDisable(false);
+        controller.getBtnDeleteTableRow().setDisable(true);
+        controller.getBtnEditTableRow().setDisable(true);
+    }
 }

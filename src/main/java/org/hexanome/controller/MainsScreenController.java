@@ -146,6 +146,13 @@ public class MainsScreenController implements Observer {
         this.btnStopCalcul = btnStopCalcul;
     }
 
+    public Button getBtnDeleteTableRow() {
+        return btnDeleteTableRow;
+    }
+
+    public Button getBtnEditTableRow() {
+        return btnEditTableRow;
+    }
 
     public Button getBtnLoadMap() {
         return btnLoadMap;
@@ -703,13 +710,12 @@ public class MainsScreenController implements Observer {
                 //getWarehouse()->PlanningRequest
                 break;
         }
-        //tableView.getSelectionModel();
-        //tableView.setOnKeyReleased();
         System.out.println(tableView.getSelectionModel().getSelectedItem());
     }
 
     public void stopTour(ActionEvent actionEvent) {
         currentState.finishCompute(this);
+        this.currentState.enableButton(this);
     }
 
     public void changeCusror(String w) {
