@@ -79,6 +79,9 @@ public class TourState implements State {
         controller.getBtnAddRequest().setDisable(false);
         controller.getBtnRedo().setDisable(false);
         controller.getBtnUndo().setDisable(false);
+        controller.getBtnStopCalcul().setDisable(true);
+        controller.getBtnDeleteTableRow().setDisable(false);
+        controller.getBtnEditTableRow().setDisable(false);
     }
 
     @Override

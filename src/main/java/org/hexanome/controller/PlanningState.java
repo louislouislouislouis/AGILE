@@ -95,5 +95,8 @@ public class PlanningState implements State {
         controller.getBtnAddRequest().setDisable(true);
         controller.getBtnRedo().setDisable(true);
         controller.getBtnUndo().setDisable(true);
+        controller.getBtnStopCalcul().setDisable(true);
+        controller.getBtnDeleteTableRow().setDisable(true);
+        controller.getBtnEditTableRow().setDisable(true);
     }
 }
