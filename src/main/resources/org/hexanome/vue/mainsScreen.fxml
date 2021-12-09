@@ -13,117 +13,88 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
-            prefWidth="800.0" style="-fx-background-color: #1F5C22;" xmlns="http://javafx.com/javafx/17"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.hexanome.controller.MainsScreenController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #1F5C22;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.hexanome.controller.MainsScreenController">
     <left>
-        <VBox minHeight="200.0" minWidth="150.0" prefHeight="200.0" prefWidth="150.0"
-              style="-fx-background-color: #1F5C22;" BorderPane.alignment="CENTER">
+        <VBox minHeight="200.0" minWidth="150.0" prefHeight="200.0" prefWidth="150.0" style="-fx-background-color: #1F5C22;" BorderPane.alignment="CENTER">
             <children>
                 <HBox prefHeight="100.0" prefWidth="200.0">
                     <children>
-                        <Region prefHeight="26.0" prefWidth="70.0"/>
-                        <Button fx:id="btnUndo" disable="true" mnemonicParsing="false" onAction="#undo"
-                                style="-fx-background-color: #1F5C22;" text="&lt;-" textFill="#cbd175">
+                        <Region prefHeight="26.0" prefWidth="70.0" />
+                        <Button fx:id="btnUndo" disable="true" mnemonicParsing="false" onAction="#undo" style="-fx-background-color: #1F5C22;" text="&lt;-" textFill="#cbd175">
                             <font>
-                                <Font name="System Bold Italic" size="16.0"/>
+                                <Font name="System Bold Italic" size="16.0" />
                             </font>
                         </Button>
-                        <Button fx:id="btnRedo" disable="true" mnemonicParsing="false" onAction="#redo"
-                                style="-fx-background-color: #1F5C22;" text="-&gt;" textFill="#cbd175">
+                        <Button fx:id="btnRedo" disable="true" mnemonicParsing="false" onAction="#redo" style="-fx-background-color: #1F5C22;" text="-&gt;" textFill="#cbd175">
                             <font>
-                                <Font name="System Bold Italic" size="16.0"/>
+                                <Font name="System Bold Italic" size="16.0" />
                             </font>
                         </Button>
                     </children>
                 </HBox>
-                <Region prefHeight="350.0" prefWidth="200.0"/>
-                <Button fx:id="btnLoadMap" defaultButton="true" minWidth="150.0" mnemonicParsing="false"
-                        onAction="#selectionMap" prefHeight="26.0" prefWidth="150.0"
-                        style="-fx-background-color: #1F5C22;" text="Select Map" textAlignment="CENTER"
-                        textFill="#cbd175">
+                <Region prefHeight="350.0" prefWidth="200.0" />
+                <Button fx:id="btnLoadMap" defaultButton="true" minWidth="150.0" mnemonicParsing="false" onAction="#selectionMap" prefHeight="26.0" prefWidth="150.0" style="-fx-background-color: #1F5C22;" text="Select Map" textAlignment="CENTER" textFill="#cbd175">
                     <VBox.margin>
-                        <Insets bottom="15.0"/>
+                        <Insets bottom="15.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="btnLoadRequest" disable="true" layoutX="10.0" layoutY="10.0" minWidth="150.0"
-                        mnemonicParsing="false" onAction="#loadRequest" style="-fx-background-color: #1F5C22;"
-                        text="Load Request" textAlignment="CENTER" textFill="#cbd175">
+                <Button fx:id="btnLoadRequest" disable="true" layoutX="10.0" layoutY="10.0" minWidth="150.0" mnemonicParsing="false" onAction="#loadRequest" style="-fx-background-color: #1F5C22;" text="Load Request" textAlignment="CENTER" textFill="#cbd175">
                     <VBox.margin>
-                        <Insets bottom="15.0"/>
+                        <Insets bottom="15.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="btnAddRequest" disable="true" layoutX="10.0" layoutY="10.0" minWidth="150.0"
-                        mnemonicParsing="false" onAction="#addRequest" style="-fx-background-color: #1F5C22;"
-                        text="Add Request" textAlignment="CENTER" textFill="#cbd175">
+                <Button fx:id="btnAddRequest" disable="true" layoutX="10.0" layoutY="10.0" minWidth="150.0" mnemonicParsing="false" onAction="#addRequest" style="-fx-background-color: #1F5C22;" text="Add Request" textAlignment="CENTER" textFill="#cbd175">
                     <VBox.margin>
-                        <Insets bottom="15.0"/>
+                        <Insets bottom="15.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="btnValidateRoute" disable="true" minWidth="150.0" mnemonicParsing="false"
-                        onAction="#computeTour" style="-fx-background-color: #1F5C22;" text="Compute Tour"
-                        textFill="#cbd175">
+                <Button fx:id="btnValidateRoute" disable="true" minWidth="150.0" mnemonicParsing="false" onAction="#computeTour" style="-fx-background-color: #1F5C22;" text="Compute Tour" textFill="#cbd175">
                     <VBox.margin>
-                        <Insets bottom="15.0"/>
+                        <Insets bottom="15.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="btnStopCalcul" disable="true" minWidth="150.0" mnemonicParsing="false"
-                        onAction="#stopTour" style="-fx-background-color: #1F5C22;" text="Stop Tour" textFill="#cbd175">
+                <Button fx:id="btnStopCalcul" disable="true" minWidth="150.0" mnemonicParsing="false" onAction="#stopTour" style="-fx-background-color: #1F5C22;" text="Stop Tour" textFill="#cbd175">
                     <VBox.margin>
-                        <Insets bottom="15.0"/>
+                        <Insets bottom="15.0" />
                     </VBox.margin>
                 </Button>
                 <HBox prefHeight="100.0" prefWidth="200.0">
                     <children>
-                        <Region layoutX="62.0" layoutY="10.0" minWidth="20.0" prefHeight="200.0"/>
-                        <Button fx:id="btnEditTableRow" minHeight="40.0" minWidth="40.0" mnemonicParsing="false"
-                                onAction="#editTableRow" text="E"/>
-                        <Region minWidth="30.0"/>
-                        <Button fx:id="btnDeleteTableRow" minHeight="40.0" minWidth="40.0" mnemonicParsing="false"
-                                onAction="#deleteTableRow" text="D"/>
-                        <Region layoutX="10.0" layoutY="10.0" minWidth="20.0"/>
+                        <Region layoutX="62.0" layoutY="10.0" minWidth="20.0" prefHeight="200.0" />
+                        <Button fx:id="btnEditTableRow" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#editTableRow" style="-fx-background-color: #1F5C22;" text="E" textFill="#cbd175" />
+                        <Region minWidth="30.0" />
+                        <Button fx:id="btnDeleteTableRow" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#deleteTableRow" style="-fx-background-color: #1F5C22;" text="D" textFill="#cbd175" />
+                        <Region layoutX="10.0" layoutY="10.0" minWidth="20.0" />
                     </children>
                 </HBox>
-                <Region layoutX="10.0" layoutY="10.0" prefHeight="350.0" prefWidth="200.0"/>
+                <Region layoutX="10.0" layoutY="10.0" prefHeight="350.0" prefWidth="200.0" />
             </children>
         </VBox>
     </left>
     <center>
-        <SplitPane dividerPositions="0.9633471645919778" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0"
-                   BorderPane.alignment="CENTER">
+        <SplitPane dividerPositions="0.9633471645919778" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
             <items>
                 <SplitPane dividerPositions="0.609761686526123" prefHeight="160.0" prefWidth="200.0">
                     <items>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="747.0" prefWidth="355.0">
                             <children>
-                                <HBox fx:id="mapContainer" prefHeight="768.0" prefWidth="262.0"
-                                      style="-fx-background-color: #000000;" AnchorPane.bottomAnchor="0.0"
-                                      AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                      AnchorPane.topAnchor="0.0"/>
+                                <HBox fx:id="mapContainer" prefHeight="768.0" prefWidth="262.0" style="-fx-background-color: #000000;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                             </children>
                         </AnchorPane>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                             <children>
-                                <VBox prefHeight="196.0" prefWidth="498.4" AnchorPane.bottomAnchor="0.0"
-                                      AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                      AnchorPane.topAnchor="0.0">
+                                <VBox prefHeight="196.0" prefWidth="498.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
-                                        <TableView fx:id="tableView" prefHeight="775.0" prefWidth="338.0"
-                                                   style="-fx-background-color: #7FCD6A;">
+                                        <TableView fx:id="tableView" prefHeight="775.0" prefWidth="338.0" style="-fx-background-color: #7FCD6A;">
                                             <columns>
-                                                <TableColumn id="columnIDofIntersection" fx:id="columnID"
-                                                             prefWidth="75.0" style="background: #1F5C22;" text="ID"/>
-                                                <TableColumn id="columnTypOfPoint" fx:id="columnType" prefWidth="75.0"
-                                                             text="Type"/>
-                                                <TableColumn id="columnArrivalTime" fx:id="columnArrivalTime"
-                                                             prefWidth="75.0" text="Arrival Time"/>
-                                                <TableColumn id="columnDepartureTime" fx:id="columnDepartureTime"
-                                                             prefWidth="75.0" text="Departure Time"/>
-                                                <TableColumn id="columnColor" fx:id="columnColor" prefWidth="10.0"
-                                                             text="Color"/>
+                                                <TableColumn id="columnIDofIntersection" fx:id="columnID" prefWidth="75.0" style="background: #1F5C22;" text="ID" />
+                                                <TableColumn id="columnTypOfPoint" fx:id="columnType" prefWidth="75.0" text="Type" />
+                                                <TableColumn id="columnArrivalTime" fx:id="columnArrivalTime" prefWidth="75.0" text="Arrival Time" />
+                                                <TableColumn id="columnDepartureTime" fx:id="columnDepartureTime" prefWidth="75.0" text="Departure Time" />
+                                                <TableColumn id="columnColor" fx:id="columnColor" prefWidth="10.0" text="Color" />
                                             </columns>
                                             <columnResizePolicy>
-                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                             </columnResizePolicy>
                                         </TableView>
                                     </children>
@@ -137,13 +108,13 @@
                     <children>
                         <Label text="Total" textFill="#cbd175">
                             <font>
-                                <Font name="System Bold" size="12.0"/>
+                                <Font name="System Bold" size="12.0" />
                             </font>
                         </Label>
-                        <Region minWidth="310.0"/>
-                        <Label layoutX="36.0" layoutY="10.0" text="Time : XXX/XXX s" textFill="#cbd175"/>
-                        <Region layoutX="36.0" layoutY="10.0" minWidth="310.0"/>
-                        <Label layoutX="10.0" layoutY="10.0" text="Distance : XXX/XXX m" textFill="#cbd175"/>
+                        <Region minWidth="310.0" />
+                        <Label layoutX="36.0" layoutY="10.0" text="Time : XXX/XXX s" textFill="#cbd175" />
+                        <Region layoutX="36.0" layoutY="10.0" minWidth="310.0" />
+                        <Label layoutX="10.0" layoutY="10.0" text="Distance : XXX/XXX m" textFill="#cbd175" />
                     </children>
                 </HBox>
             </items>
@@ -154,7 +125,7 @@
             <children>
                 <Label fx:id="messageToUser" text="Message(s) :" textFill="#cbd175">
                     <padding>
-                        <Insets left="20.0"/>
+                        <Insets left="20.0" />
                     </padding>
                 </Label>
             </children>

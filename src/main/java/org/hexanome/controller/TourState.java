@@ -87,15 +87,15 @@ public class TourState implements State {
         controller.getPlanning().getRequests().forEach(request -> {
             DeliveryPoint delivery = request.getDeliveryPoint();
             PickupPoint pickup = request.getPickupPoint();
-            System.out.println("Delivery " + delivery);
-            System.out.println("Pickup " + pickup);
+            /*System.out.println("Delivery " + delivery);
+            System.out.println("Pickup " + pickup);*/
             Color colorDelivery = request.getDeliveryPoint().getColor();
-            System.out.println("DeliveryColor : " + colorDelivery);
+            //System.out.println("DeliveryColor : " + colorDelivery);
             Color colorPickup = request.getPickupPoint().getColor();
             System.out.println("PickupColor " + colorPickup);
             Boolean equals = colorDelivery.equals(colorPickup);
             Boolean colorEquals = colorDelivery.equals(colorItem);
-            System.out.println("Equals? " + equals);
+            //System.out.println("Equals? " + equals);
             System.out.println(colorEquals);
             if (colorEquals == true) {
                 // we add the command to the list of command

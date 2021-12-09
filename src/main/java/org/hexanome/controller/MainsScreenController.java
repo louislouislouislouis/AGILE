@@ -283,10 +283,12 @@ public class MainsScreenController implements Observer {
     public void selectionMap(ActionEvent actionEvent) {
         //method that uploads an XML file (carte)
         File selectedFile = fileChooser(actionEvent);
-        System.out.println(selectedFile);
+        //System.out.println(selectedFile);
         if (selectedFile == null) {
-            new ExceptionBox("null");
-            AlertBox.displayAlert("Message d'erreur", "Veuillez sélectionner un fichier");
+            //new ExceptionBox("null");
+            AlertBox alertBox = new AlertBox();
+            alertBox.displayAlert("Message d'erreur", "Veuillez sélectionner un fichier");
+            //AlertBox.displayAlert("Message d'erreur", "Veuillez sélectionner un fichier");
         } else {
             // We clear the map before loading an XML file with requests
             map.clearMap();
@@ -511,9 +513,7 @@ public class MainsScreenController implements Observer {
         columnArrivalTime.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
         columnDepartureTime.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
         columnColor.setCellValueFactory(new PropertyValueFactory<>("color"));
-        /*columnModify.setCellValueFactory(new PropertyValueFactory<>("modify"));
-        columnDelete.setCellValueFactory(new PropertyValueFactory<>("delete"));
-*/
+
         columnColor.setCellFactory(tv -> new TableCell<Point, Color>() {
             @Override
             protected void updateItem(Color item, boolean empty) {
@@ -680,9 +680,15 @@ public class MainsScreenController implements Observer {
     @FXML
     void deleteTableRow(ActionEvent event) {
         //Delete point in the map
+        //If table row not selectet
         Point selectedItem = tableView.getSelectionModel().getSelectedItem();
-
-        this.currentState.deleteRequest(this, selectedItem, listOfCommands);
+        if (selectedItem != null) {
+            this.currentState.deleteRequest(this, selectedItem, listOfCommands);
+        } else {
+            AlertBox alertBox = new AlertBox();
+            alertBox.displayAlert("Error Message", "Please select the point you want to delete");
+            //AlertBox.displayAlert("Error Message", "Please select the point you want to delete");
+        }
     }
 
     @FXML

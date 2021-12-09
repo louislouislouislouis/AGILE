@@ -1,5 +1,6 @@
 package org.hexanome.vue;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -14,21 +15,33 @@ public class AlertBox {
 
     /*---------------------------VARIABLES------------------------------------------------------------*/
     //Declaration of the buttons in the alertBox.fxml
+
+    @FXML
+    private Button btnClose;
+
+    @FXML
+    private AnchorPane layout;
+
+    @FXML
+    private Label lbMessageAlert;
+
     //This class will create a popup for the user displaying any malfunction in the program
-    public static void displayAlert(String title, String message){
+    public void displayAlert(String title, String message){
+
+        if(title == null || message == null){
+            return;
+        }
+        System.out.println("Title : " + title + " Message : " + message);
         Stage window = new Stage();
 
         window.initModality(Modality.APPLICATION_MODAL); //blocks any action until the window is dealt with
         window.setTitle(title);
 
-        Label label = new Label();
-        label.setText(message);
-        Button btnClose = new Button("OK");
+        lbMessageAlert.setText(message);
+
         btnClose.setOnAction(e -> window.close());
 
-        VBox layout = new VBox(10);
-        layout.getChildren().addAll(label, btnClose);
-        layout.setAlignment(Pos.CENTER);
+        layout.getChildren().addAll(lbMessageAlert, btnClose);
 
         Scene scene = new Scene(layout);
         window.setScene(scene);
