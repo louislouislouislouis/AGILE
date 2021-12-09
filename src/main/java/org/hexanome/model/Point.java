@@ -11,8 +11,6 @@ public class Point {
     private Long id;
     private String type;
     private Color color;
-    private Button btnModify;
-    private Button btnDelete;
     private LocalTime departureTime;
     private LocalTime arrivalTime;
     private int duration;
@@ -49,6 +47,10 @@ public class Point {
 
     public Color getColor() {
         return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     @Override

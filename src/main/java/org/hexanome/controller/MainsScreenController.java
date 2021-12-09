@@ -728,4 +728,15 @@ public class MainsScreenController implements Observer {
             btnAddRequest.getScene().getRoot().setCursor(Cursor.DEFAULT);
         }
     }
+
+    public void updateColorRequest() {
+        LinkedList<Request> requests = planning.getRequests();
+        for (int i = 0; i < requests.size(); i++) {
+            Request request = requests.get(i);
+            Color color = ColorEnum.values()[i].color;
+
+            request.getPickupPoint().setColor(color);
+            request.getDeliveryPoint().setColor(color);
+        }
+    }
 }
