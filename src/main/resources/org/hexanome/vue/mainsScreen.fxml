@@ -23,41 +23,62 @@
             <children>
                 <HBox prefHeight="100.0" prefWidth="200.0">
                     <children>
-                        <Region prefHeight="26.0" prefWidth="70.0" />
-                        <Button fx:id="btnUndo" disable="true" mnemonicParsing="false" onAction="#undo" style="-fx-background-color: #1F5C22;" text="&lt;-" textFill="#cbd175">
+
+                        <Region prefHeight="26.0" prefWidth="70.0"/>
+                        <Button fx:id="btnUndo" styleClass="button" disable="true" mnemonicParsing="false"
+                                onAction="#undo"
+                                style="-fx-background-color: #1F5C22;" text="&lt;-" textFill="#cbd175">
                             <font>
                                 <Font name="System Bold Italic" size="16.0" />
                             </font>
                         </Button>
-                        <Button fx:id="btnRedo" disable="true" mnemonicParsing="false" onAction="#redo" style="-fx-background-color: #1F5C22;" text="-&gt;" textFill="#cbd175">
+                        <Button fx:id="btnRedo" styleClass="button" disable="true" mnemonicParsing="false"
+                                onAction="#redo"
+                                style="-fx-background-color: #1F5C22;" text="-&gt;" textFill="#cbd175">
                             <font>
                                 <Font name="System Bold Italic" size="16.0" />
                             </font>
                         </Button>
                     </children>
                 </HBox>
-                <Region prefHeight="350.0" prefWidth="200.0" />
-                <Button fx:id="btnLoadMap" defaultButton="true" minWidth="150.0" mnemonicParsing="false" onAction="#selectionMap" prefHeight="26.0" prefWidth="150.0" style="-fx-background-color: #1F5C22;" text="Select Map" textAlignment="CENTER" textFill="#cbd175">
+
+                <Region prefHeight="350.0" prefWidth="200.0"/>
+                <Button fx:id="btnLoadMap" styleClass="button" defaultButton="true" minWidth="150.0"
+                        mnemonicParsing="false"
+                        onAction="#selectionMap" prefHeight="26.0" prefWidth="150.0"
+                        style="-fx-background-color: #1F5C22;" text="Select Map" textAlignment="CENTER"
+                        textFill="#cbd175">
                     <VBox.margin>
                         <Insets bottom="15.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="btnLoadRequest" disable="true" layoutX="10.0" layoutY="10.0" minWidth="150.0" mnemonicParsing="false" onAction="#loadRequest" style="-fx-background-color: #1F5C22;" text="Load Request" textAlignment="CENTER" textFill="#cbd175">
+                <Button fx:id="btnLoadRequest" styleClass="button" disable="true" layoutX="10.0" layoutY="10.0"
+                        minWidth="150.0"
+                        mnemonicParsing="false" onAction="#loadRequest" style="-fx-background-color: #1F5C22;"
+                        text="Load Request" textAlignment="CENTER" textFill="#cbd175">
                     <VBox.margin>
                         <Insets bottom="15.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="btnAddRequest" disable="true" layoutX="10.0" layoutY="10.0" minWidth="150.0" mnemonicParsing="false" onAction="#addRequest" style="-fx-background-color: #1F5C22;" text="Add Request" textAlignment="CENTER" textFill="#cbd175">
+                <Button fx:id="btnAddRequest" styleClass="button" disable="true" layoutX="10.0" layoutY="10.0"
+                        minWidth="150.0"
+                        mnemonicParsing="false" onAction="#addRequest" style="-fx-background-color: #1F5C22;"
+                        text="Add Request" textAlignment="CENTER" textFill="#cbd175">
                     <VBox.margin>
                         <Insets bottom="15.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="btnValidateRoute" disable="true" minWidth="150.0" mnemonicParsing="false" onAction="#computeTour" style="-fx-background-color: #1F5C22;" text="Compute Tour" textFill="#cbd175">
+                <Button fx:id="btnValidateRoute" styleClass="button" disable="true" minWidth="150.0"
+                        mnemonicParsing="false"
+                        onAction="#computeTour" style="-fx-background-color: #1F5C22;" text="Compute Tour"
+                        textFill="#cbd175">
                     <VBox.margin>
                         <Insets bottom="15.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="btnStopCalcul" disable="true" minWidth="150.0" mnemonicParsing="false" onAction="#stopTour" style="-fx-background-color: #1F5C22;" text="Stop Tour" textFill="#cbd175">
+                <Button fx:id="btnStopCalcul" styleClass="button" disable="true" minWidth="150.0"
+                        mnemonicParsing="false"
+                        onAction="#stopTour" style="-fx-background-color: #1F5C22;" text="Stop Tour" textFill="#cbd175">
                     <VBox.margin>
                         <Insets bottom="15.0" />
                     </VBox.margin>

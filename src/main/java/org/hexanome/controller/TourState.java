@@ -87,19 +87,9 @@ public class TourState implements State {
     @Override
     public void deleteRequest(MainsScreenController controller, Point selectedItem, ListOfCommands listOfCommands) {
         Color colorItem = selectedItem.getColor();
-        controller.getPlanning().getRequests().forEach(request -> {
-            DeliveryPoint delivery = request.getDeliveryPoint();
-            PickupPoint pickup = request.getPickupPoint();
-            /*System.out.println("Delivery " + delivery);
-            System.out.println("Pickup " + pickup);*/
+        for (Request request : controller.getPlanning().getRequests()) {
             Color colorDelivery = request.getDeliveryPoint().getColor();
-            //System.out.println("DeliveryColor : " + colorDelivery);
-            Color colorPickup = request.getPickupPoint().getColor();
-            System.out.println("PickupColor " + colorPickup);
-            Boolean equals = colorDelivery.equals(colorPickup);
             Boolean colorEquals = colorDelivery.equals(colorItem);
-            //System.out.println("Equals? " + equals);
-            System.out.println(colorEquals);
             if (colorEquals == true) {
                 // we add the command to the list of command
                 // it will be executed there
@@ -108,7 +98,7 @@ public class TourState implements State {
             } else {
                 System.out.println("No se elimina ninguna request");
             }
-        });
+        }
     }
 
     @Override

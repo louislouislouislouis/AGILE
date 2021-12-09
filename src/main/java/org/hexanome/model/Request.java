@@ -23,7 +23,7 @@ public class Request {
         return deliveryPoint;
     }
 
-
+    
     @Override
     public String toString() {
         return "\nRequest{" +
