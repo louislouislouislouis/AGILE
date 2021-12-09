@@ -14,6 +14,8 @@ public class GraphAPI {
     }
 
     public void V1_TSP(PlanningRequest planning, MapIF map, Tour tour, MainsScreenController allowCalculation) {
+        tour.setInitialRequests(planning.getRequests());
+
         Map<Intersection, Map<Intersection, Segment>> adj = map.getMatAdj();
         Set<Intersection> destinations = this.getDestinations(planning);
 
@@ -63,37 +65,61 @@ public class GraphAPI {
         Intersection newPickUpPoint = newRequest.getPickupPoint().getAddress();
         Intersection newDeliveryPoint = newRequest.getDeliveryPoint().getAddress();
 
-        Dijkstra dijkstra1 = new Dijkstra(nbVerticesDijkstra);
-        dijkstra1.dijkstra(map.getIntersections(), adj, newPickUpPoint, destinations);
-        this.updateShortestPathIntersections(map, dijkstra1, newPickUpPoint);
-        this.updateShortestPathsCost(map, dijkstra1, newPickUpPoint);
+        if (tour.getInitialRequests().contains(newRequest)) {
+            tour.addPoint(tour.getPoints().get(0)); // add Warehouse
+            Boolean isSet = false;
+            int i = 1;
+            while (!isSet && i < tour.getPoints().size()) {
+                if (tour.getPoints().get(i).getArrivalTime().isAfter(newRequest.getPickupPoint().getArrivalTime())) {
+                    tour.addPointBetween(tour.getPoints().get(i - 1), tour.getPoints().get(i), newRequest.getPickupPoint());
+                    isSet = true;
+                }
+                i++;
+            }
+            isSet = false;
+            i = 1;
+            while (!isSet && i < tour.getPoints().size()) {
+                if (tour.getPoints().get(i).getArrivalTime().isAfter(newRequest.getDeliveryPoint().getArrivalTime())) {
+                    tour.addPointBetween(tour.getPoints().get(i - 1), tour.getPoints().get(i), newRequest.getDeliveryPoint());
+                    isSet = true;
+                }
+                i++;
+            }
+            tour.deleteLastPoint();
+            tour.updateDestinationsByPoints();
+        } else {
+            Dijkstra dijkstra1 = new Dijkstra(nbVerticesDijkstra);
+            dijkstra1.dijkstra(map.getIntersections(), adj, newPickUpPoint, destinations);
+            this.updateShortestPathIntersections(map, dijkstra1, newPickUpPoint);
+            this.updateShortestPathsCost(map, dijkstra1, newPickUpPoint);
 
-        Dijkstra dijkstra2 = new Dijkstra(nbVerticesDijkstra);
-        dijkstra2.dijkstra(map.getIntersections(), adj, newDeliveryPoint, destinations);
-        this.updateShortestPathIntersections(map, dijkstra2, newDeliveryPoint);
-        this.updateShortestPathsCost(map, dijkstra2, newDeliveryPoint);
+            Dijkstra dijkstra2 = new Dijkstra(nbVerticesDijkstra);
+            dijkstra2.dijkstra(map.getIntersections(), adj, newDeliveryPoint, destinations);
+            this.updateShortestPathIntersections(map, dijkstra2, newDeliveryPoint);
+            this.updateShortestPathsCost(map, dijkstra2, newDeliveryPoint);
 
-        // pairs of points where new request could potentially be added
-        List<Pair<Point, Point>> haveWaitingTimes = new ArrayList<>();
+            // pairs of points where new request could potentially be added
+            List<Pair<Point, Point>> haveWaitingTimes = new ArrayList<>();
 
-        // add newPickup in tour if possible
-        if (this.addPickupPointDuringTour(tour, planning, map, haveWaitingTimes)) {
-            // add newDelivery in tour if possible
-            if (!this.addDeliveryPointDuringTour(tour, planning, map, haveWaitingTimes)) {
-                // if not possible add newDelivery in the end of the tour
+            // add newPickup in tour if possible
+            if (this.addPickupPointDuringTour(tour, planning, map, haveWaitingTimes)) {
+                // add newDelivery in tour if possible
+                if (!this.addDeliveryPointDuringTour(tour, planning, map, haveWaitingTimes)) {
+                    // if not possible add newDelivery in the end of the tour
+                    tour.removeLastDestination(); // remove Warehouse in the end of the tour
+                    tour.addDestination(newDeliveryPoint); // add new DeliveryPoint
+                    tour.addDestination(planning.getWarehouse().getAddress()); // add Warehouse in the end of the tour
+                    tour.updateTimingForNewDestination(map, newRequest.getDeliveryPoint());
+                }
+            }
+            // if not possible add newPickup and newDelivery in the end of the tour
+            else {
                 tour.removeLastDestination(); // remove Warehouse in the end of the tour
+                tour.addDestination(newPickUpPoint); // add new PickupPoint
                 tour.addDestination(newDeliveryPoint); // add new DeliveryPoint
                 tour.addDestination(planning.getWarehouse().getAddress()); // add Warehouse in the end of the tour
-                tour.updateTimingForNewDestination(map, newRequest.getDeliveryPoint());
+                tour.updateTimingForNewRequest(map, newRequest.getPickupPoint(), newRequest.getDeliveryPoint());
             }
-        }
-        // if not possible add newPickup and newDelivery in the end of the tour
-        else {
-            tour.removeLastDestination(); // remove Warehouse in the end of the tour
-            tour.addDestination(newPickUpPoint); // add new PickupPoint
-            tour.addDestination(newDeliveryPoint); // add new DeliveryPoint
-            tour.addDestination(planning.getWarehouse().getAddress()); // add Warehouse in the end of the tour
-            tour.updateTimingForNewRequest(map, newRequest.getPickupPoint(), newRequest.getDeliveryPoint());
         }
         tour.computeCompleteTour(map);
         tour.calculateCost(map);
