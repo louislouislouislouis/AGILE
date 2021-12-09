@@ -171,6 +171,9 @@ public class Tour extends Observable {
         Intersection deliveryPoint = request.getDeliveryPoint().getAddress();
         destinations.remove(deliveryPoint);
 
+        points.remove(request.getPickupPoint());
+        points.remove(request.getDeliveryPoint());
+
         this.computeCompleteTour(map);
         this.calculateCost(map);
     }

@@ -4,6 +4,7 @@ import javafx.util.Pair;
 import org.hexanome.controller.MainsScreenController;
 import org.hexanome.model.*;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -116,15 +117,19 @@ public class GraphAPI {
         Point newPickup = planning.getRequests().getLast().getPickupPoint();
         for (Pair<Point, Point> p : haveWaitingTimes) {
             Point start = p.getKey();
-            Point destination = p.getKey();
+            Point destination = p.getValue();
 
             // delete pair from list with potential spaces for adding request
             haveWaitingTimes.remove(p);
 
             if (this.checkIfAddableBetween(map, tour, start, destination, newPickup)) {
                 //check if time left between newPickup and next Point and if so at to havingWaitingTimes
-                int restTimeToTravel = destination.getArrivalTime().getSecond() - newPickup.getDepartureTime().getSecond();
+                LocalTime departureTime = newPickup.getDepartureTime();
+                LocalTime arrivalTime = destination.getArrivalTime();
+                Duration difference = Duration.between(departureTime, arrivalTime);
+                int restTimeToTravel = (int) difference.getSeconds();
                 int currentTimeToTravel = tour.getSecondsForPath(map, newPickup.getAddress(), destination.getAddress());
+
                 if (currentTimeToTravel < restTimeToTravel) {
                     Pair<Point, Point> newPair = new Pair<>(newPickup, destination);
                     haveWaitingTimes.add(newPair);
@@ -143,13 +148,13 @@ public class GraphAPI {
             return false;
         }
 
-        Point newPickup = planning.getRequests().getLast().getDeliveryPoint();
+        Point newDelivery = planning.getRequests().getLast().getDeliveryPoint();
 
         for (Pair<Point, Point> p : haveWaitingTimes) {
             Point start = p.getKey();
-            Point destination = p.getKey();
+            Point destination = p.getValue();
 
-            if (this.checkIfAddableBetween(map, tour, start, destination, newPickup)) {
+            if (this.checkIfAddableBetween(map, tour, start, destination, newDelivery)) {
                 return true;
             }
 
@@ -168,7 +173,11 @@ public class GraphAPI {
      * @return true if there is enough time to add newPoint between start and destination, false otherwise
      */
     private boolean checkIfAddableBetween(MapIF map, Tour tour, Point start, Point destination, Point newPoint) {
-        int timeToTravel = start.getDepartureTime().getSecond() - destination.getArrivalTime().getSecond();
+        LocalTime departureTime = start.getDepartureTime();
+        LocalTime arrivalTime = destination.getArrivalTime();
+
+        Duration difference = Duration.between(departureTime, arrivalTime);
+        int timeToTravel = (int) difference.getSeconds();
 
         int timeStartToNewPickup = tour.getSecondsForPath(map, start.getAddress(), newPoint.getAddress());
         int timeNewpickupToDestination = tour.getSecondsForPath(map, newPoint.getAddress(), destination.getAddress());
@@ -203,7 +212,9 @@ public class GraphAPI {
             LocalTime departureTime = start.getDepartureTime();
             LocalTime arrivalTime = destination.getArrivalTime();
 
-            int maxSecondsForPath = arrivalTime.getSecond() - departureTime.getSecond();
+            Duration difference = Duration.between(departureTime, arrivalTime);
+            int maxSecondsForPath = (int) difference.getSeconds();
+
             int actualSecondsForPath = tour.getSecondsForPath(map, start.getAddress(), destination.getAddress());
 
             if (maxSecondsForPath - actualSecondsForPath > 0) {
