@@ -1,9 +1,6 @@
 package org.hexanome.model;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class MapIF {
     private HashMap<Long, Intersection> intersections;
@@ -98,7 +95,7 @@ public class MapIF {
         for (Segment s : this.getSegments().values()) {
             adj.get(s.getOriginIntersection()).put(s.getDestinationIntersection(), s);
         }
-        this.MatAdj=adj;
+        this.MatAdj = adj;
     }
 
     public Map<Long, Map<Long, List<Long>>> getShortestPathsIntersections() {
@@ -115,5 +112,55 @@ public class MapIF {
 
     public void setShortestPathsCost(Map<Long, Map<Long, Double>> shortestPathsCost) {
         this.shortestPathsCost = shortestPathsCost;
+    }
+
+    public boolean isIsolated(long id, long idWarehouse) {
+        LinkedList<Long> idsVisited = new LinkedList<>();
+        if (checkIfNeighbor(id, idWarehouse, idsVisited)) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    /**
+     * Return false if cannot reach idWarehouse
+     */
+    private boolean checkIfNeighbor(long id, long idWarehouse, LinkedList<Long> idsVisited) {
+        if (id == idWarehouse) {
+            return true;
+        } else {
+            Intersection intersection = intersections.get(id);
+            Map<Intersection, Segment> listNeighbor = MatAdj.get(intersection);
+
+            Map<Intersection, Segment> listNeighborNotVisited = new HashMap<>();
+
+            listNeighbor.forEach((inter, segment) -> {
+                Long myId = inter.getIdIntersection();
+                if (!idsVisited.contains(myId)) {
+                    listNeighborNotVisited.put(inter, segment);
+                }
+            });
+
+            if (listNeighborNotVisited.size() == 0) {
+                return false;
+            } else {
+                listNeighbor.forEach((inter, segment) -> {
+                    idsVisited.add(inter.getIdIntersection());
+                });
+
+                boolean foundWarehouse = false;
+
+                for (Map.Entry<Intersection, Segment> entry : listNeighborNotVisited.entrySet()) {
+                    Intersection inter = entry.getKey();
+                    if (checkIfNeighbor(inter.getIdIntersection(), idWarehouse, idsVisited)) {
+                        foundWarehouse = true;
+                    }
+                }
+
+                return foundWarehouse;
+            }
+        }
     }
 }

@@ -568,7 +568,6 @@ public class MainsScreenController implements Observer {
             } else if (e.getButton() == MouseButton.PRIMARY) {
                 this.leftClick(null);
             }
-            System.out.println("onMousedetect");
             //Pour les layers de request
             this.updateMapView();
 
@@ -600,11 +599,7 @@ public class MainsScreenController implements Observer {
     }
 
     public void updateMapView() {
-        //requestLayer.forceReRender();
-        //tourLayer.forceReRender();
         mapView.layout();
-
-        System.out.println("updtaMapView Called");
     }
 
     public void updateTourLayer() {
