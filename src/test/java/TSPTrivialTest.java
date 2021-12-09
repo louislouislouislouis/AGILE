@@ -54,8 +54,8 @@ public class TSPTrivialTest {
         MainsScreenController controller = new MainsScreenController();
         t.setDepartureTime(LocalTime.MIDNIGHT);
         ga.V1_TSP(planning, map, t, controller);
-        assertEquals("Erreur de calcul du coût", t.getCost(), 42.0, delta);
-        assertEquals(t.getIntersections().get(0), i1);
-        assertEquals(t.getIntersections().get(1), i2);
+        assertEquals("Erreur de calcul du coût", 42.0, t.getCost(), delta);
+        assertEquals(i1, t.getIntersections().get(0));
+        assertEquals(i2, t.getIntersections().get(1));
     }
 }
