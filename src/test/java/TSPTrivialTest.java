@@ -1,5 +1,6 @@
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
+import org.hexanome.controller.MainsScreenController;
 import org.hexanome.controller.tsp.GraphAPI;
 import org.hexanome.model.*;
 import org.junit.BeforeClass;
@@ -50,8 +51,9 @@ public class TSPTrivialTest {
         double delta = 0.0000001;
         GraphAPI ga = new GraphAPI();
         Tour t = new Tour();
+        MainsScreenController controller = new MainsScreenController();
         t.setDepartureTime(LocalTime.MIDNIGHT);
-        ga.V1_TSP(planning, map, t, null);
+        ga.V1_TSP(planning, map, t, controller);
         assertEquals("Erreur de calcul du coût", t.getCost(), 42.0, delta);
         assertEquals(t.getIntersections().get(0), i1);
         assertEquals(t.getIntersections().get(1), i2);
