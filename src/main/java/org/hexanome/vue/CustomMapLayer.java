@@ -169,10 +169,6 @@ public class CustomMapLayer extends MapLayer {
             shape.setOnMouseClicked(mouseEvent -> {
                 if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                     c.leftClick(map.getIntersections().get(id));
-
-                    // pas au bon endroit je pense
-                    shape.setFill(Color.DARKORANGE);
-                    ((Circle) shape).setRadius(10);
                 } else if (mouseEvent.getButton() == MouseButton.SECONDARY) {
                     c.rightClick();
                 }
@@ -231,40 +227,7 @@ public class CustomMapLayer extends MapLayer {
      * This public method is used to force the render of this layer
      */
     public void forceReRender() {
-        pointList.forEach((id, mapPoint) -> {
-
-            Shape shape = shapeList.get(id);
-            Point2D point2d = this.getMapPoint(mapPoint.getLatitude(), mapPoint.getLongitude());
-
-            if (shape instanceof Circle) {
-                /* Déplace le cercle selon les coordonnées du point */
-                shape.setTranslateX(point2d.getX());
-                shape.setTranslateY(point2d.getY());
-            } else {
-                /* Déplace le cercle selon les coordonnées du point */
-                shape.setTranslateX(point2d.getX() - shape.getLayoutBounds().getWidth() / 2);
-                shape.setTranslateY(point2d.getY() - shape.getLayoutBounds().getWidth() / 2);
-            }
-        });
-
-        segmentList.forEach((id, pair) -> {
-
-            MapPoint mapPointStart = pair.getKey();
-            MapPoint mapPointEnd = pair.getValue();
-
-            Point2D point2dStart = this.getMapPoint(mapPointStart.getLatitude(), mapPointStart.getLongitude());
-            Point2D point2dEnd = this.getMapPoint(mapPointEnd.getLatitude(), mapPointEnd.getLongitude());
-
-
-            Polyline polyline = polylineList.get(id);
-
-            polyline.getPoints().clear();
-
-            polyline.getPoints().addAll(
-                    point2dStart.getX(), point2dStart.getY(),
-                    point2dEnd.getX(), point2dEnd.getY()
-            );
-        });
+        layoutLayer();
     }
 
     /* La fonction est appelée à chaque rafraichissement de la carte */

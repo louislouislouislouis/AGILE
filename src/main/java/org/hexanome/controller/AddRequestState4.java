@@ -46,7 +46,7 @@ public class AddRequestState4 implements State {
     }
 
     @Override
-    public void validate(MainsScreenController controller, int duration, ListOfCommands listOfCommands) {
+    public void validate(MainsScreenController controller, int duration, ListOfCommands listOfCommands) throws Exception {
         if (duration > 0) {
             Color color = ColorEnum.values()[controller.getPlanning().getRequests().size()].color;
 
@@ -69,7 +69,7 @@ public class AddRequestState4 implements State {
             // we change the state of the controller
             controller.setCurrentState(controller.tourState);
         } else {
-            System.out.println("duration cannot be negative");
+            throw new Exception("Duration cannot be negative");
         }
 
     }
