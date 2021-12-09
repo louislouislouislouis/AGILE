@@ -72,11 +72,17 @@ public class RequestDeserializer {
         if (pickupAddress < 0)
             throw new ExceptionXML("Error when reading file: pickupAddress must be positive");
 
+        if (map.getIntersections().get(pickupAddress) == null)
+            throw new ExceptionXML("Error when reading file: point out of the map");
+
         PickupPoint pickupPoint = new PickupPoint(map.getIntersections().get(pickupAddress), pickupDuration, color);
 
         Long deliveryAddress = Long.parseLong(elt.getAttribute("deliveryAddress"));
         if (deliveryAddress < 0)
             throw new ExceptionXML("Error when reading file: deliveryAddress must be positive");
+
+        if (map.getIntersections().get(deliveryAddress) == null)
+            throw new ExceptionXML("Error when reading file: point out of the map");
 
         DeliveryPoint deliveryPoint = new DeliveryPoint(map.getIntersections().get(deliveryAddress), deliveryDuration, color);
 

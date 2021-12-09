@@ -17,11 +17,11 @@ public class AddRequestState1 implements State {
     //
 
     @Override
-    public void leftClick(MainsScreenController controller, Intersection i) {
+    public void leftClick(MainsScreenController controller, Intersection i) throws Exception {
         if (i != null) {
             // we must check if the intersection isn't isolated
             if (controller.getMap().isIsolated(i.getIdIntersection(), controller.getPlanning().getWarehouse().getId())) {
-                System.out.println("LE POINT EST ISOLE");
+                throw new Exception("ISOLATED POINT");
             } else {
                 // we change the selected intersection in the next state
                 controller.addRequestState2.setPickUp(i);
@@ -29,8 +29,6 @@ public class AddRequestState1 implements State {
                 // we change the state of the controller
                 controller.setCurrentState(controller.addRequestState2);
             }
-        } else {
-
         }
     }
 

@@ -29,19 +29,22 @@ public class AddRequestState3 implements State {
     }
 
     @Override
-    public void leftClick(MainsScreenController controller, Intersection i) {
+    public void leftClick(MainsScreenController controller, Intersection i) throws Exception {
         if (i != null) {
-            // we change the selected intersection in the next state
-            controller.addRequestState4.setPickUp(pickUp);
-            controller.addRequestState4.setDelivery(i);
+            // we must check if the intersection isn't isolated
+            if (controller.getMap().isIsolated(i.getIdIntersection(), controller.getPlanning().getWarehouse().getId())) {
+                throw new Exception("ISOLATED POINT");
+            } else {
+                // we change the selected intersection in the next state
+                controller.addRequestState4.setPickUp(pickUp);
+                controller.addRequestState4.setDelivery(i);
 
-            // we change the duration
-            controller.addRequestState4.setPickUpDuration(pickUpDuration);
+                // we change the duration
+                controller.addRequestState4.setPickUpDuration(pickUpDuration);
 
-            // we change the state of the controller
-            controller.setCurrentState(controller.addRequestState4);
-        } else {
-
+                // we change the state of the controller
+                controller.setCurrentState(controller.addRequestState4);
+            }
         }
     }
 

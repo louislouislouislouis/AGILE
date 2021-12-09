@@ -36,7 +36,7 @@ public class AddRequestState2 implements State {
     }
 
     @Override
-    public void validate(MainsScreenController controller, int duration, ListOfCommands listOfCommands) {
+    public void validate(MainsScreenController controller, int duration, ListOfCommands listOfCommands) throws Exception {
         if (duration > 0) {
             // we change the selected intersection in the next state
             controller.addRequestState3.setPickUp(pickUp);
@@ -47,7 +47,7 @@ public class AddRequestState2 implements State {
             // we change the state of the controller
             controller.setCurrentState(controller.addRequestState3);
         } else {
-            System.out.println("duration cannot be negative");
+            throw new Exception("Duration cannot be negative");
         }
     }
 

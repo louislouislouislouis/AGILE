@@ -10,8 +10,6 @@ import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,7 +19,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.hexanome.data.ExceptionXML;
 import org.hexanome.model.*;
-import org.hexanome.vue.AlertBox;
 import org.hexanome.vue.CustomMap;
 import org.hexanome.vue.CustomMapLayer;
 import org.hexanome.vue.ExceptionBox;
@@ -142,10 +139,6 @@ public class MainsScreenController implements Observer {
         return btnStopCalcul;
     }
 
-    public void setBtnStopCalcul(Button btnStopCalcul) {
-        this.btnStopCalcul = btnStopCalcul;
-    }
-
     public Button getBtnDeleteTableRow() {
         return btnDeleteTableRow;
     }
@@ -158,25 +151,14 @@ public class MainsScreenController implements Observer {
         return btnLoadMap;
     }
 
-    public void setBtnLoadMap(Button btnLoadMap) {
-        this.btnLoadMap = btnLoadMap;
-    }
-
     public Button getBtnAddRequest() {
         return btnAddRequest;
-    }
-
-    public void setBtnAddRequest(Button btnAddRequest) {
-        this.btnAddRequest = btnAddRequest;
     }
 
     public Button getBtnValidateRoute() {
         return btnValidateRoute;
     }
 
-    public void setBtnValidateRoute(Button btnValidateRoute) {
-        this.btnValidateRoute = btnValidateRoute;
-    }
 
     public MapIF getMap() {
         return map;
@@ -206,64 +188,16 @@ public class MainsScreenController implements Observer {
         return mapView;
     }
 
-    public void setMapView(CustomMap mapView) {
-        this.mapView = mapView;
-    }
-
-    public CustomMapLayer getRequestLayer() {
-        return requestLayer;
-    }
-
-    public void setRequestLayer(CustomMapLayer requestLayer) {
-        this.requestLayer = requestLayer;
-    }
-
-    public CustomMapLayer getTourLayer() {
-        return tourLayer;
-    }
-
-    public void setTourLayer(CustomMapLayer tourLayer) {
-        this.tourLayer = tourLayer;
-    }
-
     public Button getBtnLoadRequest() {
         return btnLoadRequest;
-    }
-
-    public void setBtnLoadRequest(Button btnLoadRequest) {
-        this.btnLoadRequest = btnLoadRequest;
     }
 
     public Button getBtnRedo() {
         return btnRedo;
     }
 
-    public void setBtnRedo(Button btnRedo) {
-        this.btnRedo = btnRedo;
-    }
-
     public Button getBtnUndo() {
         return btnUndo;
-    }
-
-    public void setBtnUndo(Button btnUndo) {
-        this.btnUndo = btnUndo;
-    }
-
-    public HBox getMapContainer() {
-        return mapContainer;
-    }
-
-    public void setMapContainer(HBox mapContainer) {
-        this.mapContainer = mapContainer;
-    }
-
-    public TableView<Point> getTableView() {
-        return tableView;
-    }
-
-    public void setTableView(TableView<Point> tableView) {
-        this.tableView = tableView;
     }
 
     public CustomMapLayer getIntersectionLayer() {
@@ -294,10 +228,7 @@ public class MainsScreenController implements Observer {
         File selectedFile = fileChooser(actionEvent);
         //System.out.println(selectedFile);
         if (selectedFile == null) {
-            //new ExceptionBox("null");
-            AlertBox alertBox = new AlertBox();
-            alertBox.displayAlert("Message d'erreur", "Veuillez sélectionner un fichier");
-            //AlertBox.displayAlert("Message d'erreur", "Veuillez sélectionner un fichier");
+            new ExceptionBox("Veuillez sélectionner un fichier", "Null").display();
         } else {
             // We clear the map before loading an XML file with requests
             map.clearMap();
@@ -323,7 +254,7 @@ public class MainsScreenController implements Observer {
         System.out.println(selectedFile);
 
         if (selectedFile == null) {
-            System.out.println("pas de fichier selectionné");
+            new ExceptionBox("Veuillez sélectionner un fichier", "Null").display();
         } else {
 
             // We clear the requestLayer before loading an XML file with requests
@@ -334,7 +265,7 @@ public class MainsScreenController implements Observer {
                 // update the request layer
                 this.initRequestLayer();
             } catch (ExceptionXML | ParserConfigurationException | IOException | SAXException e) {
-                e.printStackTrace();
+                new ExceptionBox(e, "XML").display();
             }
         }
 
@@ -370,12 +301,14 @@ public class MainsScreenController implements Observer {
 
     public void rightClick() {
         this.currentState.rightClick(this);
-        System.out.println("rightclick");
-        System.out.println(this.currentState);
     }
 
     public void leftClick(Intersection i) {
-        this.currentState.leftClick(this, i);
+        try {
+            this.currentState.leftClick(this, i);
+        } catch (Exception e) {
+            new ExceptionBox(e, "Other").display();
+        }
     }
 
     public void cancel() {
@@ -383,7 +316,11 @@ public class MainsScreenController implements Observer {
     }
 
     public void validate(int duration) {
-        this.currentState.validate(this, duration, listOfCommands);
+        try {
+            this.currentState.validate(this, duration, listOfCommands);
+        } catch (Exception e) {
+            new ExceptionBox(e, "Other").display();
+        }
     }
 
     /**
@@ -676,9 +613,7 @@ public class MainsScreenController implements Observer {
         if (selectedItem != null) {
             this.currentState.deleteRequest(this, selectedItem, listOfCommands);
         } else {
-            AlertBox alertBox = new AlertBox();
-            alertBox.displayAlert("Error Message", "Please select the point you want to delete");
-            //AlertBox.displayAlert("Error Message", "Please select the point you want to delete");
+            new ExceptionBox("Please select the point you want to delete", "Null").display();
         }
     }
 

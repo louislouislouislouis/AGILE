@@ -28,7 +28,7 @@ public interface State {
     }
 
 
-    default void leftClick(MainsScreenController controller, Intersection i) {
+    default void leftClick(MainsScreenController controller, Intersection i) throws Exception {
     }
 
 
@@ -64,7 +64,7 @@ public interface State {
     default void cancel(MainsScreenController controller) {
     }
 
-    default void validate(MainsScreenController controller, int duration, ListOfCommands listOfCommands) {
+    default void validate(MainsScreenController controller, int duration, ListOfCommands listOfCommands) throws Exception {
     }
 
     default void showDialogBox(MainsScreenController controller) {
