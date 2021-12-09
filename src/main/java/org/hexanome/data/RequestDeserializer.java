@@ -94,6 +94,9 @@ public class RequestDeserializer {
         if (address < 0)
             throw new ExceptionXML("Error when reading file: address must be positive");
 
+        if (map.getIntersections().get(address) == null)
+            throw new ExceptionXML("Error when reading file: point out of the map");
+            
         Intersection departureAddress = map.getIntersections().get(address);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:m:s");
