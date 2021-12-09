@@ -3,6 +3,7 @@ package org.hexanome.controller;
 import java.io.*;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
 
@@ -519,8 +520,9 @@ public class MainsScreenController implements Observer {
         columnColor.setCellValueFactory(new PropertyValueFactory<>("color"));
 
         //set editable columns
-        //columnArrivalTime.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter())); //allows editing when the cell is double clicked
-        //columnDepartureTime.setCellFactory(TextFieldTableCell.forTableColumn(new DateTimeFormatterBuilder()));
+        columnArrivalTime.setCellFactory(TextFieldTableCell.forTableColumn()); //allows editing when the cell is double clicked
+        columnDepartureTime.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnType.setCellFactory(TextFieldTableCell.forTableColumn());
 
         columnColor.setCellFactory(tv -> new TableCell<Point, Color>() {
             @Override
