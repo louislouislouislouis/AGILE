@@ -62,8 +62,7 @@ public class DeleteRequestState implements State {
     public void showDialogBox(MainsScreenController controller) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Dialog");
-        alert.setHeaderText("Look, a Confirmation Dialog");
-        alert.setContentText("Are you ok with this?");
+        alert.setHeaderText("Are you sure you want to delete this request ?");
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {

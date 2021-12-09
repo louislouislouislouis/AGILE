@@ -91,12 +91,9 @@ public class TourState implements State {
             Color colorDelivery = request.getDeliveryPoint().getColor();
             Boolean colorEquals = colorDelivery.equals(colorItem);
             if (colorEquals == true) {
-                // we add the command to the list of command
-                // it will be executed there
-                listOfCommands.add(new DeleteRequestCommand(controller, request));
-                System.out.println("Request que se elimina : " + request);
-            } else {
-                System.out.println("No se elimina ninguna request");
+                controller.deleteRequestState.setRequest(request);
+
+                controller.setCurrentState(controller.deleteRequestState);
             }
         }
     }

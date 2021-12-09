@@ -52,8 +52,8 @@ public class MainsScreenController implements Observer {
     protected final AddRequestState2 addRequestState2 = new AddRequestState2();
     protected final AddRequestState3 addRequestState3 = new AddRequestState3();
     protected final AddRequestState4 addRequestState4 = new AddRequestState4();
-    /*protected final ModifyRequestState modifyRequestState = new ModifyRequestState();
-    protected final DeleteRequestState deleteRequestState = new DeleteRequestState();*/
+    //protected final ModifyRequestState modifyRequestState = new ModifyRequestState();
+    protected final DeleteRequestState deleteRequestState = new DeleteRequestState();
 
     // current state
     private State currentState = initialState;
@@ -226,7 +226,6 @@ public class MainsScreenController implements Observer {
     public void selectionMap(ActionEvent actionEvent) {
         //method that uploads an XML file (carte)
         File selectedFile = fileChooser(actionEvent);
-        //System.out.println(selectedFile);
         if (selectedFile == null) {
             new ExceptionBox("Veuillez sélectionner un fichier", "Null").display();
         } else {
@@ -235,11 +234,12 @@ public class MainsScreenController implements Observer {
             try {
                 currentState.loadMap(this, map, selectedFile);
                 // init the map
-                this.initMap();
+
             } catch (ExceptionXML | ParserConfigurationException | IOException | SAXException e) {
                 new ExceptionBox(e, "XML").display();
             }
         }
+        this.initMap();
     }
 
     /**
@@ -251,7 +251,6 @@ public class MainsScreenController implements Observer {
     public void loadRequest(ActionEvent actionEvent) {
         //method that uploads an XML file (carte)
         File selectedFile = fileChooser(actionEvent);
-        System.out.println(selectedFile);
 
         if (selectedFile == null) {
             new ExceptionBox("Veuillez sélectionner un fichier", "Null").display();
@@ -262,13 +261,11 @@ public class MainsScreenController implements Observer {
 
             try {
                 currentState.loadPlanning(this, map, planning, selectedFile);
-                // update the request layer
-                this.initRequestLayer();
             } catch (ExceptionXML | ParserConfigurationException | IOException | SAXException e) {
                 new ExceptionBox(e, "XML").display();
             }
         }
-
+        this.initRequestLayer();
     }
 
 
