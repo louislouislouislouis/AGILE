@@ -1,17 +1,23 @@
 package org.hexanome.controller;
 
 import java.io.*;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.*;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,12 +25,10 @@ import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.converter.IntegerStringConverter;
 import org.hexanome.data.ExceptionXML;
 import org.hexanome.model.*;
-import org.hexanome.vue.AlertBox;
-import org.hexanome.vue.CustomMap;
-import org.hexanome.vue.CustomMapLayer;
-import org.hexanome.vue.ExceptionBox;
+import org.hexanome.vue.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -108,6 +112,10 @@ public class MainsScreenController implements Observer {
     private Button btnDeleteTableRow;
     @FXML
     private Button btnEditTableRow;
+    @FXML
+    private Spinner<LocalTime> spnrArrivalTime;
+    @FXML
+    private Spinner<LocalTime> spnrDepartureTime;
 
     /*----------------------Constructor---------------------------------------*/
 
@@ -293,8 +301,8 @@ public class MainsScreenController implements Observer {
         //System.out.println(selectedFile);
         if (selectedFile == null) {
             //new ExceptionBox("null");
-            AlertBox alertBox = new AlertBox();
-            alertBox.displayAlert("Message d'erreur", "Veuillez sélectionner un fichier");
+            AlertBox alertBox = new AlertBox(new Label("Veuillez sélectionner un fichier"));
+            alertBox.displayAlert("Message d'erreur");
             //AlertBox.displayAlert("Message d'erreur", "Veuillez sélectionner un fichier");
         } else {
             // We clear the map before loading an XML file with requests
@@ -521,6 +529,10 @@ public class MainsScreenController implements Observer {
         columnDepartureTime.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
         columnColor.setCellValueFactory(new PropertyValueFactory<>("color"));
 
+        //set editable columns
+        //columnArrivalTime.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter())); //allows editing when the cell is double clicked
+        //columnDepartureTime.setCellFactory(TextFieldTableCell.forTableColumn(new DateTimeFormatterBuilder()));
+
         columnColor.setCellFactory(tv -> new TableCell<Point, Color>() {
             @Override
             protected void updateItem(Color item, boolean empty) {
@@ -654,7 +666,6 @@ public class MainsScreenController implements Observer {
     public void initRequestLayer() {
         mapView.removeLayer(requestLayer);
         tourLayer.resetAll();
-
         //Create the Request Layer
 
         requestLayer = new CustomMapLayer();
@@ -692,8 +703,8 @@ public class MainsScreenController implements Observer {
         if (selectedItem != null) {
             this.currentState.deleteRequest(this, selectedItem, listOfCommands);
         } else {
-            AlertBox alertBox = new AlertBox();
-            alertBox.displayAlert("Error Message", "Please select the point you want to delete");
+            AlertBox alertBox = new AlertBox(new Label("Plese select the point you want to delete"));
+            alertBox.displayAlert("Error Message");
             //AlertBox.displayAlert("Error Message", "Please select the point you want to delete");
         }
     }
@@ -701,16 +712,18 @@ public class MainsScreenController implements Observer {
     @FXML
     void editTableRow(ActionEvent event) {
         //Modify departure time , arrival time and point in the map
+        //tableView.setEditable(true);
 
         Point selectedItem = tableView.getSelectionModel().getSelectedItem();
-        String typeItem = selectedItem.getType();
 
-        switch (typeItem) {
-            case ("warehouse"):
-                //getWarehouse()->PlanningRequest
-                break;
-        }
-        System.out.println(tableView.getSelectionModel().getSelectedItem());
+        //UpdateView updateView = new UpdateView(spnrArrivalTime,spnrDepartureTime);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
+        spnrArrivalTime.valueProperty().addListener((obs, oldTime, newTime) -> {
+            System.out.println(formatter.format(newTime));
+        });
+
+        spnrDepartureTime.valueProperty().addListener((obs, oldTime, newTime) ->
+                System.out.println(formatter.format(newTime)));
     }
 
     public void stopTour(ActionEvent actionEvent) {
