@@ -251,6 +251,7 @@ public class MainsScreenController implements Observer {
             try {
                 currentState.loadMap(this, map, selectedFile);
                 // init the map
+                this.initMap();
 
             } catch (ExceptionXML e) {
                 new ExceptionBox(e, "XML").display();
@@ -258,7 +259,7 @@ public class MainsScreenController implements Observer {
                 new ExceptionBox(e, "Other").display();
             }
         }
-        this.initMap();
+        //this.initMap();
     }
 
     /**
