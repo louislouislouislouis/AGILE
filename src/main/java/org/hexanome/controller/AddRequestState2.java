@@ -47,6 +47,10 @@ public class AddRequestState2 implements State {
             // we change the state of the controller
             controller.setCurrentState(controller.addRequestState3);
         } else {
+            // we clear the view
+            controller.getMapView().removeLayer(controller.getIntersectionLayer());
+            // we change the state of the controller
+            controller.setCurrentState(controller.tourState);
             throw new Exception("Duration cannot be negative");
         }
     }

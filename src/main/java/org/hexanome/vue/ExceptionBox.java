@@ -77,7 +77,7 @@ public class ExceptionBox {
         this.ex.printStackTrace(pw);
         String exceptionText = sw.toString();
 
-        //Label label = new Label("The exception stacktrace was:");
+
 
         TextArea textArea = new TextArea(exceptionText);
         textArea.setEditable(false);
@@ -90,7 +90,7 @@ public class ExceptionBox {
 
         GridPane expContent = new GridPane();
         expContent.setMaxWidth(Double.MAX_VALUE);
-       // expContent.add(label, 0, 0);
+
         expContent.add(textArea, 0, 1);
 
 // Set expandable Exception into the dialog pane.
