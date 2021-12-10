@@ -10,7 +10,7 @@ public abstract class TemplateTSP implements TSP {
     protected Graph g;
     private Double bestSolCost;
     public Map<Integer, Long> mapIdTSP;
-    public Map<Long,Integer> mapVertexTSP;
+    public Map<Long, Integer> mapVertexTSP;
     private MapIF map;
     private Set<Intersection> destinations;
     private PlanningRequest planning;
@@ -110,8 +110,8 @@ public abstract class TemplateTSP implements TSP {
             if (g.isArc(currentVertex, 0)) {
                 if (currentCost + g.getCost(currentVertex, 0) < bestSolCost) {
                     visited.toArray(bestSol);
-                    this.updateTour(tour);
                     bestSolCost = currentCost + g.getCost(currentVertex, 0);
+                    this.updateTour(tour);
                 }
             }
         } else if (currentCost + bound(currentVertex, unvisited) < bestSolCost) {
@@ -152,7 +152,7 @@ public abstract class TemplateTSP implements TSP {
         tour.computeCompleteTour(map);
         tour.setCost(this.getSolutionCost());
         tour.updateTiming(map, planning);
-
+        
         tour.notifyChange("UPDATEMAP");
     }
 

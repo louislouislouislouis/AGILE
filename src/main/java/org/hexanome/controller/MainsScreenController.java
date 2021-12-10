@@ -118,6 +118,10 @@ public class MainsScreenController implements Observer {
     private Spinner<LocalTime> spnrArrivalTime;
     @FXML
     private Spinner<LocalTime> spnrDepartureTime;
+    @FXML
+    private Label durationLabel;
+    @FXML
+    private Label distanceLabel;
 
     /*----------------------Constructor---------------------------------------*/
 
@@ -546,7 +550,7 @@ public class MainsScreenController implements Observer {
         tourLayer.forceReRender();
         //mapView.layout();
 
-
+        updateTimeAndDistance();
     }
 
     public void updateMapView() {
@@ -583,7 +587,7 @@ public class MainsScreenController implements Observer {
         mapView.addLayer(tourLayer);
         mapView.addLayer(requestLayer);
 
-        //tour.notifyChange("UPDATEMAP");
+        updateTimeAndDistance();
     }
 
     public void initRequestLayer() {
@@ -668,5 +672,14 @@ public class MainsScreenController implements Observer {
             request.getPickupPoint().setColor(color);
             request.getDeliveryPoint().setColor(color);
         }
+    }
+
+    public void updateTimeAndDistance() {
+        int distance = tour.getCost().intValue();
+        LocalTime duration;
+        
+        duration = LocalTime.ofSecondOfDay(planning.getWarehouse().getArrivalTime().toSecondOfDay() - planning.getWarehouse().getDepartureTime().toSecondOfDay());
+        durationLabel.setText("Duration : " + duration.toString());
+        distanceLabel.setText("Distance : " + distance + " m");
     }
 }

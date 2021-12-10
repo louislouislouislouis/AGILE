@@ -18,7 +18,6 @@ public class ComputeWaitingState implements State {
         controller.changeCursor("N");
         // we change the state of the controller
         controller.setCurrentState(controller.tourState);
-        System.out.println("in ComputeWaitings signal to stop");
     }
 
     @Override
