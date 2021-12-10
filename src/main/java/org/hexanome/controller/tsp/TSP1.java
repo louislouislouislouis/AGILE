@@ -27,33 +27,15 @@ public class TSP1 extends TemplateTSP {
 
     @Override
     protected Double bound(Integer currentVertex, Set<Integer> unvisited) {
-        Set<Integer> unvisitedTemp = new HashSet<>(unvisited);
-        Integer currentVertexTemp = currentVertex;
-        Double res = 0.0;
         Double minCostCurrent = Double.MAX_VALUE;
 
-        for (Integer i : unvisitedTemp) {
-            if (costTSP[currentVertexTemp][i] < minCostCurrent) {
+        for (Integer i : unvisited) {
+            if (costTSP[currentVertex][i] < minCostCurrent) {
                 minCostCurrent = costTSP[currentVertex][i];
-                currentVertexTemp = i;
-
             }
         }
-        res += minCostCurrent;
 
-        unvisitedTemp.remove(currentVertex);
-
-        if (!unvisitedTemp.isEmpty()) {
-            minCostCurrent = Double.MAX_VALUE;
-            for (Integer i : unvisitedTemp) {
-                if (costTSP[currentVertexTemp][i] < minCostCurrent) {
-                    minCostCurrent = costTSP[currentVertex][i];
-                }
-            }
-            res += minCostCurrent;
-        }
-
-        return res;
+        return minCostCurrent;
     }
 
     @Override
