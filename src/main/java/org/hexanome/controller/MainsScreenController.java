@@ -257,6 +257,12 @@ public class MainsScreenController implements Observer {
                 // init the map
                 this.initMap();
 
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Successful message");
+                alert.setHeaderText("Map is loaded");
+
+                alert.showAndWait();
+
             } catch (ExceptionXML e) {
                 new ExceptionBox(e, "XML").display();
             } catch (ParserConfigurationException | IOException | SAXException e) {
