@@ -4,22 +4,18 @@ import org.hexanome.model.Intersection;
 import org.hexanome.model.Point;
 
 public class ModifyRequestState implements State {
-
+    /*
+            Missing tableview is not updating
+            Missing refresh points in map
+         */
     @Override
     public void leftClick(MainsScreenController controller, Intersection i) throws Exception {
         if (i != null) {
             System.out.println(i);
-            //return intersection
-            /*// we must check if the intersection isn't isolated
-            if (controller.getMap().isIsolated(i.getIdIntersection(), controller.getPlanning().getWarehouse().getId())) {
-                throw new Exception("ISOLATED POINT");
-            } else {
-                // we change the selected intersection in the next state
-                controller.addRequestState2.setPickUp(i);
-
-                // we change the state of the controller
-                controller.setCurrentState(controller.addRequestState2);
-            }*/
+            Point p = controller.getTableView().getSelectionModel().getSelectedItem();
+            p.setAddress(i);
+            controller.getMapView().removeLayer(controller.getIntersectionLayer());
+            controller.setCurrentState(controller.tourState);
         }
     }
 

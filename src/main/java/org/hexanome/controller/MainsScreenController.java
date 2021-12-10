@@ -217,6 +217,10 @@ public class MainsScreenController implements Observer {
         return intersectionLayer;
     }
 
+    public TableView<Point> getTableView() {
+        return tableView;
+    }
+
     /*--------------------------------Methods----------------------------------------------------------*/
 
     /**
@@ -631,33 +635,6 @@ public class MainsScreenController implements Observer {
         //Modify departure time , arrival time and point in the map
         tableView.setEditable(true);
         currentState.modifyRequest(this);
-
-        //get old data
-        Point selectedItem = tableView.getSelectionModel().getSelectedItem();
-        //get the new intersection point, load intersection to selected item
-        System.out.println(selectedItem);
-        if (selectedItem != null) {
-            this.currentState.modifyRequest(this, selectedItem, listOfCommands);
-        } else {
-            new ExceptionBox("Please select the point you want to delete", "Null").display();
-        }
-        selectedItem.setAddress(currentState.modifyRequest(););
-        String id = selectedItem.getId().toString();
-        String type = selectedItem.getType();
-        LocalTime arrivalTime = selectedItem.getArrivalTime();
-        LocalTime departureTime = selectedItem.getDepartureTime();
-        Color color = selectedItem.getColor();
-
-        //if(tableView.setOnInputMethodTextChanged(new EventListener listener);){}
-        //Point replacePoint = Point()
-        //tableView.change
-        //String newId = selectedItem.getId().toString();
-        //String newType = selectedItem.getType();
-        LocalTime newArrivalTime = selectedItem.getArrivalTime();
-        LocalTime newDepartureTime = selectedItem.getDepartureTime();
-        //Color color = selectedItem.getColor();
-
-
     }
 
     public void updateIntersection(ActionEvent actionEvent){
