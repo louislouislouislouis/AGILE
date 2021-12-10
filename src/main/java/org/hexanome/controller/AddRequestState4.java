@@ -47,8 +47,21 @@ public class AddRequestState4 implements State {
 
     @Override
     public void validate(MainsScreenController controller, int duration, ListOfCommands listOfCommands) throws Exception {
-        if (duration > 0) {
-            Color color = ColorEnum.values()[controller.getPlanning().getRequests().size()].color;
+        if (duration >= 0) {
+            Color color = null;
+            boolean different;
+            for (ColorEnum myColor : ColorEnum.values()) {
+                different = true;
+                for (Request request : controller.getPlanning().getRequests()) {
+                    if (myColor.color == request.getDeliveryPoint().getColor()) {
+                        different = false;
+                    }
+                }
+                if (different) {
+                    color = myColor.color;
+                    break;
+                }
+            }
 
             // we lack 2 states for each duration time
 
