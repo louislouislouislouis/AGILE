@@ -260,6 +260,7 @@ public class MainsScreenController implements Observer {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Successful message");
                 alert.setHeaderText("Map is loaded");
+                alert.setContentText(selectedFile.getName() + " is found");
 
                 alert.showAndWait();
 

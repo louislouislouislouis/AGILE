@@ -37,6 +37,11 @@ public abstract class TemplateTSP implements TSP {
         }
     }
 
+    /**
+     * @param g
+     * @param tour
+     * @param allowCalculation
+     */
     public void searchSolution(Graph g, Tour tour, MainsScreenController allowCalculation) {
         this.g = g;
         bestSol = new Integer[g.getNbVertices()];
