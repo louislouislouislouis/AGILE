@@ -24,6 +24,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
+import javafx.util.converter.LocalTimeStringConverter;
 import org.hexanome.data.ExceptionXML;
 import org.hexanome.model.*;
 import org.hexanome.vue.*;
@@ -60,8 +61,8 @@ public class MainsScreenController implements Observer {
     protected final AddRequestState2 addRequestState2 = new AddRequestState2();
     protected final AddRequestState3 addRequestState3 = new AddRequestState3();
     protected final AddRequestState4 addRequestState4 = new AddRequestState4();
-    //protected final ModifyRequestState modifyRequestState = new ModifyRequestState();
     protected final DeleteRequestState deleteRequestState = new DeleteRequestState();
+    protected final ModifyRequestState modifyRequestState = new ModifyRequestState();
 
     // current state
     private State currentState = initialState;
@@ -447,8 +448,8 @@ public class MainsScreenController implements Observer {
         columnColor.setCellValueFactory(new PropertyValueFactory<>("color"));
 
         //set editable columns
-        //columnArrivalTime.setCellFactory(TextFieldTableCell.forTableColumn(LocalTime)); //allows editing when the cell is double clicked
-        //columnDepartureTime.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnArrivalTime.setCellFactory(TextFieldTableCell.forTableColumn(new LocalTimeStringConverter())); //allows editing when the cell is double clicked
+        columnDepartureTime.setCellFactory(TextFieldTableCell.forTableColumn(new LocalTimeStringConverter()));
         //columnType.setCellFactory(TextFieldTableCell.forTableColumn());
 
         columnColor.setCellFactory(tv -> new TableCell<Point, Color>() {
@@ -624,9 +625,29 @@ public class MainsScreenController implements Observer {
     @FXML
     void editTableRow(ActionEvent event) {
         //Modify departure time , arrival time and point in the map
-        //tableView.setEditable(true);
+        tableView.setEditable(true);
         currentState.modifyRequest(this);
+
+        //get old data
         Point selectedItem = tableView.getSelectionModel().getSelectedItem();
+        System.out.println(selectedItem);
+        String id = selectedItem.getId().toString();
+        String type = selectedItem.getType();
+        LocalTime arrivalTime = selectedItem.getArrivalTime();
+        LocalTime departureTime = selectedItem.getDepartureTime();
+        Color color = selectedItem.getColor();
+
+        //if(selectedItem.){}
+        //Point replacePoint = Point()
+        //tableView.change
+        Point newPoint = tableView.getSelectionModel().getSelectedItem();
+        System.out.println(newPoint);
+        //String newId = selectedItem.getId().toString();
+        //String newType = selectedItem.getType();
+        LocalTime newArrivalTime = selectedItem.getArrivalTime();
+        LocalTime newDepartureTime = selectedItem.getDepartureTime();
+        //Color color = selectedItem.getColor();
+
 
     }
 

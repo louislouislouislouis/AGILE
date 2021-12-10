@@ -104,6 +104,10 @@ public class TourState implements State {
     public void modifyRequest(MainsScreenController controller) {
         // on affiche les points des intersections sur la carte
         controller.updateMapIntersection();
+
+        // we change the state of the controller
+        controller.setCurrentState((State) controller.modifyRequestState);
+
     }
 
     @Override
