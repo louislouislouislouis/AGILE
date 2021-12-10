@@ -508,6 +508,12 @@ public class MainsScreenController implements Observer {
             data.add(request.getDeliveryPoint());
             data.add(request.getPickupPoint());
         });
+        tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            System.out.println("Event Handle");
+            requestLayer.animateOnePoint(newSelection.getId());
+
+
+        });
     }
 
 
