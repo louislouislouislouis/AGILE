@@ -15,7 +15,8 @@ public class TSP1 extends TemplateTSP {
 
     public TSP1(
             Double[][] costTSP,
-            Map<Integer, Long> mapIdTSP, LinkedList<Request> requests,
+            Map<Integer, Long> mapIdTSP,
+            LinkedList<Request> requests,
             MapIF map,
             Set<Intersection> destinations,
             PlanningRequest planning) {
@@ -25,24 +26,23 @@ public class TSP1 extends TemplateTSP {
     }
 
     @Override
-    protected Double bound(Integer currentVertex, Collection<Integer> unvisited) {
-        return 0.0;
-		/*
-		Double minCostTSP = Double.MAX_VALUE;
-		Integer minUnvisited = 0;
-		for (Integer i : unvisited) {
-			if(costTSP[currentVertex][i] < minCostTSP) {
-				minUnvisited = i;
-				minCostTSP = costTSP[currentVertex][i];
-			}
-		}
-		return costTSP[currentVertex][minUnvisited];
-		 */
+    protected Double bound(Integer currentVertex, Set<Integer> unvisited) {
+        Set<Integer> unvisitedTemp = new HashSet<>(unvisited);
+        Integer currentVertexTemp = currentVertex;
+        Double minCostCurrent = Double.MAX_VALUE;
+
+        for (Integer i : unvisitedTemp) {
+            if (costTSP[currentVertexTemp][i] < minCostCurrent) {
+                minCostCurrent = costTSP[currentVertex][i];
+            }
+        }
+
+        return minCostCurrent;
     }
 
     @Override
-    protected Iterator<Integer> iterator(Integer currentVertex, Collection<Integer> unvisited, Graph g) {
-        return new SeqIter(unvisited, currentVertex, g, super.mapIdTSP, requests);
+    protected Iterator<Integer> iterator(Integer currentVertex, Set<Integer> unvisited, Graph g) {
+        return new SeqIter(unvisited, currentVertex, g, super.requestsVertex);
     }
 
 }

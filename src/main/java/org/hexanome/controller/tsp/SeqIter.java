@@ -17,11 +17,12 @@ public class SeqIter implements Iterator<Integer> {
 	 * @param currentVertex
 	 * @param g
 	 */
-	public SeqIter(Collection<Integer> unvisited, int currentVertex, Graph g, Map<Integer,Long> mapIdTSP, LinkedList<Request> requests){
+	public SeqIter(Set<Integer> unvisited, int currentVertex, Graph g, Map<Integer, Integer> requestsVertex) {
 		this.candidates = new Integer[unvisited.size()];
 		for (Integer s : unvisited){
-			if (g.isArc(currentVertex, s) && isOkOrderPickupDelivery(unvisited, currentVertex, g, mapIdTSP, requests))
+			if (g.isArc(currentVertex, s) && isOkOrderPickupDelivery(unvisited, currentVertex, requestsVertex)) {
 				candidates[nbCandidates++] = s;
+			}
 		}
 	}
 	
@@ -39,45 +40,12 @@ public class SeqIter implements Iterator<Integer> {
 	@Override
 	public void remove() {}
 
-	public boolean isOkOrderPickupDelivery(Collection<Integer> unvisited, int currentVertex, Graph g, Map<Integer, Long> mapIdTSP, LinkedList<Request> requests) {
-		if (isDelivery(currentVertex, mapIdTSP, requests)) {
-			for (Integer i : getPickupByDelivery(currentVertex, mapIdTSP, requests)) {
-				if (unvisited.contains(i)) {
-					return false;
-				}
+	public boolean isOkOrderPickupDelivery(Set<Integer> unvisited, int currentVertex, Map<Integer, Integer> requestsVertex) {
+		if (requestsVertex.containsKey(currentVertex)) {
+			if (unvisited.contains(requestsVertex.get(currentVertex))) {
+				return false;
 			}
 		}
 		return true;
 	}
-
-	public boolean isDelivery(int currentVertex, Map<Integer,Long> mapIdTSP, LinkedList<Request> requests) {
-		for (Request r : requests) {
-			if (r.getDeliveryPoint().getAddress().getIdIntersection() == mapIdTSP.get(currentVertex)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public LinkedList<Integer> getPickupByDelivery(Integer deliveryVertex, Map<Integer,Long> mapIdTSP, LinkedList<Request> requests) {
-		Long idDelivery = mapIdTSP.get(deliveryVertex);
-		LinkedList<Long> idPickupPoints = new LinkedList<>();
-		for (Request r : requests) {
-			if (r.getDeliveryPoint().getAddress().getIdIntersection() == idDelivery) {
-				idPickupPoints.add(r.getDeliveryPoint().getAddress().getIdIntersection());
-			}
-		}
-		LinkedList<Integer> pickupVertexes = new LinkedList<>();
-		Map<Long,Integer> mapVertexTSP = new HashMap<>();
-		for (Integer i : mapIdTSP.keySet()) {
-			mapVertexTSP.put(mapIdTSP.get(i), i);
-		}
-		for (Long l : idPickupPoints) {
-			pickupVertexes.add(mapVertexTSP.get(l));
-		}
-		return  pickupVertexes;
-	}
-
-
-
 }

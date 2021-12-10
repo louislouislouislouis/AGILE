@@ -49,9 +49,7 @@ public class GraphAPI {
         tour.addPoint(planning.getWarehouse());
 
         tsp.searchSolution(g, tour, allowCalculation);
-        System.out.print("End of method");
-        //       + (System.currentTimeMillis() - startTime) + "ms : ");
-
+        System.out.println("Search solution time: " + (System.currentTimeMillis() - startTime) + "ms : ");
     }
 
     public void ADD_REQUEST(PlanningRequest planning, MapIF map, Tour tour, Boolean isUndo) {

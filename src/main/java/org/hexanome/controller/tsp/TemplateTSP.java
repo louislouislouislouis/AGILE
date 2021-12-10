@@ -9,14 +9,14 @@ public abstract class TemplateTSP implements TSP {
     private Integer[] bestSol;
     protected Graph g;
     private Double bestSolCost;
-    private int timeLimit;
-    private long startTime;
-    private Map<Long, Map<Long, List<Long>>> shortestPathsIntersections;
-    private Map<Long, Map<Long, Double>> shortestPathsCost;
     public Map<Integer, Long> mapIdTSP;
+    public Map<Long,Integer> mapVertexTSP;
     private MapIF map;
     private Set<Intersection> destinations;
     private PlanningRequest planning;
+
+    // key: vertex delivery, value: vertex pickup
+    public Map<Integer, Integer> requestsVertex;
 
     public TemplateTSP(
             Map<Integer, Long> mapIdTSP,
@@ -24,22 +24,36 @@ public abstract class TemplateTSP implements TSP {
             Set<Intersection> destinations,
             PlanningRequest planning) {
         this.mapIdTSP = mapIdTSP;
-        this.shortestPathsIntersections = map.getShortestPathsIntersections();
-        this.shortestPathsCost = map.getShortestPathsCost();
+        this.mapVertexTSP = new HashMap<>();
+        for (Integer i : mapIdTSP.keySet()) {
+            mapVertexTSP.put(mapIdTSP.get(i), i);
+        }
         this.map = map;
         this.destinations = destinations;
         this.planning = planning;
+        this.requestsVertex = new HashMap<>();
+        for (Request r : this.planning.requests) {
+            requestsVertex.put(mapVertexTSP.get(r.getDeliveryPoint().getId()), mapVertexTSP.get(r.getPickupPoint().getId()));
+        }
     }
 
     public void searchSolution(Graph g, Tour tour, MainsScreenController allowCalculation) {
         this.g = g;
         bestSol = new Integer[g.getNbVertices()];
-        Collection<Integer> unvisited = new ArrayList<Integer>(g.getNbVertices() - 1);
-        for (int i = 1; i < g.getNbVertices(); i++) unvisited.add(i);
-        Collection<Integer> visited = new ArrayList<Integer>(g.getNbVertices());
-        visited.add(0); // The first visited vertex is 0
         bestSolCost = Double.MAX_VALUE;
+
+        Set<Integer> unvisited = new HashSet<>();
+        for (int i = 1; i < g.getNbVertices(); i++) unvisited.add(i);
+
+        LinkedList<Integer> visited = new LinkedList<>();
+        visited.add(0); // The first visited vertex is 0
+
         branchAndBound(0, unvisited, visited, Double.valueOf(0), tour, allowCalculation);
+
+        for (Integer i : bestSol) {
+            System.out.print(i + " ");
+        }
+        System.out.println(bestSolCost);
     }
 
     public Integer getSolution(int i) {
@@ -62,7 +76,7 @@ public abstract class TemplateTSP implements TSP {
      * @return a lower bound of the cost of paths in <code>g</code> starting from <code>currentVertex</code>, visiting
      * every vertex in <code>unvisited</code> exactly once, and returning back to vertex <code>0</code>.
      */
-    protected abstract Double bound(Integer currentVertex, Collection<Integer> unvisited);
+    protected abstract Double bound(Integer currentVertex, Set<Integer> unvisited);
 
     /**
      * Method that must be defined in TemplateTSP subclasses
@@ -72,7 +86,7 @@ public abstract class TemplateTSP implements TSP {
      * @param g
      * @return an iterator for visiting all vertices in <code>unvisited</code> which are successors of <code>currentVertex</code>
      */
-    protected abstract Iterator<Integer> iterator(Integer currentVertex, Collection<Integer> unvisited, Graph g);
+    protected abstract Iterator<Integer> iterator(Integer currentVertex, Set<Integer> unvisited, Graph g);
 
     /**
      * Template method of a branch and bound algorithm for solving the TSP in <code>g</code>.
@@ -82,13 +96,17 @@ public abstract class TemplateTSP implements TSP {
      * @param visited       the sequence of vertices that have been already visited (including currentVertex)
      * @param currentCost   the cost of the path corresponding to <code>visited</code>
      */
-    private void branchAndBound(int currentVertex, Collection<Integer> unvisited,
-                                Collection<Integer> visited, Double currentCost, Tour tour, MainsScreenController allowCalculation) {
+    private void branchAndBound(int currentVertex,
+                                Set<Integer> unvisited,
+                                LinkedList<Integer> visited,
+                                Double currentCost,
+                                Tour tour,
+                                MainsScreenController allowCalculation) {
         if (!allowCalculation.isAllowcalculation() && tour.getIntersections().size() > 1) {
             System.out.println("Tour have been forced to stop");
             return;
         }
-        if (unvisited.size() == 0) {
+        if (unvisited.isEmpty()) {
             if (g.isArc(currentVertex, 0)) {
                 if (currentCost + g.getCost(currentVertex, 0) < bestSolCost) {
                     visited.toArray(bestSol);
@@ -102,12 +120,11 @@ public abstract class TemplateTSP implements TSP {
                 Integer nextVertex = it.next();
                 visited.add(nextVertex);
                 unvisited.remove(nextVertex);
-                Intersection lastIntersection = tour.getLastIntersection();
 
                 branchAndBound(nextVertex, unvisited, visited,
                         currentCost + g.getCost(currentVertex, nextVertex), tour, allowCalculation);
 
-                visited.remove(nextVertex);
+                visited.removeLast();
                 unvisited.add(nextVertex);
             }
         }
@@ -122,9 +139,6 @@ public abstract class TemplateTSP implements TSP {
         Intersection[] LHSArray = new Intersection[destinations.size()];
         // Converting LinkedHashMap to Array
         LHSArray = destinations.toArray(LHSArray);
-
-        //tour.setDestinations(LHSArray);
-        //tour.computeCompleteTour(shortestPathsIntersections,map);
 
         List<Intersection> pathTSP = new ArrayList<>();
         for (int i = 0; i < bestSol.length; i++) {
