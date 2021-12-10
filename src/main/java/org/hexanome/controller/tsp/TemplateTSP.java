@@ -103,7 +103,6 @@ public abstract class TemplateTSP implements TSP {
                                 Tour tour,
                                 MainsScreenController allowCalculation) {
         if (!allowCalculation.isAllowcalculation() && tour.getIntersections().size() > 1) {
-            System.out.println("Tour have been forced to stop");
             return;
         }
         if (unvisited.isEmpty()) {
@@ -152,7 +151,7 @@ public abstract class TemplateTSP implements TSP {
         tour.computeCompleteTour(map);
         tour.setCost(this.getSolutionCost());
         tour.updateTiming(map, planning);
-        
+
         tour.notifyChange("UPDATEMAP");
     }
 

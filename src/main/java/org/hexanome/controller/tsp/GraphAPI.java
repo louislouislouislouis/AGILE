@@ -316,7 +316,7 @@ public class GraphAPI {
                 costTSP[i.getKey().intValue()][jj++] = j.getValue();
             }
         }
-        System.out.println("MapIdTSP: " + mapIdTSP);
+        /*System.out.println("MapIdTSP: " + mapIdTSP);
 
         for (int i = 0; i < nbVerticesTSP; i++) {
             for (int j = 0; j < nbVerticesTSP; j++) {
@@ -326,7 +326,7 @@ public class GraphAPI {
                 System.out.print(costTSP[i][j] + " ");
             }
             System.out.println();
-        }
+        }*/
     }
 
     /**
