@@ -391,7 +391,6 @@ public class MainsScreenController implements Observer {
         String action = (String) arg;
         switch (action) {
             case "UPDATEMAP":
-                System.out.println("Update map called");
                 Platform.runLater(new Runnable() {
                     private MainsScreenController myController;
 
@@ -406,15 +405,6 @@ public class MainsScreenController implements Observer {
                         myController.updateTableView();
                     }
                 }.init(this));
-                //this.updateDynamycMap();
-                System.out.println("updtaMapView222 Called");
-                /*try {
-                    System.out.println("updtaMapView222 Called");
-                    //TimeUnit.MILLISECONDS.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }*/
-
 
                 break;
             default:
