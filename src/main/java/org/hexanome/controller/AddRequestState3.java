@@ -48,6 +48,11 @@ public class AddRequestState3 implements State {
         }
     }
 
+    /**
+     * right click to undo things
+     *
+     * @param controller
+     */
     @Override
     public void rightClick(MainsScreenController controller) {
         // we clear the view
