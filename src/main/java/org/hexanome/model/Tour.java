@@ -73,7 +73,6 @@ public class Tour extends Observable {
     }
 
     public void addIntersection(Intersection intersection) {
-        //this.cost += this.intersections.get(this.intersections.size()-1).
         this.intersections.add(intersection);
 
     }
@@ -370,5 +369,11 @@ public class Tour extends Observable {
 
     public void deleteLastPoint() {
         points.remove(points.size() - 1);
+    }
+
+    public void updateTimingWarehouse(MapIF map) {
+        points.add(points.get(0)); //add warehouse as last point
+        this.setTimings(map, points.size() - 2);
+        points.remove(points.size() - 1); // remove last warehouse
     }
 }

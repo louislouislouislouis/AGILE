@@ -40,14 +40,19 @@ import com.gluonhq.maps.MapPoint;
 public class MainsScreenController implements Observer {
 
     /*---------------------------VARIABLES------------------------------------------------------------*/
-    private MapIF map;
+    /*private MapIF map;
     private PlanningRequest planning;
-    private Tour tour;
+    private Tour tour;*/
+
+    public MapIF map;
+    public PlanningRequest planning;
+    public Tour tour;
 
     private static final ObservableList<Point> data = FXCollections.observableArrayList();
 
     /* command variable */
-    private ListOfCommands listOfCommands;
+    //private ListOfCommands listOfCommands;
+    public ListOfCommands listOfCommands;
 
     /* state variable */
 
@@ -65,7 +70,8 @@ public class MainsScreenController implements Observer {
     protected final ModifyRequestState modifyRequestState = new ModifyRequestState();
 
     // current state
-    private State currentState = initialState;
+    //private State currentState = initialState;
+    public State currentState = initialState;
 
     /* Création de la carte Gluon JavaFX */
     private CustomMap mapView;
@@ -362,6 +368,9 @@ public class MainsScreenController implements Observer {
 
     /**
      * Method called by window after a click on the button "Redo"
+     *
+     * @param actionEvent
+     * @return void
      */
     public void redo(ActionEvent actionEvent) {
         currentState.redo(listOfCommands);
@@ -647,6 +656,7 @@ public class MainsScreenController implements Observer {
         //Modify departure time , arrival time and point in the map
         tableView.setEditable(true);
         currentState.modifyRequest(this);
+
     }
 
     public void updateIntersection(ActionEvent actionEvent) {
