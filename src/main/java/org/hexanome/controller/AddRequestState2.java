@@ -37,7 +37,7 @@ public class AddRequestState2 implements State {
 
     @Override
     public void validate(MainsScreenController controller, int duration, ListOfCommands listOfCommands) throws Exception {
-        if (duration > 0) {
+        if (duration >= 0) {
             // we change the selected intersection in the next state
             controller.addRequestState3.setPickUp(pickUp);
 
