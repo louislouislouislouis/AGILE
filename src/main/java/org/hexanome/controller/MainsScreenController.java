@@ -284,7 +284,7 @@ public class MainsScreenController implements Observer {
                 this.initRequestLayer();
             } catch (ExceptionXML e) {
                 new ExceptionBox(e, "XML").display();
-            } catch (ParserConfigurationException | IOException | SAXException e) {
+            } catch (ParserConfigurationException | IOException | SAXException | NumberFormatException e) {
                 new ExceptionBox(e, "Other").display();
             }
         }
