@@ -51,7 +51,7 @@ public class App extends Application {
             }
         });
         System.out.println(getClass().getResource("AFFICHEGAT.png"));
-        stage.getIcons().add(new Image("https://scontent-mrs2-2.xx.fbcdn.net/v/t1.6435-1/p480x480/132803884_3675306175922204_633656899173464801_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=7206a8&_nc_ohc=dv1Gs0XbN2kAX8ITAZZ&_nc_ht=scontent-mrs2-2.xx&oh=00_AT_Ki_rRMLvfIb_1lnqZIAYfKCaUHobomwQFqzA-jFOfnQ&oe=61D7E323");
+        stage.getIcons().add(new Image("https://scontent-mrs2-2.xx.fbcdn.net/v/t1.6435-1/p480x480/132803884_3675306175922204_633656899173464801_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=7206a8&_nc_ohc=dv1Gs0XbN2kAX8ITAZZ&_nc_ht=scontent-mrs2-2.xx&oh=00_AT_Ki_rRMLvfIb_1lnqZIAYfKCaUHobomwQFqzA-jFOfnQ&oe=61D7E323"));
 
         stage.setScene(scene);
         stage.show();
