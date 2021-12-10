@@ -71,7 +71,6 @@ public class TSPTrivialTest {
         Tour t = new Tour();
         MainsScreenController controller = new MainsScreenController();
         t.setDepartureTime(LocalTime.MIDNIGHT);
-        System.out.println("Long.MAX_VALUE : " + Long.MAX_VALUE);
         ga.V1_TSP(planning, map, t, controller);
         t.calculateCost(map);
         assertEquals("Erreur de calcul du coût", 24.0, t.getCost(), delta);
