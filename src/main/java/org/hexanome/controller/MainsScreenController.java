@@ -368,6 +368,9 @@ public class MainsScreenController implements Observer {
 
     /**
      * Method called by window after a click on the button "Redo"
+     *
+     * @param actionEvent
+     * @return void
      */
     public void redo(ActionEvent actionEvent) {
         currentState.redo(listOfCommands);
