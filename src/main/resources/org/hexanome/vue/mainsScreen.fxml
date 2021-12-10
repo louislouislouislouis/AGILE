@@ -53,13 +53,6 @@
                         <Insets bottom="15.0"/>
                     </VBox.margin>
                 </Button>
-                <Button fx:id="btnAddRequest" disable="true" layoutX="10.0" layoutY="10.0" minWidth="150.0"
-                        mnemonicParsing="false" onAction="#addRequest" styleClass="button" text="Add Request"
-                        textAlignment="CENTER">
-                    <VBox.margin>
-                        <Insets bottom="15.0"/>
-                    </VBox.margin>
-                </Button>
                 <Button fx:id="btnValidateRoute" disable="true" minWidth="150.0" mnemonicParsing="false"
                         onAction="#computeTour" styleClass="button" text="Compute Tour">
                     <VBox.margin>
@@ -67,13 +60,14 @@
                     </VBox.margin>
                 </Button>
                 <Button fx:id="btnStopCalcul" disable="true" minWidth="150.0" mnemonicParsing="false"
-                        onAction="#stopTour" styleClass="button" text="Stop Tour">
+                        onAction="#stopTour" styleClass=" stop-button" text="Stop">
                     <VBox.margin>
                         <Insets bottom="15.0"/>
                     </VBox.margin>
                 </Button>
-                <Button fx:id="btnEditTableRow" disable="true" minWidth="150.0" mnemonicParsing="false"
-                        onAction="#editTableRow" styleClass="button" text="Edit">
+                <Button fx:id="btnAddRequest" disable="true" layoutX="10.0" layoutY="10.0" minWidth="150.0"
+                        mnemonicParsing="false" onAction="#addRequest" styleClass="button" text="Add Request"
+                        textAlignment="CENTER">
                     <VBox.margin>
                         <Insets bottom="15.0"/>
                     </VBox.margin>
@@ -84,6 +78,13 @@
                         <Insets bottom="15.0"/>
                     </VBox.margin>
                 </Button>
+                <Button fx:id="btnEditTableRow" disable="true" visible="false" minWidth="150.0" mnemonicParsing="false"
+                        onAction="#editTableRow" styleClass="button" text="Edit">
+                    <VBox.margin>
+                        <Insets bottom="15.0"/>
+                    </VBox.margin>
+                </Button>
+
 
                 <Region layoutX="10.0" layoutY="10.0" prefHeight="350.0" prefWidth="200.0"/>
             </children>

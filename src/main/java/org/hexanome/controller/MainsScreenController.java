@@ -686,7 +686,7 @@ public class MainsScreenController implements Observer {
         LocalTime duration;
 
         duration = LocalTime.ofSecondOfDay(planning.getWarehouse().getArrivalTime().toSecondOfDay() - planning.getWarehouse().getDepartureTime().toSecondOfDay());
-        durationLabel.setText("Duration : " + duration.getHour() + " h " + duration.getMinute() + " min");
-        distanceLabel.setText("Distance : " + distance + " m");
+        durationLabel.setText("Duration : " + (duration.getHour() == 0 ? "" : duration.getHour() + " h ") + duration.getMinute() + " min");
+        distanceLabel.setText("Distance : " + distance / 1000 + " " + distance % 1000 + " m");
     }
 }

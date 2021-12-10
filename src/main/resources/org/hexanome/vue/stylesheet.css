@@ -10,3 +10,15 @@
     -fx-background-radius: 20;
 }
 
+.stop-button {
+    -fx-background-color: #a41313;
+    -fx-background-radius: 20;
+    -fx-font-weight: bold;
+    -fx-font-size: 18;
+    -fx-text-fill: white;
+}
+
+.stop-button:hover {
+    -fx-background-color: #770e0e;
+}
+
