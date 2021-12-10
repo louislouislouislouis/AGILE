@@ -47,7 +47,7 @@ public class AddRequestState4 implements State {
 
     @Override
     public void validate(MainsScreenController controller, int duration, ListOfCommands listOfCommands) throws Exception {
-        if (duration > 0) {
+        if (duration >= 0) {
             Color color = null;
             boolean different;
             for (ColorEnum myColor : ColorEnum.values()) {
