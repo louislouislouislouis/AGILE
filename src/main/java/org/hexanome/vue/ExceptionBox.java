@@ -8,6 +8,10 @@ import javafx.scene.layout.Priority;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+/**
+ * this class is used to show what type of box for what type of exception
+ */
+
 public class ExceptionBox {
 
     private String msg;
@@ -71,13 +75,12 @@ public class ExceptionBox {
         alert.showAndWait();
     }
 
-    private void addExpandable(Alert alert){
+    private void addExpandable(Alert alert) {
         // Create expandable Exception.
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         this.ex.printStackTrace(pw);
         String exceptionText = sw.toString();
-
 
 
         TextArea textArea = new TextArea(exceptionText);
