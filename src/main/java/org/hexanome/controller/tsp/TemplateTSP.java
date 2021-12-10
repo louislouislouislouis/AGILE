@@ -10,7 +10,7 @@ public abstract class TemplateTSP implements TSP {
     protected Graph g;
     private Double bestSolCost;
     public Map<Integer, Long> mapIdTSP;
-    public Map<Long,Integer> mapVertexTSP;
+    public Map<Long, Integer> mapVertexTSP;
     private MapIF map;
     private Set<Intersection> destinations;
     private PlanningRequest planning;
@@ -37,6 +37,11 @@ public abstract class TemplateTSP implements TSP {
         }
     }
 
+    /**
+     * @param g
+     * @param tour
+     * @param allowCalculation
+     */
     public void searchSolution(Graph g, Tour tour, MainsScreenController allowCalculation) {
         this.g = g;
         bestSol = new Integer[g.getNbVertices()];
