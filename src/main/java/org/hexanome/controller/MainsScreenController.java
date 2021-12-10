@@ -259,7 +259,7 @@ public class MainsScreenController implements Observer {
                 new ExceptionBox(e, "Other").display();
             }
         }
-        //this.initMap();
+
     }
 
     /**
