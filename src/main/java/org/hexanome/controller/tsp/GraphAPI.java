@@ -13,6 +13,14 @@ public class GraphAPI {
     public GraphAPI() {
     }
 
+    /**
+     * compute best tour
+     *
+     * @param planning         contains requests
+     * @param map              contains Intersections and Segments
+     * @param tour             to show on map
+     * @param allowCalculation controller to interrupt calculation
+     */
     public void V1_TSP(PlanningRequest planning, MapIF map, Tour tour, MainsScreenController allowCalculation) {
 
         Map<Intersection, Map<Intersection, Segment>> adj = map.getMatAdj();
@@ -52,6 +60,14 @@ public class GraphAPI {
         System.out.println("Search solution time: " + (System.currentTimeMillis() - startTime) + "ms : ");
     }
 
+    /**
+     * add request to already calculated tour
+     *
+     * @param planning contains Requests
+     * @param map      contains Intersections and Segments
+     * @param tour     to show on map
+     * @param isUndo   true if add request ist undo of delete request, false otherwise
+     */
     public void ADD_REQUEST(PlanningRequest planning, MapIF map, Tour tour, Boolean isUndo) {
         Map<Intersection, Map<Intersection, Segment>> adj = map.getMatAdj();
         Set<Intersection> destinations = this.getDestinations(planning);
@@ -199,6 +215,12 @@ public class GraphAPI {
         return addRequestSuccessfully;
     }
 
+    /**
+     * takeover tour data from newTour2 to newTour
+     *
+     * @param newTour  best tour is stored here
+     * @param newTour2 tour with data to takeover
+     */
     private void updateBestTour(Tour newTour, Tour newTour2) {
         newTour.setIntersections(newTour2.getIntersections());
         newTour.setCost(newTour2.getCost());
@@ -207,27 +229,6 @@ public class GraphAPI {
         newTour.setWarehouse(newTour2.getWarehouse());
         newTour.setDestinations(newTour2.getDestinations());
         newTour.setPoints(newTour2.getPoints());
-    }
-
-    public boolean addDeliveryPointDuringTour(Tour tour, PlanningRequest planning, MapIF map, List<Pair<Point, Point>> haveWaitingTimes) {
-        if (haveWaitingTimes.isEmpty()) {
-            return false;
-        }
-
-        Point newDelivery = planning.getRequests().getLast().getDeliveryPoint();
-
-        for (Pair<Point, Point> p : haveWaitingTimes) {
-            Point start = p.getKey();
-            Point destination = p.getValue();
-
-            if (this.checkIfAddableBetween(map, tour, start, destination, newDelivery)) {
-                return true;
-            }
-
-            // delete pair from list with potential spaces for adding request
-            haveWaitingTimes.remove(p);
-        }
-        return false;
     }
 
     /**
@@ -292,8 +293,16 @@ public class GraphAPI {
     }
 
 
+    /**
+     * delete request from tour
+     *
+     * @param request to delete
+     * @param map     contains Intersections and Segments
+     * @param tour    to show on map
+     */
     public void DELETE_REQUEST(Request request, MapIF map, Tour tour) {
         tour.removeRequest(request, map);
+        tour.updateTimingWarehouse(map);
         tour.notifyChange("UPDATEMAP");
     }
 
@@ -316,17 +325,6 @@ public class GraphAPI {
                 costTSP[i.getKey().intValue()][jj++] = j.getValue();
             }
         }
-        /*System.out.println("MapIdTSP: " + mapIdTSP);
-
-        for (int i = 0; i < nbVerticesTSP; i++) {
-            for (int j = 0; j < nbVerticesTSP; j++) {
-                if (costTSP[i][j] == 0) {
-                    costTSP[i][j] = (double) -1;
-                }
-                System.out.print(costTSP[i][j] + " ");
-            }
-            System.out.println();
-        }*/
     }
 
     /**
