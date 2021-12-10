@@ -18,6 +18,12 @@ public class ExceptionBox {
     private String type;
     private Exception ex = null;
 
+    /**
+     * create ExceptionBox who contain info for the box
+     *
+     * @param e the exception
+     * @param s the type of the exception
+     */
     public ExceptionBox(Exception e, String s) {
         msg = e.getMessage();
         type = s;
@@ -29,6 +35,12 @@ public class ExceptionBox {
         type = s;
     }
 
+    /**
+     * method to call to display the ExceptionBox, is a switch which call private display method for exception
+     * type
+     *
+     * @return void
+     */
     public void display() {
         switch (this.type) {
             case "Null":
@@ -45,6 +57,11 @@ public class ExceptionBox {
         }
     }
 
+    /**
+     * show a box for null exception
+     *
+     * @return void
+     */
     private void displayNullException() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error message");
@@ -54,6 +71,9 @@ public class ExceptionBox {
         alert.showAndWait();
     }
 
+    /**
+     * show a box for other exception like IOS, SAX etc
+     */
     private void displayOtherException() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error message");
@@ -65,6 +85,9 @@ public class ExceptionBox {
         alert.showAndWait();
     }
 
+    /**
+     * show a box for XML exception, it is exception when the xml file have some problems like wrong format
+     */
     private void displayExceptionXML() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error message");
@@ -75,6 +98,11 @@ public class ExceptionBox {
         alert.showAndWait();
     }
 
+    /**
+     * to add a grid which display the track of the exception
+     *
+     * @param alert
+     */
     private void addExpandable(Alert alert) {
         // Create expandable Exception.
         StringWriter sw = new StringWriter();
@@ -97,7 +125,7 @@ public class ExceptionBox {
 
         expContent.add(textArea, 0, 1);
 
-// Set expandable Exception into the dialog pane.
+        // Set expandable Exception into the dialog pane.
         alert.getDialogPane().setExpandableContent(expContent);
     }
 }
