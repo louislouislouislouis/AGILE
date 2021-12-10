@@ -31,12 +31,24 @@ public class TSPTrivialTest {
         intersections.put(2L, i2);
         intersections.put(3L, i3);
 
-        Segment s1 = new Segment(i1, i2, "Rue fumier", 42.0);
-        Segment s2 = new Segment(i3, i1, "Rue Onche", 21.0);
+        Segment s1 = new Segment(i1, i2, "Rue fumier", 5.0);
+        Segment s3 = new Segment(i2, i1, "Rue fumier", 5.0);
+        Segment s2 = new Segment(i3, i1, "Rue Onche", 10.0);
+        Segment s4 = new Segment(i1, i3, "Rue Onche", 10.0);
+        Segment s5 = new Segment(i2, i3, "Rue Schlagetto", 9.0);
+        Segment s6 = new Segment(i3, i2, "Rue Schlagetto", 9.0);
         Pair<UUID, Segment> p1 = new Pair<>(UUID.randomUUID(), s1);
         Pair<UUID, Segment> p2 = new Pair<>(UUID.randomUUID(), s2);
+        Pair<UUID, Segment> p3 = new Pair<>(UUID.randomUUID(), s3);
+        Pair<UUID, Segment> p4 = new Pair<>(UUID.randomUUID(), s4);
+        Pair<UUID, Segment> p5 = new Pair<>(UUID.randomUUID(), s5);
+        Pair<UUID, Segment> p6 = new Pair<>(UUID.randomUUID(), s6);
         segments.put(p1.getKey(), p1.getValue());
         segments.put(p2.getKey(), p2.getValue());
+        segments.put(p3.getKey(), p3.getValue());
+        segments.put(p4.getKey(), p4.getValue());
+        segments.put(p5.getKey(), p5.getValue());
+        segments.put(p6.getKey(), p6.getValue());
 
         map = new MapIF(intersections, segments);
 
@@ -59,9 +71,13 @@ public class TSPTrivialTest {
         Tour t = new Tour();
         MainsScreenController controller = new MainsScreenController();
         t.setDepartureTime(LocalTime.MIDNIGHT);
+        System.out.println("Long.MAX_VALUE : " + Long.MAX_VALUE);
         ga.V1_TSP(planning, map, t, controller);
-        assertEquals("Erreur de calcul du coût", 126.0, t.getCost(), delta);
-        assertEquals(i1, t.getIntersections().get(0));
-        assertEquals(i2, t.getIntersections().get(1));
+        t.calculateCost(map);
+        assertEquals("Erreur de calcul du coût", 24.0, t.getCost(), delta);
+        assertEquals(i3, t.getIntersections().get(0));
+        assertEquals(i1, t.getIntersections().get(1));
+        assertEquals(i2, t.getIntersections().get(2));
+        assertEquals(i3, t.getIntersections().get(3));
     }
 }
