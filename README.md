@@ -1,6 +1,6 @@
-![example workflow](https://github.com/louislouislouislouis/AGILE/actions/workflows/main.yml/badge.svg)
-
 # PLD AGILE
+
+![example workflow](https://github.com/louislouislouislouis/AGILE/actions/workflows/main.yml/badge.svg)
 
 ## Exécuter le projet (java fx)
 
