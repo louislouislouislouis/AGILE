@@ -254,7 +254,7 @@ public class MainsScreenController implements Observer {
 
             } catch (ExceptionXML e) {
                 new ExceptionBox(e, "XML").display();
-            } catch (ParserConfigurationException | IOException | SAXException e){
+            } catch (ParserConfigurationException | IOException | SAXException e) {
                 new ExceptionBox(e, "Other").display();
             }
         }
@@ -280,13 +280,13 @@ public class MainsScreenController implements Observer {
 
             try {
                 currentState.loadPlanning(this, map, planning, selectedFile);
+                this.initRequestLayer();
             } catch (ExceptionXML e) {
                 new ExceptionBox(e, "XML").display();
-            } catch (ParserConfigurationException | IOException | SAXException e){
+            } catch (ParserConfigurationException | IOException | SAXException e) {
                 new ExceptionBox(e, "Other").display();
             }
         }
-        this.initRequestLayer();
     }
 
 
@@ -637,11 +637,12 @@ public class MainsScreenController implements Observer {
         currentState.modifyRequest(this);
     }
 
-    public void updateIntersection(ActionEvent actionEvent){
+    public void updateIntersection(ActionEvent actionEvent) {
         //get actual point from table and set new point
         Point selectedItem = tableView.getSelectionModel().getSelectedItem();
         selectedItem.getId();
     }
+
     public void stopTour(ActionEvent actionEvent) {
         currentState.finishCompute(this);
     }
