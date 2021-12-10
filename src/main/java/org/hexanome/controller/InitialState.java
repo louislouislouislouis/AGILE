@@ -30,11 +30,11 @@ public class InitialState implements State {
         // We initialize the deserializer
         MapDeserializer domMap = new MapDeserializer();
 
-        // we load the map
-        domMap.load(map, selectedFile);
+            // we load the map
+            domMap.load(map, selectedFile);
 
-        // we change the state of the controller
-        controller.setCurrentState(controller.mapState);
+            // we change the state of the controller
+            controller.setCurrentState(controller.mapState);
     }
 
     @Override

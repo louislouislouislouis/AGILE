@@ -55,6 +55,7 @@ public class ExceptionBox {
         alert.setTitle("Error message");
         alert.setHeaderText("Error");
         alert.setContentText(msg);
+        this.addExpandable(alert);
 
 
         alert.showAndWait();

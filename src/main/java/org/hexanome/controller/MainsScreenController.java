@@ -248,8 +248,10 @@ public class MainsScreenController implements Observer {
                 currentState.loadMap(this, map, selectedFile);
                 // init the map
 
-            } catch (ExceptionXML | ParserConfigurationException | IOException | SAXException e) {
+            } catch (ExceptionXML e) {
                 new ExceptionBox(e, "XML").display();
+            } catch (ParserConfigurationException | IOException | SAXException e){
+                new ExceptionBox(e, "Other").display();
             }
         }
         this.initMap();
@@ -274,8 +276,10 @@ public class MainsScreenController implements Observer {
 
             try {
                 currentState.loadPlanning(this, map, planning, selectedFile);
-            } catch (ExceptionXML | ParserConfigurationException | IOException | SAXException e) {
+            } catch (ExceptionXML e) {
                 new ExceptionBox(e, "XML").display();
+            } catch (ParserConfigurationException | IOException | SAXException e){
+                new ExceptionBox(e, "Other").display();
             }
         }
         this.initRequestLayer();
