@@ -60,14 +60,20 @@ public class RequestDeserializer {
 
         Color color = ColorEnum.values()[i].color;
 
+        if(elt.getAttribute("pickupDuration").equals(""))
+            throw new ExceptionXML("Wrong format");
         int pickupDuration = Integer.parseInt(elt.getAttribute("pickupDuration"));
         if (pickupDuration < 0)
             throw new ExceptionXML("Error when reading file: pickup duration must be positive");
 
+        if(elt.getAttribute("deliveryDuration").equals(""))
+            throw new ExceptionXML("Wrong format");
         int deliveryDuration = Integer.parseInt(elt.getAttribute("deliveryDuration"));
         if (deliveryDuration < 0)
             throw new ExceptionXML("Error when reading file: delivery duration must be positive");
 
+        if(elt.getAttribute("pickupAddress").equals(""))
+            throw new ExceptionXML("Wrong format");
         Long pickupAddress = Long.parseLong(elt.getAttribute("pickupAddress"));
         if (pickupAddress < 0)
             throw new ExceptionXML("Error when reading file: pickupAddress must be positive");
@@ -77,10 +83,11 @@ public class RequestDeserializer {
 
         PickupPoint pickupPoint = new PickupPoint(map.getIntersections().get(pickupAddress), pickupDuration, color);
 
+        if(elt.getAttribute("deliveryAddress").equals(""))
+            throw new ExceptionXML("Wrong format");
         Long deliveryAddress = Long.parseLong(elt.getAttribute("deliveryAddress"));
         if (deliveryAddress < 0)
             throw new ExceptionXML("Error when reading file: deliveryAddress must be positive");
-
         if (map.getIntersections().get(deliveryAddress) == null)
             throw new ExceptionXML("Error when reading file: point out of the map");
 
