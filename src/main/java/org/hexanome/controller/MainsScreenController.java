@@ -40,14 +40,19 @@ import com.gluonhq.maps.MapPoint;
 public class MainsScreenController implements Observer {
 
     /*---------------------------VARIABLES------------------------------------------------------------*/
-    private MapIF map;
+    /*private MapIF map;
     private PlanningRequest planning;
-    private Tour tour;
+    private Tour tour;*/
+
+    public MapIF map;
+    public PlanningRequest planning;
+    public Tour tour;
 
     private static final ObservableList<Point> data = FXCollections.observableArrayList();
 
     /* command variable */
-    private ListOfCommands listOfCommands;
+    //private ListOfCommands listOfCommands;
+    public ListOfCommands listOfCommands;
 
     /* state variable */
 
@@ -65,7 +70,8 @@ public class MainsScreenController implements Observer {
     protected final ModifyRequestState modifyRequestState = new ModifyRequestState();
 
     // current state
-    private State currentState = initialState;
+    //private State currentState = initialState;
+    public State currentState = initialState;
 
     /* Création de la carte Gluon JavaFX */
     private CustomMap mapView;
@@ -508,12 +514,12 @@ public class MainsScreenController implements Observer {
         tourLayer.resetAll();
 
         /* Zoom de 5 */
-        mapView.setZoom(14);
+        mapView.setZoom(13.5);
 
         /* creation of the mapPoint on which the camera will be centered
          *  We use the longitude and latitude of Lyon
          * */
-        MapPoint mapPointCamera = new MapPoint(45.760327, 4.876824);
+        MapPoint mapPointCamera = new MapPoint(45.754676, 4.866590);
 
         /* Centre la carte sur le point */
         mapView.flyTo(0, mapPointCamera, 0.1);
@@ -647,6 +653,7 @@ public class MainsScreenController implements Observer {
         //Modify departure time , arrival time and point in the map
         tableView.setEditable(true);
         currentState.modifyRequest(this);
+
     }
 
     public void updateIntersection(ActionEvent actionEvent) {
@@ -684,9 +691,9 @@ public class MainsScreenController implements Observer {
     public void updateTimeAndDistance() {
         int distance = tour.getCost().intValue();
         LocalTime duration;
-        
+
         duration = LocalTime.ofSecondOfDay(planning.getWarehouse().getArrivalTime().toSecondOfDay() - planning.getWarehouse().getDepartureTime().toSecondOfDay());
-        durationLabel.setText("Duration : " + duration.toString());
+        durationLabel.setText("Duration : " + duration.getHour() + " h " + duration.getMinute() + " min");
         distanceLabel.setText("Distance : " + distance + " m");
     }
 }
