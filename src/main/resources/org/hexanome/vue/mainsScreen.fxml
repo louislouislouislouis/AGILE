@@ -138,9 +138,11 @@
                 <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #217346;">
                     <children>
                         <Region minWidth="10.0"/>
-                        <Label layoutX="36.0" layoutY="10.0" text="Duration :  min" styleClass="label-total"/>
+                        <Label fx:id="durationLabel" layoutX="36.0" layoutY="10.0" text="Duration :  min"
+                               styleClass="label-total"/>
                         <Region layoutX="36.0" layoutY="10.0" minWidth="310.0"/>
-                        <Label layoutX="10.0" layoutY="10.0" text="Distance :  m" styleClass="label-total"/>
+                        <Label fx:id="distanceLabel" layoutX="10.0" layoutY="10.0" text="Distance :  m"
+                               styleClass="label-total"/>
                     </children>
                 </HBox>
             </items>

@@ -1,4 +1,5 @@
 import javafx.scene.paint.Color;
+import org.hexanome.controller.MainsScreenController;
 import org.hexanome.controller.tsp.GraphAPI;
 import org.hexanome.model.*;
 import org.junit.BeforeClass;
@@ -112,7 +113,8 @@ public class TSPTest {
         GraphAPI ga = new GraphAPI();
         Tour t = new Tour();
         t.setDepartureTime(LocalTime.MIDNIGHT);
-        ga.V1_TSP(planning, map, t, null);
+        MainsScreenController controller = new MainsScreenController();
+        ga.V1_TSP(planning, map, t, controller);
         assertEquals(t.getIntersections().size(), 281);
 
         for (int i = 0; i < solution.length; ++i) {

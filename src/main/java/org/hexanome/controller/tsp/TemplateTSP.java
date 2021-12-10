@@ -108,15 +108,14 @@ public abstract class TemplateTSP implements TSP {
                                 Tour tour,
                                 MainsScreenController allowCalculation) {
         if (!allowCalculation.isAllowcalculation() && tour.getIntersections().size() > 1) {
-            System.out.println("Tour have been forced to stop");
             return;
         }
         if (unvisited.isEmpty()) {
             if (g.isArc(currentVertex, 0)) {
                 if (currentCost + g.getCost(currentVertex, 0) < bestSolCost) {
                     visited.toArray(bestSol);
-                    this.updateTour(tour);
                     bestSolCost = currentCost + g.getCost(currentVertex, 0);
+                    this.updateTour(tour);
                 }
             }
         } else if (currentCost + bound(currentVertex, unvisited) < bestSolCost) {
