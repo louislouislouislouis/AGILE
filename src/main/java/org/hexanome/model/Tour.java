@@ -114,13 +114,6 @@ public class Tour extends Observable {
         return cost;
     }
 
-    public Intersection getLastIntersection() {
-        if (intersections.size() == 0) {
-            return null;
-        }
-        return this.intersections.get(intersections.size() - 1);
-    }
-
     public void setWarehouse(Intersection warehouse) {
         this.warehouse = warehouse;
     }
@@ -190,6 +183,13 @@ public class Tour extends Observable {
         this.destinations.remove(this.destinations.size() - 1);
     }
 
+
+    /**
+     * remove Request from Tour
+     *
+     * @param request to remove
+     * @param map     contains Intersections and Segments
+     */
     public void removeRequest(Request request, MapIF map) {
         Intersection pickUpPoint = request.getPickupPoint().getAddress();
         destinations.remove(pickUpPoint);
@@ -323,6 +323,12 @@ public class Tour extends Observable {
         points.remove(points.size() - 1); // remove last warehouse
     }
 
+    /**
+     * updates timing only for new request and warehouse
+     *
+     * @param map           contains Intersections and Segments
+     * @param deliveryPoint point to update timing
+     */
     public void updateTimingForNewDestination(MapIF map, DeliveryPoint deliveryPoint) {
         points.add(deliveryPoint);
         points.add(points.get(0)); //add warehouse as last point
@@ -358,6 +364,9 @@ public class Tour extends Observable {
         }
     }
 
+    /**
+     * updating list destinations by list points
+     */
     public void updateDestinationsByPoints() {
         List<Intersection> newDestinations = new ArrayList<>();
         for (Point p : points) {
@@ -371,6 +380,11 @@ public class Tour extends Observable {
         points.remove(points.size() - 1);
     }
 
+    /**
+     * updates arrivalTime for Warehouse
+     *
+     * @param map contains Intersections and Segments
+     */
     public void updateTimingWarehouse(MapIF map) {
         points.add(points.get(0)); //add warehouse as last point
         this.setTimings(map, points.size() - 2);
