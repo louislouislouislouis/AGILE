@@ -100,6 +100,7 @@ public class GraphAPI {
             }
             tour.deleteLastPoint();
             tour.updateDestinationsByPoints();
+            tour.updateTimingWarehouse(map);
         } else {
             Dijkstra dijkstra1 = new Dijkstra(nbVerticesDijkstra);
             dijkstra1.dijkstra(map.getIntersections(), adj, newPickUpPoint, destinations);
@@ -122,8 +123,8 @@ public class GraphAPI {
                 tour.addDestination(newDeliveryPoint); // add new DeliveryPoint
                 tour.addDestination(planning.getWarehouse().getAddress()); // add Warehouse in the end of the tour
             }
+            tour.updateTimingForNewRequest(map, newRequest.getPickupPoint(), newRequest.getDeliveryPoint());
         }
-        tour.updateTimingForNewRequest(map, newRequest.getPickupPoint(), newRequest.getDeliveryPoint());
         tour.computeCompleteTour(map);
         tour.calculateCost(map);
         tour.notifyChange("UPDATEMAP");
