@@ -3,12 +3,14 @@ package org.hexanome.vue;
 import com.gluonhq.maps.MapLayer;
 import com.gluonhq.maps.MapPoint;
 
+import javafx.animation.ScaleTransition;
 import javafx.geometry.Point2D;
 import javafx.scene.control.TableView;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import javafx.util.Duration;
 import javafx.util.Pair;
 import org.hexanome.controller.MainsScreenController;
 import org.hexanome.model.MapIF;
@@ -142,6 +144,27 @@ public class CustomMapLayer extends MapLayer {
                 }
             });
         });
+    }
+
+    public void animateOnePoint(Long Id) {
+        System.out.println("IN ANIMATE");
+        //Creating a rotate transition
+        //Setting the node for the transition
+        System.out.println(shapeList.get(Id));
+
+        ScaleTransition st = new ScaleTransition(Duration.millis(400), shapeList.get(Id));
+        st.setFromX(1);
+        st.setToX(1.5);
+        st.setFromY(1);
+        st.setToY(1.5);
+        st.setCycleCount(4);
+        st.setAutoReverse(true);
+
+        st.play();
+
+
+        //Playing the animation
+
     }
 
     /**
