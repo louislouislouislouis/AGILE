@@ -30,6 +30,8 @@ public class Intersection {
         return idIntersection;
     }
 
+
+
     @Override
     public String toString() {
         return "Intersection{" +

@@ -634,18 +634,23 @@ public class MainsScreenController implements Observer {
 
         //get old data
         Point selectedItem = tableView.getSelectionModel().getSelectedItem();
+        //get the new intersection point, load intersection to selected item
         System.out.println(selectedItem);
+        if (selectedItem != null) {
+            this.currentState.modifyRequest(this, selectedItem, listOfCommands);
+        } else {
+            new ExceptionBox("Please select the point you want to delete", "Null").display();
+        }
+        selectedItem.setAddress(currentState.modifyRequest(););
         String id = selectedItem.getId().toString();
         String type = selectedItem.getType();
         LocalTime arrivalTime = selectedItem.getArrivalTime();
         LocalTime departureTime = selectedItem.getDepartureTime();
         Color color = selectedItem.getColor();
 
-        //if(selectedItem.){}
+        //if(tableView.setOnInputMethodTextChanged(new EventListener listener);){}
         //Point replacePoint = Point()
         //tableView.change
-        Point newPoint = tableView.getSelectionModel().getSelectedItem();
-        System.out.println(newPoint);
         //String newId = selectedItem.getId().toString();
         //String newType = selectedItem.getType();
         LocalTime newArrivalTime = selectedItem.getArrivalTime();
@@ -655,6 +660,11 @@ public class MainsScreenController implements Observer {
 
     }
 
+    public void updateIntersection(ActionEvent actionEvent){
+        //get actual point from table and set new point
+        Point selectedItem = tableView.getSelectionModel().getSelectedItem();
+        selectedItem.getId();
+    }
     public void stopTour(ActionEvent actionEvent) {
         currentState.finishCompute(this);
     }

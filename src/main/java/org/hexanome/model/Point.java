@@ -41,6 +41,12 @@ public class Point {
         return id;
     }
 
+    public void setAddress(Intersection address) {
+        //tomando adress y al editarla cambiamos su id también (actualizando intersección y su ID)
+        this.address = address;
+        this.id = address.getIdIntersection();
+    }
+
     public String getType() {
         return type;
     }
