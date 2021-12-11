@@ -122,6 +122,8 @@ public class GraphAPI {
                 tour.addDestination(newPickUpPoint); // add new PickupPoint
                 tour.addDestination(newDeliveryPoint); // add new DeliveryPoint
                 tour.addDestination(planning.getWarehouse().getAddress()); // add Warehouse in the end of the tour
+                tour.addPoint(newRequest.getPickupPoint());
+                tour.addPoint(newRequest.getDeliveryPoint());
             }
             tour.updateTimingForNewRequest(map, newRequest.getPickupPoint(), newRequest.getDeliveryPoint());
         }

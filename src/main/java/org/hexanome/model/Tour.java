@@ -303,7 +303,7 @@ public class Tour extends Observable {
     }
 
     /**
-     * updates arrival and departure times for added request in the end of a tour,
+     * updates arrival and departure times for added request in the tour,
      * update arrival time warehouse
      * all others points keep their arrival and departure times that have already been calculated
      *
@@ -312,15 +312,11 @@ public class Tour extends Observable {
      * @param delivery of new request
      */
     public void updateTimingForNewRequest(MapIF map, Point pickUp, Point delivery) {
-        points.add(pickUp);
-        points.add(delivery);
-        points.add(points.get(0)); //add warehouse as last point
-
-        for (int i = points.size() - 4; i < points.size() - 1; i++) {
-            this.setTimings(map, i);
-        }
-
-        points.remove(points.size() - 1); // remove last warehouse
+        int indexPickup = points.indexOf(pickUp);
+        int indexDelivery = points.indexOf(delivery);
+        this.setTimings(map, indexPickup - 1);
+        this.setTimings(map, indexDelivery - 1);
+        this.updateTimingWarehouse(map);
     }
 
     /**
