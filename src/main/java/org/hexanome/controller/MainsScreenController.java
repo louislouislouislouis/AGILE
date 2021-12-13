@@ -498,9 +498,8 @@ public class MainsScreenController implements Observer {
             data.add(request.getPickupPoint());
         });
         tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            requestLayer.animateOnePoint(newSelection.getId());
-
-
+            if (newSelection != null)
+                requestLayer.animateOnePoint(newSelection.getId());
         });
     }
 
