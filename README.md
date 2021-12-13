@@ -9,3 +9,9 @@
 ## Exécuter les tests
 
 `mvn surefire:test`
+
+## Générer un rapport de test
+
+`mvn surefire-report:report`
+
+Le fichier généré est ensuite accessible sous `src/target/site/surefire-report.html`
