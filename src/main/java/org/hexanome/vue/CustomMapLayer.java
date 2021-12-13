@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 /**
- * Affiche un point rouge sur la carte
+ * Object used to create a new layer on the map view
  */
 public class CustomMapLayer extends MapLayer {
 
@@ -55,6 +55,9 @@ public class CustomMapLayer extends MapLayer {
         this.getChildren().add(circle);
     }
 
+    /**
+     * This method will reset all the list and all the children of the current layer
+     */
     public void resetAll() {
         pointList.clear();
         segmentList.clear();

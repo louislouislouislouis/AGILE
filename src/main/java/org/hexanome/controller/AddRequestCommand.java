@@ -5,10 +5,21 @@ import org.hexanome.model.MapIF;
 import org.hexanome.model.PlanningRequest;
 import org.hexanome.model.Request;
 
+/**
+ * Command from the command design pattern that is used to add a request
+ *
+ * @author Gastronom'if
+ */
 public class AddRequestCommand implements Command {
     private MainsScreenController controller;
     private Request request;
 
+    /**
+     * Create the command which add a request to the planning
+     *
+     * @param request    the request to add
+     * @param controller the controller
+     */
     public AddRequestCommand(MainsScreenController controller, Request request) {
         this.controller = controller;
         this.request = request;

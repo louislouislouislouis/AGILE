@@ -28,7 +28,7 @@ public class MapDeserializer {
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException
-     * @throws ExceptionXML
+     * @throws ExceptionXML                 exceptions that come from a malformed xml file
      */
     public void load(MapIF map, File xml) throws ParserConfigurationException, SAXException, IOException, ExceptionXML {
         DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -56,6 +56,12 @@ public class MapDeserializer {
         map.setAdj();
     }
 
+    /**
+     * This private method create an intersection from an element
+     *
+     * @param elt current element
+     * @return it returns an Intersection
+     */
     private Intersection createIntersection(Element elt) throws ExceptionXML {
         double longitude = Double.parseDouble(elt.getAttribute("longitude"));
         if (longitude < 0)
@@ -65,13 +71,20 @@ public class MapDeserializer {
         if (latitude < 0)
             throw new ExceptionXML("Error when reading file: Latitude must be positive");
 
-        Long idIntersection = Long.parseLong(elt.getAttribute("id"));
+        long idIntersection = Long.parseLong(elt.getAttribute("id"));
         if (idIntersection < 0)
             throw new ExceptionXML("Error when reading file: Id must be positive");
 
         return new Intersection(longitude, latitude, idIntersection);
     }
 
+    /**
+     * This private method create a segment from an element and a list of intersections
+     *
+     * @param elt           current element
+     * @param intersections list of intersection composing the segment
+     * @return it returns a segment
+     */
     private Segment createSegment(Element elt, HashMap<Long, Intersection> intersections) throws ExceptionXML {
         long originId = Long.parseLong(elt.getAttribute("origin"));
         if (originId < 0)
@@ -93,13 +106,4 @@ public class MapDeserializer {
 
         return new Segment(originIntersection, destinationIntersection, name, length);
     }
-
-    /**
-     * @param intersections intersections in the map
-     * @param segments      amount of all segments in the map
-     * @return map with key: startIntersection,
-     * value: map with key: neighbourIntersection,
-     * value: segment between startIntersection and neighbourIntersection
-     */
-
 }

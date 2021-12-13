@@ -1,11 +1,14 @@
 package org.hexanome.model;
 
-import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 
 import java.time.LocalTime;
 
+/**
+ * Object containing a special point
+ *
+ * @author Gastronom'if
+ */
 public class Point {
     private Intersection address;
     private Long id;

@@ -1,5 +1,10 @@
 package org.hexanome.model;
 
+/**
+ * Object containing a segment between two intersection
+ *
+ * @author Gastronom'if
+ */
 public class Segment {
     private Intersection originIntersection;
     private Intersection destinationIntersection;

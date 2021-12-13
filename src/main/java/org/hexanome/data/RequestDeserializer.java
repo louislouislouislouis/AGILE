@@ -30,7 +30,7 @@ public class RequestDeserializer {
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException
-     * @throws ExceptionXML
+     * @throws ExceptionXML                 exceptions that come from a malformed xml file
      */
     public void load(PlanningRequest planning, File xml, MapIF map) throws ParserConfigurationException, SAXException, IOException, ExceptionXML {
         DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -42,6 +42,14 @@ public class RequestDeserializer {
             throw new ExceptionXML("Wrong format the first node has this name : " + root.getNodeName());
     }
 
+    /**
+     * This private method will create node list from the element present in the xml file
+     * then will call method to create request
+     *
+     * @param planning       the planning to create from the file
+     * @param noeudDOMRacine root node of the file "planningRequest"
+     * @param map            object that contains map's data
+     */
     private void buildFromDOMXML(Element noeudDOMRacine, PlanningRequest planning, MapIF map) throws ExceptionXML, NumberFormatException {
         NodeList warehouses = noeudDOMRacine.getElementsByTagName("depot");
         NodeList requests = noeudDOMRacine.getElementsByTagName("request");
@@ -56,23 +64,31 @@ public class RequestDeserializer {
         planning.setWarehouse(createWarehouse((Element) warehouses.item(0), map));
     }
 
+    /**
+     * This private method create a request from an element
+     *
+     * @param elt current element
+     * @param i   index of the request
+     * @param map object that contains map's data
+     * @return it returns a Request
+     */
     private Request createRequest(Element elt, MapIF map, int i) throws ExceptionXML {
 
         Color color = ColorEnum.values()[i].color;
 
-        if(elt.getAttribute("pickupDuration").equals(""))
+        if (elt.getAttribute("pickupDuration").equals(""))
             throw new ExceptionXML("Wrong format");
         int pickupDuration = Integer.parseInt(elt.getAttribute("pickupDuration"));
         if (pickupDuration < 0)
             throw new ExceptionXML("Error when reading file: pickup duration must be positive");
 
-        if(elt.getAttribute("deliveryDuration").equals(""))
+        if (elt.getAttribute("deliveryDuration").equals(""))
             throw new ExceptionXML("Wrong format");
         int deliveryDuration = Integer.parseInt(elt.getAttribute("deliveryDuration"));
         if (deliveryDuration < 0)
             throw new ExceptionXML("Error when reading file: delivery duration must be positive");
 
-        if(elt.getAttribute("pickupAddress").equals(""))
+        if (elt.getAttribute("pickupAddress").equals(""))
             throw new ExceptionXML("Wrong format");
         Long pickupAddress = Long.parseLong(elt.getAttribute("pickupAddress"));
         if (pickupAddress < 0)
@@ -83,7 +99,7 @@ public class RequestDeserializer {
 
         PickupPoint pickupPoint = new PickupPoint(map.getIntersections().get(pickupAddress), pickupDuration, color);
 
-        if(elt.getAttribute("deliveryAddress").equals(""))
+        if (elt.getAttribute("deliveryAddress").equals(""))
             throw new ExceptionXML("Wrong format");
         Long deliveryAddress = Long.parseLong(elt.getAttribute("deliveryAddress"));
         if (deliveryAddress < 0)
@@ -103,7 +119,7 @@ public class RequestDeserializer {
 
         if (map.getIntersections().get(address) == null)
             throw new ExceptionXML("Error when reading file: point out of the map");
-            
+
         Intersection departureAddress = map.getIntersections().get(address);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:m:s");
