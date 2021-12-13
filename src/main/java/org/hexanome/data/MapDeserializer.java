@@ -28,7 +28,7 @@ public class MapDeserializer {
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException
-     * @throws ExceptionXML
+     * @throws ExceptionXML                 exceptions that come from a malformed xml file
      */
     public void load(MapIF map, File xml) throws ParserConfigurationException, SAXException, IOException, ExceptionXML {
         DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
