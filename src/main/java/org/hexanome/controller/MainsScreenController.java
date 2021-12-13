@@ -2,16 +2,12 @@ package org.hexanome.controller;
 
 import java.io.*;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.TemporalAccessor;
 import java.util.*;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Cursor;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -23,11 +19,9 @@ import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LocalTimeStringConverter;
 import org.hexanome.data.ExceptionXML;
 import org.hexanome.model.*;
-import org.hexanome.vue.*;
 import org.hexanome.vue.CustomMap;
 import org.hexanome.vue.CustomMapLayer;
 import org.hexanome.vue.ExceptionBox;
@@ -248,7 +242,6 @@ public class MainsScreenController implements Observer {
      * Method be called everytime button load Map is Handled
      *
      * @param actionEvent
-     * @return void
      */
     public void selectionMap(ActionEvent actionEvent) {
         //method that uploads an XML file (carte)
@@ -283,7 +276,6 @@ public class MainsScreenController implements Observer {
      * Method be called everytime button load Request is Handled
      *
      * @param actionEvent
-     * @return void
      */
     public void loadRequest(ActionEvent actionEvent) {
         //method that uploads an XML file (carte)
@@ -298,7 +290,7 @@ public class MainsScreenController implements Observer {
 
             try {
                 currentState.loadPlanning(this, map, planning, selectedFile);
-                this.initRequestLayer();
+                this.updateRequestLayer();
             } catch (ExceptionXML e) {
                 new ExceptionBox(e, "XML").display();
             } catch (ParserConfigurationException | IOException | SAXException | NumberFormatException e) {
@@ -312,7 +304,6 @@ public class MainsScreenController implements Observer {
      * Method be called every time button "add request" is handled
      *
      * @param actionEvent
-     * @return void
      */
     public void addRequest(ActionEvent actionEvent) {
         currentState.addRequest(this);
@@ -323,7 +314,6 @@ public class MainsScreenController implements Observer {
      * This method call the method computeTour of the current state and reset the listOfCommands
      *
      * @param actionEvent
-     * @return void
      */
     public void computeTour(ActionEvent actionEvent) {
         tour = new Tour(new ArrayList<>(), null, this, planning.getWarehouse().getDepartureTime(), map.getMatAdj());
@@ -369,8 +359,7 @@ public class MainsScreenController implements Observer {
     /**
      * Method called by window after a click on the button "Redo"
      *
-     * @param actionEvent
-     * @return void
+     * @param actionEvent event
      */
     public void redo(ActionEvent actionEvent) {
         currentState.redo(listOfCommands);
@@ -382,8 +371,7 @@ public class MainsScreenController implements Observer {
      * Method called to open a Navigation File
      * Return the file
      *
-     * @param actionEvent
-     * @return File
+     * @param actionEvent event
      */
     public File fileChooser(ActionEvent actionEvent) {
         //method that opens the File Explorer to allow the user to get their XML files
@@ -417,7 +405,6 @@ public class MainsScreenController implements Observer {
      */
     @Override
     public void update(Observable o, Object arg) {
-        //System.out.println("Une fonction d'actualisation à été appelé");
         String action = (String) arg;
         switch (action) {
             case "UPDATEMAP":
@@ -438,7 +425,6 @@ public class MainsScreenController implements Observer {
 
                 break;
             default:
-                System.out.println("Unknown method");
 
         }
 
@@ -467,6 +453,9 @@ public class MainsScreenController implements Observer {
 
     }
 
+    /**
+     * this method update the table view on the GUI
+     */
     public void updateTableView() {
         // cell factory
 
@@ -509,14 +498,15 @@ public class MainsScreenController implements Observer {
             data.add(request.getPickupPoint());
         });
         tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            System.out.println("Event Handle");
             requestLayer.animateOnePoint(newSelection.getId());
 
 
         });
     }
 
-
+    /**
+     * this method initialize the map
+     */
     public void initMap() {
         // clear possible layer
         mapView.removeLayer(requestLayer);
@@ -551,6 +541,9 @@ public class MainsScreenController implements Observer {
         });
     }
 
+    /**
+     * this method update the layer with the dynamic tour
+     */
     public void updateDynamicMap() {
         tourLayer.resetAll();
 
@@ -575,10 +568,16 @@ public class MainsScreenController implements Observer {
         updateTimeAndDistance();
     }
 
+    /**
+     * this method update the map view
+     */
     public void updateMapView() {
         mapView.layout();
     }
 
+    /**
+     * this method update the tour layer
+     */
     public void updateTourLayer() {
         // clear
         mapView.removeLayer(tourLayer);
@@ -588,8 +587,6 @@ public class MainsScreenController implements Observer {
         tourLayer = new CustomMapLayer();
 
         List<Intersection> intersectionList = tour.getIntersections();
-
-        System.out.println(intersectionList.size());
 
         for (int i = 0; i < intersectionList.size() - 1; i++) {
             Intersection start;
@@ -612,7 +609,10 @@ public class MainsScreenController implements Observer {
         updateTimeAndDistance();
     }
 
-    public void initRequestLayer() {
+    /**
+     * this method update the layer with intersections
+     */
+    public void updateRequestLayer() {
         mapView.removeLayer(requestLayer);
         requestLayer.resetAll();
         tourLayer.resetAll();
@@ -645,6 +645,9 @@ public class MainsScreenController implements Observer {
         requestLayer.forceReRender();
     }
 
+    /**
+     * this method is used to deletr a request
+     */
     @FXML
     void deleteTableRow(ActionEvent event) {
         //Delete point in the map
@@ -657,6 +660,9 @@ public class MainsScreenController implements Observer {
         }
     }
 
+    /**
+     * this method edit a request
+     */
     @FXML
     void editTableRow(ActionEvent event) {
         //Modify departure time , arrival time and point in the map
@@ -665,38 +671,24 @@ public class MainsScreenController implements Observer {
 
     }
 
-    public void updateIntersection(ActionEvent actionEvent) {
-        //get actual point from table and set new point
-        Point selectedItem = tableView.getSelectionModel().getSelectedItem();
-        selectedItem.getId();
-    }
-
+    /**
+     * this method enable the user to stop the computation
+     */
     public void stopTour(ActionEvent actionEvent) {
         currentState.finishCompute(this);
     }
 
     public void changeCursor(String w) {
-        System.out.println("VERIFY CURSOR IF NEEDED");
         if (w.equals("W")) {
-            System.out.println(btnAddRequest.getScene().getRoot());
             btnAddRequest.getScene().getRoot().setCursor(Cursor.WAIT);
         } else if (w.equals("N")) {
-            System.out.println(btnAddRequest.getScene().getRoot());
             btnAddRequest.getScene().getRoot().setCursor(Cursor.DEFAULT);
         }
     }
 
-    public void updateColorRequest() {
-        LinkedList<Request> requests = planning.getRequests();
-        for (int i = 0; i < requests.size(); i++) {
-            Request request = requests.get(i);
-            Color color = ColorEnum.values()[i].color;
-
-            request.getPickupPoint().setColor(color);
-            request.getDeliveryPoint().setColor(color);
-        }
-    }
-
+    /**
+     * this method update the time and distance displayed on the GUI
+     */
     public void updateTimeAndDistance() {
         int distance = tour.getCost().intValue();
         LocalTime duration;

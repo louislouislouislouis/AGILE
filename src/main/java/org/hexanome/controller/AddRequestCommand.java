@@ -1,8 +1,6 @@
 package org.hexanome.controller;
 
 import org.hexanome.controller.tsp.GraphAPI;
-import org.hexanome.model.MapIF;
-import org.hexanome.model.PlanningRequest;
 import org.hexanome.model.Request;
 
 /**
@@ -32,7 +30,7 @@ public class AddRequestCommand implements Command {
         graphAPI.ADD_REQUEST(controller.getPlanning(), controller.getMap(), controller.getTour(), false);
 
 
-        controller.initRequestLayer();
+        controller.updateRequestLayer();
         controller.updateTourLayer();
         controller.updateTableView();
     }
@@ -44,7 +42,7 @@ public class AddRequestCommand implements Command {
         graphAPI.DELETE_REQUEST(request, controller.getMap(), controller.getTour());
 
 
-        controller.initRequestLayer();
+        controller.updateRequestLayer();
         controller.updateTourLayer();
         controller.updateTableView();
     }

@@ -29,8 +29,7 @@ public class DeleteRequestCommand implements Command {
         GraphAPI graphAPI = new GraphAPI();
         graphAPI.DELETE_REQUEST(request, controller.getMap(), controller.getTour());
 
-        controller.updateColorRequest();
-        controller.initRequestLayer();
+        controller.updateRequestLayer();
         controller.updateTourLayer();
         controller.updateTableView();
     }
@@ -41,8 +40,7 @@ public class DeleteRequestCommand implements Command {
         GraphAPI graphAPI = new GraphAPI();
         graphAPI.ADD_REQUEST(controller.getPlanning(), controller.getMap(), controller.getTour(), true);
 
-        controller.updateColorRequest();
-        controller.initRequestLayer();
+        controller.updateRequestLayer();
         controller.updateTourLayer();
         controller.updateTableView();
     }

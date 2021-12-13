@@ -1,9 +1,7 @@
 package org.hexanome.controller;
 
-import javafx.scene.paint.Color;
 import org.hexanome.model.Intersection;
 import org.hexanome.model.Point;
-import org.hexanome.model.Request;
 import org.hexanome.model.Tour;
 
 import java.util.ArrayList;
@@ -22,7 +20,7 @@ public class ModifyRequestState implements State {
             controller.getMapView().removeLayer(controller.getIntersectionLayer());
             controller.setCurrentState(controller.tourState);
             controller.updateTableView();
-            controller.initRequestLayer();
+            controller.updateRequestLayer();
             controller.updateTourLayer();
             controller.tour = new Tour(new ArrayList<>(), null, controller, controller.planning.getWarehouse().getDepartureTime(), controller.map.getMatAdj());
             // we must reset the command list

@@ -150,11 +150,8 @@ public class CustomMapLayer extends MapLayer {
     }
 
     public void animateOnePoint(Long Id) {
-        System.out.println("IN ANIMATE");
         //Creating a rotate transition
         //Setting the node for the transition
-        System.out.println(shapeList.get(Id));
-
         ScaleTransition st = new ScaleTransition(Duration.millis(400), shapeList.get(Id));
         st.setFromX(1);
         st.setToX(1.5);
