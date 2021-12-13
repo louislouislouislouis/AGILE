@@ -71,7 +71,7 @@ public class MapDeserializer {
         if (latitude < 0)
             throw new ExceptionXML("Error when reading file: Latitude must be positive");
 
-        Long idIntersection = Long.parseLong(elt.getAttribute("id"));
+        long idIntersection = Long.parseLong(elt.getAttribute("id"));
         if (idIntersection < 0)
             throw new ExceptionXML("Error when reading file: Id must be positive");
 
