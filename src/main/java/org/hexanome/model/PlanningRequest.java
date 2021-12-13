@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Object containing a planning of request that was generated from a xml file
+ *
+ * @author Gastronom'if
+ */
 public class PlanningRequest {
     public Warehouse warehouse;
     public LinkedList<Request> requests;

@@ -1,10 +1,13 @@
 package org.hexanome.model;
 
-import org.hexanome.controller.MainsScreenController;
-
 import java.time.LocalTime;
 import java.util.*;
 
+/**
+ * Object containing a computed list of request
+ *
+ * @author Gastronom'if
+ */
 public class Tour extends Observable {
 
 

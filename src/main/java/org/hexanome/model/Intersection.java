@@ -1,5 +1,10 @@
 package org.hexanome.model;
 
+/**
+ * Object containing an intersection
+ *
+ * @author Gastronom'if
+ */
 public class Intersection {
     private double longitude;
     private double latitude;
@@ -29,7 +34,6 @@ public class Intersection {
     public long getIdIntersection() {
         return idIntersection;
     }
-
 
 
     @Override

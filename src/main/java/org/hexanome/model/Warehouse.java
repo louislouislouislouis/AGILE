@@ -4,6 +4,11 @@ import javafx.scene.paint.Color;
 
 import java.time.LocalTime;
 
+/**
+ * Object containing a point representing a warehouse
+ *
+ * @author Gastronom'if
+ */
 public class Warehouse extends Point {
 
     /**

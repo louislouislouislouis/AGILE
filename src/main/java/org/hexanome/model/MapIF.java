@@ -2,6 +2,11 @@ package org.hexanome.model;
 
 import java.util.*;
 
+/**
+ * Object containing the map of the city
+ *
+ * @author Gastronom'if
+ */
 public class MapIF {
     private HashMap<Long, Intersection> intersections;
     private HashMap<UUID, Segment> segments;
@@ -114,9 +119,15 @@ public class MapIF {
         this.shortestPathsCost = shortestPathsCost;
     }
 
-    public boolean isIsolated(long id, long idWarehouse) {
+    /**
+     * Return false if the isn't isolated (it means that he can reach the target id)
+     *
+     * @param id       the current id
+     * @param targetId the id to target
+     */
+    public boolean isIsolated(long id, long targetId) {
         LinkedList<Long> idsVisited = new LinkedList<>();
-        if (checkIfNeighbor(id, idWarehouse, idsVisited)) {
+        if (checkIfNeighbor(id, targetId, idsVisited)) {
             return false;
         } else {
             return true;
@@ -125,10 +136,14 @@ public class MapIF {
     }
 
     /**
-     * Return false if cannot reach idWarehouse
+     * Return false if it cannot reach targetId
+     *
+     * @param id         the current id
+     * @param targetId   the id to target
+     * @param idsVisited list of visited ids
      */
-    private boolean checkIfNeighbor(long id, long idWarehouse, LinkedList<Long> idsVisited) {
-        if (id == idWarehouse) {
+    private boolean checkIfNeighbor(long id, long targetId, LinkedList<Long> idsVisited) {
+        if (id == targetId) {
             return true;
         } else {
             Intersection intersection = intersections.get(id);
@@ -154,7 +169,7 @@ public class MapIF {
 
                 for (Map.Entry<Intersection, Segment> entry : listNeighborNotVisited.entrySet()) {
                     Intersection inter = entry.getKey();
-                    if (checkIfNeighbor(inter.getIdIntersection(), idWarehouse, idsVisited)) {
+                    if (checkIfNeighbor(inter.getIdIntersection(), targetId, idsVisited)) {
                         foundWarehouse = true;
                     }
                 }

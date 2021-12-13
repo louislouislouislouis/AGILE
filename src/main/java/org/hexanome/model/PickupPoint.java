@@ -4,6 +4,11 @@ import javafx.scene.paint.Color;
 
 import java.time.LocalTime;
 
+/**
+ * Object containing a pickup Point
+ *
+ * @author Gastronom'if
+ */
 public class PickupPoint extends Point {
 
     /**

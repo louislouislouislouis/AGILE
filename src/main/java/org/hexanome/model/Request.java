@@ -1,5 +1,10 @@
 package org.hexanome.model;
 
+/**
+ * Object containing a request
+ *
+ * @author Gastronom'if
+ */
 public class Request {
     private PickupPoint pickupPoint;
     private DeliveryPoint deliveryPoint;
@@ -23,7 +28,7 @@ public class Request {
         return deliveryPoint;
     }
 
-    
+
     @Override
     public String toString() {
         return "\nRequest{" +
