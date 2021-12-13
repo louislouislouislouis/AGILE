@@ -42,6 +42,14 @@ public class RequestDeserializer {
             throw new ExceptionXML("Wrong format the first node has this name : " + root.getNodeName());
     }
 
+    /**
+     * This private method will create node list from the element present in the xml file
+     * then will call method to create request
+     *
+     * @param planning       the planning to create from the file
+     * @param noeudDOMRacine root node of the file "planningRequest"
+     * @param map            object that contains map's data
+     */
     private void buildFromDOMXML(Element noeudDOMRacine, PlanningRequest planning, MapIF map) throws ExceptionXML, NumberFormatException {
         NodeList warehouses = noeudDOMRacine.getElementsByTagName("depot");
         NodeList requests = noeudDOMRacine.getElementsByTagName("request");
@@ -56,6 +64,14 @@ public class RequestDeserializer {
         planning.setWarehouse(createWarehouse((Element) warehouses.item(0), map));
     }
 
+    /**
+     * This private method create a request from an element
+     *
+     * @param elt current element
+     * @param i   index of the request
+     * @param map object that contains map's data
+     * @return it returns a Request
+     */
     private Request createRequest(Element elt, MapIF map, int i) throws ExceptionXML {
 
         Color color = ColorEnum.values()[i].color;
