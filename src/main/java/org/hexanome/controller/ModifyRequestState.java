@@ -3,8 +3,7 @@ package org.hexanome.controller;
 import org.hexanome.model.*;
 import org.hexanome.vue.ExceptionBox;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.*;
 
 public class ModifyRequestState implements State {
     Request oldRequest;
@@ -14,6 +13,8 @@ public class ModifyRequestState implements State {
     DeliveryPoint newDeliveryPoint;
     PickupPoint newPickupPoint;
     Point pointToUpdate;
+    int position1;
+    int position;
 
     @Override
     public void leftClick(MainsScreenController controller, Intersection i) throws Exception {
@@ -49,7 +50,10 @@ public class ModifyRequestState implements State {
         pointToUpdate = controller.getTableView().getSelectionModel().getSelectedItem();
         System.out.println("Point to uptdate: " + pointToUpdate);
         LinkedList<Request> requestList = controller.getPlanning().getRequests();
+        System.out.println(requestList);
         oldRequest = requestList.element();
+
+
         if (pointToUpdate.getType().equals("pickup")) {
             oldDeliveryPoint = oldRequest.getDeliveryPoint();
             oldPickupPoint = oldRequest.getPickupPoint();
@@ -66,7 +70,20 @@ public class ModifyRequestState implements State {
             new ExceptionBox("Cannot change warehouse", "Behavioral problem").display();
             newRequest = oldRequest;
         }
+
+        position1 = requestList.indexOf(oldRequest);
+
+        System.out.println(position1);
         listOfCommands.add(new ModifyRequestCommand(controller, oldRequest, newRequest));
+        //requestList.set(position, newRequest);
+        position = requestList.indexOf(newRequest);
+        System.out.println(position);
+        LinkedList<Request> newRequestList = controller.getPlanning().getRequests();
+        //requestList = controller.getPlanning().getRequests();
+        //Collections.swap(requestList, position, requestList.size()-1);
+        Collections.swap(newRequestList, position, requestList.size()-1);
+        System.out.println("New request list" + requestList);
+        System.out.println("New request list2" + newRequestList);
         controller.getMapView().removeLayer(controller.getIntersectionLayer());
         // we change the state of the controller
         controller.setCurrentState(controller.tourState);
