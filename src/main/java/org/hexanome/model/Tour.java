@@ -170,9 +170,6 @@ public class Tour extends Observable {
         for (int i = 0; i < destinations.size() - 1; i++) {
             Intersection startIntersection = destinations.get(i);
             Intersection destinationIntersection = destinations.get(i + 1);
-            System.out.println("startIntersection: " + startIntersection.getIdIntersection());
-            System.out.println("destinationIntersection: " + destinationIntersection.getIdIntersection());
-            System.out.println("OK");
             cost += shortestPathsCost.get(startIntersection.getIdIntersection()).get(destinationIntersection.getIdIntersection());
         }
         this.cost = cost;

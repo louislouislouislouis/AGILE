@@ -57,7 +57,7 @@ public class GraphAPI {
         tour.addPoint(planning.getWarehouse());
 
         tsp.searchSolution(g, tour, allowCalculation);
-        System.out.println("Search solution time: " + (System.currentTimeMillis() - startTime) + "ms : ");
+        System.out.println("Search solution time: " + (System.currentTimeMillis() - startTime) + "ms");
     }
 
     /**
@@ -319,7 +319,6 @@ public class GraphAPI {
                                              Double[][] costTSP,
                                              int nbVerticesTSP) {
         for (Map.Entry<Long, Map<Long, Double>> i : adjTSP.entrySet()) {
-            System.out.println(i.getKey() + " " + i.getValue());
             int jj = 0;
             for (Map.Entry<Long, Double> j : i.getValue().entrySet()) {
                 if (j.getValue() == 0) {

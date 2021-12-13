@@ -32,7 +32,8 @@ public class AddRequestState3 implements State {
     public void leftClick(MainsScreenController controller, Intersection i) throws Exception {
         if (i != null) {
             // we must check if the intersection isn't isolated
-            if (controller.getMap().isIsolated(i.getIdIntersection(), controller.getPlanning().getWarehouse().getId())) {
+            if (controller.getMap().isIsolated(i.getIdIntersection(), controller.getPlanning().getWarehouse().getId()) ||
+                    controller.getMap().isIsolated(controller.getPlanning().getWarehouse().getId(), i.getIdIntersection())) {
                 throw new Exception("ISOLATED POINT");
             } else {
                 // we change the selected intersection in the next state

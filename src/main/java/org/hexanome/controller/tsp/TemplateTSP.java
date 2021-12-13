@@ -54,11 +54,6 @@ public abstract class TemplateTSP implements TSP {
         visited.add(0); // The first visited vertex is 0
 
         branchAndBound(0, unvisited, visited, Double.valueOf(0), tour, allowCalculation);
-
-        for (Integer i : bestSol) {
-            System.out.print(i + " ");
-        }
-        System.out.println(bestSolCost);
     }
 
     public Integer getSolution(int i) {
