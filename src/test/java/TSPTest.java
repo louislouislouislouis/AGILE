@@ -25,6 +25,7 @@ public class TSPTest {
         intersections.put(3L, new Intersection(0.0, 0.0, 3));
         intersections.put(4L, new Intersection(0.0, 0.0, 4));
 
+        segments = new HashMap<>();
         segments.put(UUID.randomUUID(), new Segment(intersections.get(1L), intersections.get(2L), "", 10.0));
         segments.put(UUID.randomUUID(), new Segment(intersections.get(2L), intersections.get(1L), "", 10.0));
 
@@ -70,13 +71,14 @@ public class TSPTest {
         controller.setAllowcalculation(true);
         ga.V1_TSP(planning, map, t, controller);
         t.calculateCost(map);
-        assertEquals(t.getIntersections().size(), 5);
-        assertEquals(t.getCost(), 80.0, 0.001);
-        assertEquals(t.getIntersections().get(1), intersections.get(1L));
-        assertEquals(t.getIntersections().get(2), intersections.get(2L));
-        assertEquals(t.getIntersections().get(3), intersections.get(4L));
-        assertEquals(t.getIntersections().get(4), intersections.get(3L));
-        assertEquals(t.getIntersections().get(5), intersections.get(1L));
+        assertEquals("Longueur du trajet", 5, t.getIntersections().size());
+        assertEquals("Cout du trajet", 80.0, t.getCost(), 0.001);
+
+        assertEquals("1re etape du trajet", 1, t.getIntersections().get(0).getIdIntersection());
+        assertEquals("2e etape du trajet", 2, t.getIntersections().get(1).getIdIntersection());
+        assertEquals("3e etape du trajet", 4, t.getIntersections().get(2).getIdIntersection());
+        assertEquals("4e etape du trajet", 3, t.getIntersections().get(3).getIdIntersection());
+        assertEquals("5e etape du trajet", 1, t.getIntersections().get(4).getIdIntersection());
     }
 
 }
