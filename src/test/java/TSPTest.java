@@ -5,13 +5,10 @@ import org.hexanome.model.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.io.*;
 import java.time.LocalTime;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.UUID;
 
-import static java.lang.Long.parseLong;
 import static org.junit.Assert.*;
 
 public class TSPTest {
@@ -19,89 +16,50 @@ public class TSPTest {
     protected static HashMap<UUID, Segment> segments;
     protected static MapIF map;
     protected static PlanningRequest planning;
-    protected static Long[] solution;
-
-    /**
-     * @param i1 première intersection
-     * @param i2 seconde intersection
-     * @return distance euclidienne entre les deux intersections
-     */
-    public static double distanceEuclidienne(Intersection i1, Intersection i2) {
-        double lat1 = i1.getLatitude();
-        double lat2 = i2.getLatitude();
-        double long1 = i1.getLongitude();
-        double long2 = i2.getLongitude();
-
-        return Math.sqrt((lat1 - lat2) * (lat1 - lat2) + (long1 - long2) * (long1 - long2));
-    }
 
     @BeforeClass
     public static void setUp() {
-        String path = "src/test/tsplib/ulysses16.tsp";
-        int nbInter = 11;
-        int nbReq = 5;
-        try {
-            FileReader fr = new FileReader(path);
-            BufferedReader br = new BufferedReader(fr);
+        intersections = new HashMap<>();
+        intersections.put(1L, new Intersection(0.0, 0.0, 1));
+        intersections.put(2L, new Intersection(0.0, 0.0, 2));
+        intersections.put(3L, new Intersection(0.0, 0.0, 3));
+        intersections.put(4L, new Intersection(0.0, 0.0, 4));
 
-            // Lecture des intersections à partir du fichier
-            intersections = new HashMap<>();
-            for (int i = 1; i <= nbInter; i++) {
-                String[] line = br.readLine().split(" ");
-                assertEquals("Problème de formatage du fichier " + path, line.length, 3);
-                intersections.put((long) i, new Intersection(Double.parseDouble(line[2]), Double.parseDouble(line[1]), i));
-            }
+        segments = new HashMap<>();
+        segments.put(UUID.randomUUID(), new Segment(intersections.get(1L), intersections.get(2L), "", 10.0));
+        segments.put(UUID.randomUUID(), new Segment(intersections.get(2L), intersections.get(1L), "", 10.0));
 
-            // Relier toutes les intersections
-            segments = new HashMap<>();
-            intersections.forEach((id1, intersection1) -> intersections.forEach((id2, intersection2) -> {
-                if (!Objects.equals(id1, id2)) {
-                    double distance = distanceEuclidienne(intersection1, intersection2);
-                    Segment s = new Segment(intersection1, intersection2, "", distance);
-                    segments.put(UUID.randomUUID(), s);
-                }
-            }));
+        segments.put(UUID.randomUUID(), new Segment(intersections.get(1L), intersections.get(4L), "", 20.0));
+        segments.put(UUID.randomUUID(), new Segment(intersections.get(4L), intersections.get(1L), "", 20.0));
 
-            map = new MapIF(intersections, segments);
-            map.setAdj();
+        segments.put(UUID.randomUUID(), new Segment(intersections.get(1L), intersections.get(3L), "", 15.0));
+        segments.put(UUID.randomUUID(), new Segment(intersections.get(3L), intersections.get(1L), "", 15.0));
 
-            // Génération du planning
-            planning = new PlanningRequest();
-            Intersection warehouseIntersection = intersections.get(1L);
-            Warehouse warehouse = new Warehouse(LocalTime.MIDNIGHT, warehouseIntersection, Color.BLACK);
-            planning.setWarehouse(warehouse);
-            PickupPoint[] pickupList = new PickupPoint[nbReq];
-            DeliveryPoint[] deliveryList = new DeliveryPoint[nbReq];
-            int iPickup = 0;
-            int iDelivery = 0;
-            for (long i = 2; i <= nbInter; i++) {
-                Intersection curr = intersections.get(i);
-                if (curr.getIdIntersection() <= 6) {
-                    pickupList[iPickup++] = new PickupPoint(curr, 0, Color.RED);
-                } else if (curr.getIdIntersection() > 6) {
-                    deliveryList[iDelivery++] = new DeliveryPoint(curr, 0, Color.RED);
-                }
-            }
+        segments.put(UUID.randomUUID(), new Segment(intersections.get(2L), intersections.get(4L), "", 25.0));
+        segments.put(UUID.randomUUID(), new Segment(intersections.get(4L), intersections.get(2L), "", 25.0));
 
-            for (int i = 0; i < nbInter / 2; ++i) {
-                planning.addRequest(new Request(pickupList[i], deliveryList[i]));
-            }
+        segments.put(UUID.randomUUID(), new Segment(intersections.get(2L), intersections.get(3L), "", 35.0));
+        segments.put(UUID.randomUUID(), new Segment(intersections.get(3L), intersections.get(2L), "", 35.0));
 
-            // Lecture du fichier solution
-            String pathSol = path.replace(".tsp", ".opt.tour");
-            FileReader frSol = new FileReader(pathSol);
-            BufferedReader brSol = new BufferedReader(frSol);
-            solution = new Long[nbInter];
-            for (int i = 0; i < nbInter; ++i) {
-                solution[i] = parseLong(brSol.readLine());
-            }
-            assertEquals((long) solution[0], 1);
-            assertEquals((long) solution[6], 11);
+        segments.put(UUID.randomUUID(), new Segment(intersections.get(3L), intersections.get(4L), "", 30.0));
+        segments.put(UUID.randomUUID(), new Segment(intersections.get(4L), intersections.get(3L), "", 30.0));
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            fail("Could not open " + path);
-        }
+        map = new MapIF(intersections, segments);
+        map.setAdj();
+
+        PickupPoint pp1 = new PickupPoint(intersections.get(1L), 0, Color.RED);
+        PickupPoint pp2 = new PickupPoint(intersections.get(2L), 0, Color.RED);
+        DeliveryPoint dp1 = new DeliveryPoint(intersections.get(3L), 0, Color.RED);
+        DeliveryPoint dp2 = new DeliveryPoint(intersections.get(4L), 0, Color.RED);
+        Request r1 = new Request(pp1, dp1);
+        Request r2 = new Request(pp2, dp2);
+        Warehouse w = new Warehouse(LocalTime.NOON, intersections.get(1L), Color.BLACK);
+
+        planning = new PlanningRequest();
+        planning.setWarehouse(w);
+        planning.addRequest(r1);
+        planning.addRequest(r2);
+
     }
 
     @Test(timeout = 120000L)
@@ -112,12 +70,15 @@ public class TSPTest {
         MainsScreenController controller = new MainsScreenController();
         controller.setAllowcalculation(true);
         ga.V1_TSP(planning, map, t, controller);
-        assertEquals(t.getIntersections().size(), 12);
+        t.calculateCost(map);
+        assertEquals("Longueur du trajet", 5, t.getIntersections().size());
+        assertEquals("Cout du trajet", 80.0, t.getCost(), 0.001);
 
-        for (int i = 0; i < solution.length; ++i) {
-            System.out.println("Solution : " + solution[i] + " Actual : " + t.getIntersections().get(i).getIdIntersection());
-            //assertEquals((long) solution[i], t.getIntersections().get(i).getIdIntersection());
-        }
+        assertEquals("1re etape du trajet", 1, t.getIntersections().get(0).getIdIntersection());
+        assertEquals("2e etape du trajet", 2, t.getIntersections().get(1).getIdIntersection());
+        assertEquals("3e etape du trajet", 4, t.getIntersections().get(2).getIdIntersection());
+        assertEquals("4e etape du trajet", 3, t.getIntersections().get(3).getIdIntersection());
+        assertEquals("5e etape du trajet", 1, t.getIntersections().get(4).getIdIntersection());
     }
 
 }
