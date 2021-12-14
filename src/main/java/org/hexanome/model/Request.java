@@ -28,6 +28,12 @@ public class Request {
         return deliveryPoint;
     }
 
+    public boolean  isPointInRequest(Point p) {
+        if(p != null)
+            return p.equals(pickupPoint) || p.equals(deliveryPoint);
+        else
+            return false;
+    }
 
     @Override
     public String toString() {

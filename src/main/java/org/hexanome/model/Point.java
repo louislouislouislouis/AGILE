@@ -62,6 +62,10 @@ public class Point {
         this.color = color;
     }
 
+    public boolean isIntersectionEqual(Point p) {
+        return this.getId() == p.getId();
+    }
+
     @Override
     public String toString() {
         return "Point{" +
